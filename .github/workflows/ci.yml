@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install wordfreq
+      - name: Rebuild word model and check it is byte-identical
+        run: |
+          npm run build:model
+          git diff --exit-code -- src/assets/model
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npm test
+
+      - name: Check model size (< 2 MB)
+        run: |
+          size=$(du -sb src/assets/model/en-us | cut -f1)
+          echo "model size: $size bytes"
+          [ "$size" -lt 2000000 ]
+
+      - run: npm run build
+      - name: Check app bundle size (< 600 KB gzipped)
+        run: |
+          size=$(find dist -name '*.js' -o -name '*.css' | xargs gzip -c | wc -c)
+          echo "gzipped bundle size: $size bytes"
+          [ "$size" -lt 600000 ]
