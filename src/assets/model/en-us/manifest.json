@@ -1,0 +1,69 @@
+{
+  "lang": "en-us",
+  "format": 1,
+  "words": 60000,
+  "sounds": [
+    "AA",
+    "AE",
+    "AH",
+    "AO",
+    "AW",
+    "AY",
+    "B",
+    "CH",
+    "D",
+    "DH",
+    "EH",
+    "ER",
+    "EY",
+    "F",
+    "G",
+    "HH",
+    "IH",
+    "IY",
+    "JH",
+    "K",
+    "L",
+    "M",
+    "N",
+    "NG",
+    "OW",
+    "OY",
+    "P",
+    "R",
+    "S",
+    "SH",
+    "T",
+    "TH",
+    "UH",
+    "UW",
+    "V",
+    "W",
+    "Y",
+    "Z",
+    "ZH"
+  ],
+  "files": {
+    "lexicon.txt": {
+      "bytes": 506649,
+      "sha256": "d686970c346af0498d477a979aa71276dfb153c64f10a5198b7a8a6eb5986899"
+    },
+    "phones.bin": {
+      "bytes": 441336,
+      "sha256": "2ec405ddef3e64ca4423ab417e435a2ca9051ee223338419413b79fe19036ecd"
+    },
+    "meta.bin": {
+      "bytes": 60000,
+      "sha256": "0bfd1d7e53b61566dd04be9a4fcef6c54aec7c637b2c11d4f3a4a2de775432da"
+    },
+    "commonness.bin": {
+      "bytes": 60000,
+      "sha256": "f895bf3444d2d8c281ebff4c4dbcd78ff369fce62f633fd7b41e2a3ee1b595d9"
+    }
+  },
+  "credits": [
+    "CMU Pronouncing Dictionary (BSD-style licence)",
+    "wordfreq commonness ranks (CC BY-SA 4.0, commonness.bin only)",
+    "LDNOOBW English word list (CC BY 4.0)"
+  ]
+}

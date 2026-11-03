@@ -1,0 +1,301 @@
+input,expected,type,pass_if_in_top
+need,speed,perfect,10
+right,night,perfect,10
+year,near,perfect,10
+day,way,perfect,10
+going,growing,perfect,10
+before,war,perfect,10
+why,high,perfect,10
+made,played,perfect,10
+still,kill,perfect,10
+take,make,perfect,10
+got,shot,perfect,10
+never,however,perfect,10
+life,wife,perfect,10
+great,state,perfect,10
+through,new,perfect,10
+last,past,perfect,10
+while,style,perfect,10
+best,west,perfect,10
+home,dome,perfect,10
+look,took,perfect,10
+use,reduce,perfect,10
+come,dumb,perfect,10
+part,start,perfect,10
+three,key,perfect,10
+around,found,perfect,10
+between,mean,perfect,10
+better,letter,perfect,10
+find,kind,perfect,10
+old,controlled,perfect,10
+since,convince,perfect,10
+another,mother,perfect,10
+game,name,perfect,10
+thing,bring,perfect,10
+house,mouse,perfect,10
+place,case,perfect,10
+school,rule,perfect,10
+next,text,perfect,10
+without,about,perfect,10
+show,know,perfect,10
+big,dig,perfect,10
+feel,real,perfect,10
+sure,tour,perfect,10
+team,seem,perfect,10
+keep,deep,perfect,10
+please,freeze,perfect,10
+put,foot,perfect,10
+money,funny,perfect,10
+left,theft,perfect,10
+city,pretty,perfect,10
+let,set,perfect,10
+called,installed,perfect,10
+thought,brought,perfect,10
+god,squad,perfect,10
+group,loop,perfect,10
+looking,cooking,perfect,10
+care,where,perfect,10
+week,speak,perfect,10
+already,steady,perfect,10
+change,range,perfect,10
+enough,stuff,perfect,10
+full,pull,perfect,10
+making,taking,perfect,10
+point,joint,perfect,10
+bad,add,perfect,10
+hard,card,perfect,10
+support,court,perfect,10
+tell,well,perfect,10
+power,hour,perfect,10
+stop,shop,perfect,10
+water,daughter,perfect,10
+based,placed,perfect,10
+believe,receive,perfect,10
+call,small,perfect,10
+head,said,perfect,10
+men,ten,perfect,10
+far,car,perfect,10
+side,died,perfect,10
+went,event,perfect,10
+later,greater,perfect,10
+line,design,perfect,10
+run,one,perfect,10
+service,nervous,perfect,10
+thank,bank,perfect,10
+trying,buying,perfect,10
+using,losing,perfect,10
+black,back,perfect,10
+together,whether,perfect,10
+whole,control,perfect,10
+five,drive,perfect,10
+maybe,baby,perfect,10
+course,force,perfect,10
+health,wealth,perfect,10
+least,priest,perfect,10
+within,win,perfect,10
+able,label,perfect,10
+local,vocal,perfect,10
+post,coast,perfect,10
+fact,attacked,perfect,10
+given,driven,perfect,10
+half,staff,perfect,10
+work,girl,assonance,50
+world,first,assonance,50
+used,produced,assonance,50
+help,end,assonance,50
+give,until,assonance,50
+told,host,assonance,50
+yet,death,assonance,50
+seen,leave,assonance,50
+white,time,assonance,50
+came,face,assonance,50
+book,push,assonance,50
+talk,wrong,assonance,50
+hand,ask,assonance,50
+mind,liked,assonance,50
+become,much,assonance,50
+food,room,assonance,50
+south,town,assonance,50
+known,close,assonance,50
+lost,launch,assonance,50
+along,across,assonance,50
+bit,wish,assonance,50
+friend,myself,assonance,50
+hit,kid,assonance,50
+understand,act,assonance,50
+class,plan,assonance,50
+move,include,assonance,50
+wait,age,assonance,50
+late,gave,assonance,50
+light,outside,assonance,50
+police,deal,assonance,50
+red,third,consonance,50
+turn,fun,consonance,50
+among,strong,consonance,50
+check,like,consonance,50
+child,field,consonance,50
+phone,main,consonance,50
+behind,land,consonance,50
+quite,street,consonance,50
+six,tax,consonance,50
+front,account,consonance,50
+list,rest,consonance,50
+heard,instead,consonance,50
+meet,cut,consonance,50
+type,step,consonance,50
+word,road,consonance,50
+himself,wolf,consonance,50
+self,gulf,consonance,50
+held,killed,consonance,50
+fight,date,consonance,50
+price,space,consonance,50
+term,became,consonance,50
+site,hot,consonance,50
+above,save,consonance,50
+club,web,consonance,50
+dead,tried,consonance,50
+hold,build,consonance,50
+return,gone,consonance,50
+sense,response,consonance,50
+test,east,consonance,50
+break,attack,consonance,50
+guess,fresh,family,50
+learn,firm,family,50
+worth,worse,family,50
+provide,describe,family,50
+rate,lake,family,50
+eat,sleep,family,50
+green,dream,family,50
+league,agreed,family,50
+size,alive,family,50
+paid,babe,family,50
+chief,release,family,50
+cup,luck,family,50
+hate,wake,family,50
+led,leg,family,50
+vote,broke,family,50
+blood,drug,family,50
+complete,unique,family,50
+dog,broad,family,50
+met,tech,family,50
+code,globe,family,50
+lose,improve,family,50
+pick,fit,family,50
+race,safe,family,50
+sign,crime,family,50
+bed,egg,family,50
+began,gang,family,50
+earth,nurse,family,50
+forget,neck,family,50
+success,breath,family,50
+truth,proof,family,50
+say,trade,additive,50
+free,piece,additive,50
+away,stage,additive,50
+play,base,additive,50
+today,straight,additive,50
+though,alone,additive,50
+try,mine,additive,50
+ago,role,additive,50
+pay,pain,additive,50
+true,cool,additive,50
+due,huge,additive,50
+saw,fall,additive,50
+low,goal,additive,50
+stay,create,additive,50
+buy,tonight,additive,50
+although,note,additive,50
+asked,task,subtractive,50
+month,gun,subtractive,50
+film,hill,subtractive,50
+knew,choose,additive,50
+view,dude,additive,50
+boy,oil,additive,50
+gold,soul,subtractive,50
+sky,side,additive,50
+church,prefer,subtractive,50
+received,achieve,subtractive,50
+sent,ten,subtractive,50
+themselves,twelve,subtractive,50
+ground,brown,subtractive,50
+sound,crown,subtractive,50
+falling apart,calling your heart,multi,20
+broken heart,spoken art,multi,20
+cold as ice,told the price,multi,20
+running away,stunning display,multi,20
+breaking free,making tea,multi,20
+fading light,trading night,multi,20
+crying eyes,flying skies,multi,20
+dancing slow,advancing show,multi,20
+letting go,setting low,multi,20
+city lights,pretty nights,multi,20
+morning sun,warning run,multi,20
+wishing well,fishing spell,multi,20
+lucky star,yucky car,multi,20
+sweet dreams,street schemes,multi,20
+fire burning,higher learning,multi,20
+wild horses,mild forces,multi,20
+lost control,crossed the goal,multi,20
+ocean waves,motion saves,multi,20
+flying high,trying to fly,multi,20
+heart of gold,smart and bold,multi,20
+hard to find,guard your mind,multi,20
+dead of night,said it right,multi,20
+thunder rolling,wonder bowling,multi,20
+broken wings,spoken things,multi,20
+summer love,drummer above,multi,20
+money talks,funny walks,multi,20
+paper plane,vapor rain,multi,20
+second chance,reckoned dance,multi,20
+hidden pain,ridden rain,multi,20
+stolen time,swollen rhyme,multi,20
+lonely night,only right,multi,20
+easy money,breezy honey,multi,20
+bitter end,glitter friend,multi,20
+shining stone,whining phone,multi,20
+lazy song,crazy wrong,multi,20
+faded love,jaded dove,multi,20
+quiet storm,riot warm,multi,20
+simple life,dimple knife,multi,20
+gentle touch,mental much,multi,20
+bright side,night ride,multi,20
+skrrt,hurt,unknown,10
+rizz,fizz,unknown,10
+yeet,feet,unknown,10
+glizzy,dizzy,unknown,10
+fam,ham,unknown,10
+situationship,relationship,unknown,10
+shawty,naughty,unknown,10
+tryna,china,unknown,10
+goated,floated,unknown,10
+thicc,quick,unknown,10
+cringey,dingy,unknown,10
+adulting,consulting,unknown,10
+hangry,angry,unknown,10
+malibuzz,fuzz,unknown,10
+ghosted,posted,unknown,10
+bruh,duh,unknown,10
+fomo,promo,unknown,10
+swag,bag,unknown,10
+swole,soul,unknown,10
+noob,tube,unknown,10
+kawaii,hawaii,unknown,10
+frenemy,enemy,unknown,10
+staycation,vacation,unknown,10
+vlog,blog,unknown,10
+heckin,reckon,unknown,10
+unalive,arrive,unknown,10
+rizzler,sizzler,unknown,10
+mewing,chewing,unknown,10
+yapping,clapping,unknown,10
+bestie,testy,unknown,10
+lovetopia,utopia,unknown,10
+neonite,tonight,unknown,10
+glowtown,down,unknown,10
+starlite,night,unknown,10
+dreamscape,escape,unknown,10
+sunkissed,missed,unknown,10
+moonglow,slow,unknown,10
+simp,limp,unknown,10
+doomscroll,control,unknown,10
+glamping,camping,unknown,10

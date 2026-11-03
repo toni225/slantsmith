@@ -1,0 +1,12 @@
+# Slantsmith build-time slur blocklist. Words here are REMOVED from the word model (never suggested, never rhymed).
+# From the LDNOOBW English list (github.com/LDNOOBW, CC BY 4.0), cut to words in the 60k lexicon. Reviewed 2026-10-30.
+# Kept on purpose despite harmless second meanings (coon = raccoon, fag = UK cigarette): rare in lyrics, harmful as suggestions.
+coon
+coons
+fag
+faggot
+mong
+negro
+nigger
+poof
+spastic

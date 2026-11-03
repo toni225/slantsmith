@@ -1,0 +1,56 @@
+# Slantsmith build-time blocklist: misspellings found in the CMU dictionary / top-60k lexicon.
+# Mostly from the codespell dictionary (github.com/codespell-project/codespell), a derivative of English Wikipedia,
+# licensed CC BY-SA 3.0; "calender" added by hand. Used only when building the word model; not shipped in the app.
+# Format: misspelling -> correction (for review only; the app suggests fixes by edit distance)
+accidently -> accidentally
+afterall -> after all
+aircrafts -> aircraft
+allright -> all right
+alot -> a lot
+arent -> aren't
+aways -> always
+ballance -> balance
+calender -> calendar
+carribean -> Caribbean
+chek -> check
+childrens -> children
+childs -> children
+collison -> collision
+combatting -> combating
+commerical -> commercial
+commision -> commission
+cristal -> crystal
+devine -> define
+equipments -> equipment
+everytime -> every time
+expresso -> espresso
+freind -> friend
+frist -> first
+goverment -> government
+grammer -> grammar
+heros -> heroes
+incase -> in case
+informations -> information
+lastest -> latest
+lazer -> laser
+lifes -> lives
+litle -> little
+miniscule -> minuscule
+moreso -> more
+mutch -> much
+noone -> no one
+occuring -> occurring
+pavillion -> pavilion
+pharoah -> pharaoh
+pidgeon -> pigeon
+prefered -> preferred
+publically -> publicly
+refering -> referring
+sargeant -> sergeant
+sheeps -> sheep
+similiar -> similar
+stil -> still
+thier -> their
+transfered -> transferred
+wich -> which
+wil -> will

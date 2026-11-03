@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Backup import error</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#29080C}
+::selection{background:#A71D31;color:#F1F0CC}
+a{color:#D5BF86}a:hover{color:#F1F0CC}
+:focus-visible{outline:2px solid #D5BF86;outline-offset:2px}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; display: flex; flex-direction: column; background: #3F0D12; color: #F1F0CC; font-family: Manrope, system-ui, sans-serif; overflow: hidden">
+  <header style="padding: 22px 20px 0; flex-shrink: 0">
+    <h1 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 800; letter-spacing: -0.02em">Settings</h1>
+  </header>
+  <main style="flex: 1; overflow: hidden; padding: 0 20px">
+    <fieldset style="border: 0; margin: 0; padding: 0">
+      <legend style="font-size: 13px; font-weight: 700; color: #D5BF86; margin: 22px 0 8px; padding: 0">Look</legend>
+        <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 6px 0; border-bottom: 1px solid rgba(141,119,95,0.35); cursor: pointer"><span style="font-size: 16px; font-weight: 600">Studio dark</span><input type="radio" name="theme" checked style="width: 22px; height: 22px; accent-color: #A71D31; margin: 0"></label>
+        <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 6px 0; border-bottom: 1px solid rgba(141,119,95,0.35); cursor: pointer"><span style="font-size: 16px; font-weight: 600">Paper light</span><input type="radio" name="theme" style="width: 22px; height: 22px; accent-color: #A71D31; margin: 0"></label>
+        <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 6px 0; border-bottom: 1px solid rgba(141,119,95,0.35); cursor: pointer"><span style="font-size: 16px; font-weight: 600">Match my phone</span><input type="radio" name="theme" style="width: 22px; height: 22px; accent-color: #A71D31; margin: 0"></label>
+    </fieldset>
+    <fieldset style="border: 0; margin: 0; padding: 0">
+      <legend style="font-size: 13px; font-weight: 700; color: #D5BF86; margin: 22px 0 8px; padding: 0">Lyric text size</legend>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #29080C">
+        <label style="height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; color: #D5BF86; cursor: pointer"><input type="radio" name="size" style="position: absolute; opacity: 0; width: 1px; height: 1px">Small</label>
+        <label style="height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; background: #A71D31; color: #F1F0CC; cursor: pointer"><input type="radio" name="size" checked style="position: absolute; opacity: 0; width: 1px; height: 1px">Medium</label>
+        <label style="height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 700; color: #D5BF86; cursor: pointer"><input type="radio" name="size" style="position: absolute; opacity: 0; width: 1px; height: 1px">Large</label>
+      </div>
+    </fieldset>
+    <h2 style="font-size: 13px; font-weight: 700; color: #D5BF86; margin: 22px 0 8px">Writing</h2>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 6px 0; border-bottom: 1px solid rgba(141,119,95,0.35)"><label for="lyric" style="flex: 1; min-width: 0; cursor: pointer"><span style="display: block; font-size: 16px; font-weight: 600">Lyric mode for new songs</span><span style="display: block; font-size: 13px; color: #D5BF86; margin-top: 2px">Slang, dropped letters and fragments are not flagged</span></label><button id="lyric" role="switch" aria-checked="{{lyricOn}}" onClick="{{toggle_lyric}}" style="{{lyricTrack}}"><span aria-hidden="true" style="{{lyricKnob}}"></span></button></div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; padding: 6px 0; border-bottom: 1px solid rgba(141,119,95,0.35)"><label for="explicit" style="flex: 1; min-width: 0; cursor: pointer"><span style="display: block; font-size: 16px; font-weight: 600">Hide explicit words</span><span style="display: block; font-size: 13px; color: #D5BF86; margin-top: 2px">In rhyme results only</span></label><button id="explicit" role="switch" aria-checked="{{explicitOn}}" onClick="{{toggle_explicit}}" style="{{explicitTrack}}"><span aria-hidden="true" style="{{explicitKnob}}"></span></button></div>
+    <h2 style="font-size: 13px; font-weight: 700; color: #D5BF86; margin: 22px 0 8px">Your songs</h2>
+    <div style="display: flex; gap: 8px">
+      <button style="flex: 1; height: 48px; border-radius: 12px; border: 1px solid #D5BF86; background: transparent; color: #F1F0CC; font-size: 15px; font-weight: 700; cursor: pointer">Export backup</button>
+      <button style="flex: 1; height: 48px; border-radius: 12px; border: 1px solid #8D775F; background: transparent; color: #F1F0CC; font-size: 15px; font-weight: 600; cursor: pointer">Import backup</button>
+    </div>
+    <p style="margin: 10px 0 0; font-size: 13px; line-height: 20px; color: #D5BF86">Your songs stay on this device. Nothing is sent anywhere.</p>
+    <a href="Settings.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; margin-top: 8px; font-size: 14px; font-weight: 700; color: #D5BF86">Credits and licences</a>
+  </main>
+  <nav aria-label="Main" style="flex-shrink: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #29080C; padding: 6px 8px 22px; border-top: 1px solid rgba(141,119,95,0.25)">
+    <a href="Songs.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; min-height: 44px; color: #B8936F; text-decoration: none; font-size: 12px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"></path><circle cx="6.5" cy="18" r="2.5"></circle><circle cx="16.5" cy="16" r="2.5"></circle></svg>Songs</a>
+    <a href="Rhymes.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; min-height: 44px; color: #B8936F; text-decoration: none; font-size: 12px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="M20 20l-4.5-4.5"></path></svg>Rhymes</a>
+    <a href="Mix.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; min-height: 44px; color: #B8936F; text-decoration: none; font-size: 12px; font-weight: 600">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 4v16M12 4v16M18 4v16"></path><path d="M4 14h4M10 8h4M16 12h4"></path></svg>Mix help</a>
+    <a href="Settings.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; min-height: 44px; color: #D5BF86; text-decoration: none; font-size: 12px; font-weight: 700">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"></path></svg>Settings</a>
+  </nav>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(20,4,6,0.62)"></div>
+  <section role="alertdialog" aria-labelledby="err-h" aria-describedby="err-d" style="position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 20px 34px; border-radius: 26px 26px 0 0; background: radial-gradient(110% 60% at 50% 0%, rgba(213,191,134,0.14), rgba(213,191,134,0) 70%), #512220; box-shadow: 0 -18px 40px rgba(20,4,6,0.6), inset 0 1px 0 rgba(241,240,204,0.1)">
+    <div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 2px; background: #8D775F; margin: 0 auto 18px"></div>
+    <div style="display: flex; gap: 14px; align-items: flex-start">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F1F0CC" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M12 3l9.5 17h-19z"></path><path d="M12 10v4"></path><circle cx="12" cy="17" r="0.6"></circle></svg>
+      <div>
+        <h1 id="err-h" style="margin: 0; font-size: 20px; line-height: 27px; font-weight: 800; letter-spacing: -0.01em">This file isn’t a Slantsmith backup</h1>
+        <p id="err-d" style="margin: 8px 0 0; font-size: 15px; line-height: 23px">Nothing was changed. Pick the .json file you saved with Export backup.</p>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; margin: 18px 0 0; padding: 12px 14px; border-radius: 12px; border: 1px solid #8D775F; background: #3F0D12">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D5BF86" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg>
+      <span style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600">lyric-notes.txt</span>
+      <span style="font-size: 13px; color: #D5BF86">Text file</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 18px">
+      <button style="height: 52px; border-radius: 14px; border: 0; background: #A71D31; color: #F1F0CC; font-size: 16px; font-weight: 700; cursor: pointer">Choose another file</button>
+      <a href="Settings.dc.html" style="height: 48px; border-radius: 14px; border: 1px solid #8D775F; color: #F1F0CC; font-size: 15px; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center">Cancel</a>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { lyric: true, explicit: false }; }
+  sw(on) {
+    return {
+      track: 'width: 52px; height: 32px; border-radius: 16px; border: 1px solid ' + (on ? '#A71D31' : '#8D775F') + '; background: ' + (on ? '#A71D31' : '#29080C') + '; padding: 0; position: relative; cursor: pointer; flex-shrink: 0',
+      knob: 'position: absolute; top: 3px; left: ' + (on ? '23px' : '3px') + '; width: 24px; height: 24px; border-radius: 50%; background: ' + (on ? '#F1F0CC' : '#B8936F')
+    };
+  }
+  renderVals() {
+    const l = this.sw(this.state.lyric), e = this.sw(this.state.explicit);
+    return {
+      lyricOn: String(this.state.lyric), lyricTrack: l.track, lyricKnob: l.knob,
+      explicitOn: String(this.state.explicit), explicitTrack: e.track, explicitKnob: e.knob,
+      toggle_lyric: () => this.setState({ lyric: !this.state.lyric }),
+      toggle_explicit: () => this.setState({ explicit: !this.state.explicit })
+    };
+  }
+}
+</script>
+</body>
+</html>

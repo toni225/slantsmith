@@ -1,0 +1,48 @@
+# Slantsmith explicit-word list. Words here stay in the model but carry the "explicit" flag in meta.bin.
+# Shown by default; hidden when Settings > Hide explicit words is on.
+# Subset of the LDNOOBW English list (github.com/LDNOOBW, CC BY 4.0): vulgar words only. Reviewed 2026-10-30.
+# Left out on purpose: clinical or ordinary words (sex, nude, suck, scat, snatch, escort, butt...) and serious-topic
+# words (rape, abuse...), which songs may need without being "explicit". Extend as needed.
+arsehole
+ass
+asshole
+bastard
+bitch
+bitches
+blowjob
+bollocks
+boner
+boob
+boobs
+bukkake
+bullshit
+cock
+cocks
+cum
+cumming
+cunt
+dick
+dildo
+fuck
+fuckin
+fucking
+horny
+motherfucker
+nympho
+orgy
+pissing
+poon
+porn
+porno
+pussy
+shit
+shitty
+skeet
+slut
+smut
+spunk
+tit
+tits
+twat
+wank
+whore

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rhymes for hold</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#29080C}
+::selection{background:#A71D31;color:#F1F0CC}
+a{color:#D5BF86}a:hover{color:#F1F0CC}
+:focus-visible{outline:2px solid #D5BF86;outline-offset:2px}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #3F0D12; color: #F1F0CC; font-family: Manrope, system-ui, sans-serif">
+  <div aria-hidden="true" style="padding: 76px 24px 0; display: flex; flex-direction: column; gap: 8px; opacity: 0.55">
+    <span style="font-size: 15px; font-weight: 700; color: #D5BF86">Chorus</span>
+    <span style="font-size: 18px; line-height: 30px; font-weight: 600">Paper lanterns in the rain</span>
+    <span style="font-size: 18px; line-height: 30px; font-weight: 600">Float like promises we made</span>
+    <span style="font-size: 18px; line-height: 30px; font-weight: 600">Every light I try to <span style="background: #A71D31; border-radius: 6px; padding: 1px 5px">hold</span></span>
+  </div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(20,4,6,0.55)"></div>
+
+  <section role="dialog" aria-label="Rhymes for hold" style="position: absolute; left: 0; right: 0; bottom: 0; top: 196px; border-radius: 26px 26px 0 0; background: radial-gradient(110% 45% at 50% 0%, rgba(213,191,134,0.16), rgba(213,191,134,0) 70%), #512220; box-shadow: 0 -18px 40px rgba(20,4,6,0.6), inset 0 1px 0 rgba(241,240,204,0.1); display: flex; flex-direction: column">
+    <div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 2px; background: #8D775F; margin: 10px auto 4px"></div>
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; padding: 6px 12px 0 20px">
+      <div>
+        <h1 style="margin: 0; font-size: 30px; line-height: 38px; font-weight: 800; letter-spacing: -0.02em">hold</h1>
+        <p style="margin: 2px 0 0; font-size: 13px; color: #D5BF86">1 syllable, stressed</p>
+      </div>
+      <a href="Main.dc.html" aria-label="Close rhymes" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #F1F0CC; border-radius: 12px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </a>
+    </div>
+
+    <div role="tablist" aria-label="Rhyme type" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 14px 20px 0; padding: 4px; border-radius: 14px; background: #3F0D12">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+        <button role="tab" aria-selected="{{t.selected}}" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; gap: 8px; padding: 12px 20px 4px; overflow: hidden">
+      <button aria-pressed="true" style="height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid #D5BF86; background: rgba(213,191,134,0.16); color: #F1F0CC; font-size: 13px; font-weight: 600; flex-shrink: 0">Any length</button>
+      <button aria-pressed="false" style="height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid #8D775F; background: transparent; color: #F1F0CC; font-size: 13px; font-weight: 600; flex-shrink: 0">1 syllable</button>
+      <button aria-pressed="false" style="height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid #8D775F; background: transparent; color: #F1F0CC; font-size: 13px; font-weight: 600; flex-shrink: 0">2 syllables</button>
+      <button aria-pressed="false" style="height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid #8D775F; background: transparent; color: #F1F0CC; font-size: 13px; font-weight: 600; flex-shrink: 0">Common only</button>
+    </div>
+
+    <ul style="list-style: none; margin: 0; padding: 4px 8px 0 20px; flex: 1; overflow: hidden">
+      <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+        <li style="display: flex; align-items: center; gap: 12px; min-height: 64px; border-bottom: 1px solid rgba(141,119,95,0.35)">
+          <div style="flex: 1; min-width: 0">
+            <div style="display: flex; align-items: center; gap: 10px">
+              <span style="font-size: 19px; font-weight: 700">{{r.word}}</span>
+              <span style="{{r.chipStyle}}">{{r.type}}</span>
+            </div>
+            <div style="font-size: 13px; color: #D5BF86; margin-top: 2px">{{r.why}}</div>
+          </div>
+          <button aria-label="{{r.useLabel}}" style="width: 44px; height: 44px; border-radius: 12px; border: 0; background: transparent; color: #F1F0CC; display: flex; align-items: center; justify-content: center; cursor: pointer">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5v8a3 3 0 0 1-3 3H6"></path><path d="M10 12l-4 4 4 4"></path></svg>
+          </button>
+        </li>
+      </sc-for>
+    </ul>
+    <p style="margin: 0; padding: 12px 20px 28px; font-size: 13px; color: #D5BF86">{{footer}}</p>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 'slant' }; }
+  renderVals() {
+    const tab = this.state.tab;
+    const base = 'height: 40px; border-radius: 10px; border: 0; font-size: 14px; font-weight: 700; cursor: pointer; ';
+    const tabs = [
+      { id: 'perfect', label: 'Perfect 10' },
+      { id: 'slant', label: 'Slant 24' },
+      { id: 'phrase', label: 'Phrase 6' }
+    ].map((t) => ({
+      label: t.label,
+      selected: t.id === tab ? 'true' : 'false',
+      style: base + (t.id === tab ? 'background: #A71D31; color: #F1F0CC' : 'background: transparent; color: #D5BF86'),
+      pick: () => this.setState({ tab: t.id })
+    }));
+    const solid = 'font-size: 12px; font-weight: 600; color: #F1F0CC; border: 1px solid #F1F0CC; border-radius: 10px; padding: 1px 8px';
+    const dotted = 'font-size: 12px; font-weight: 600; color: #D5BF86; border: 1px dotted #D5BF86; border-radius: 10px; padding: 1px 8px';
+    const sets = {
+      perfect: [
+        ['cold', 'Perfect', 'Same oh + ld sound'], ['gold', 'Perfect', 'Same oh + ld sound'], ['told', 'Perfect', 'Same oh + ld sound'],
+        ['old', 'Perfect', 'Same oh + ld sound'], ['fold', 'Perfect', 'Same oh + ld sound'], ['controlled', 'Perfect', '2 syllables, stress on the end']
+      ],
+      slant: [
+        ['soul', 'Subtractive', 'Drops the final d'], ['whole', 'Subtractive', 'Drops the final d'], ['world', 'Consonance', 'Same ld ending, new vowel'],
+        ['wild', 'Consonance', 'Same ld ending, new vowel'], ['held', 'Consonance', 'Same ld ending, new vowel'], ['ghost', 'Assonance', 'Same oh vowel, ends in st']
+      ],
+      phrase: [
+        ['so cold', 'Phrase', 'Lands on the same oh + ld'], ['all I\u2019m told', 'Phrase', 'Lands on the same oh + ld'], ['growing old', 'Phrase', 'Lands on the same oh + ld'],
+        ['heart of gold', 'Phrase', 'Lands on the same oh + ld'], ['left out cold', 'Phrase', 'Lands on the same oh + ld'], ['never sold', 'Phrase', 'Lands on the same oh + ld']
+      ]
+    };
+    const rows = sets[tab].map(([word, type, why]) => ({
+      word, type, why, useLabel: 'Use ' + word, chipStyle: type === 'Perfect' || type === 'Phrase' ? solid : dotted
+    }));
+    const totals = { perfect: 10, slant: 24, phrase: 6 };
+    return { tabs, rows, footer: 'Showing 6 of ' + totals[tab] + '. Most common first.' };
+  }
+}
+</script>
+</body>
+</html>

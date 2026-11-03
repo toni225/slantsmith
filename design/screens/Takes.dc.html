@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Takes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#29080C}
+::selection{background:#A71D31;color:#F1F0CC}
+a{color:#D5BF86}a:hover{color:#F1F0CC}
+:focus-visible{outline:2px solid #D5BF86;outline-offset:2px}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #3F0D12; color: #F1F0CC; font-family: Manrope, system-ui, sans-serif; overflow: hidden">
+  <header style="display: flex; align-items: center; gap: 4px; height: 64px; padding: 8px 8px 0; box-sizing: border-box; flex-shrink: 0">
+    <a href="Main.dc.html" aria-label="Back to Paper Lanterns" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #F1F0CC; border-radius: 12px">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div>
+      <h1 style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Takes</h1>
+      <p style="margin: 0; font-size: 13px; color: #D5BF86">Paper Lanterns</p>
+    </div>
+  </header>
+
+  <div style="padding: 16px 20px 8px; flex-shrink: 0">
+    <button style="width: 100%; height: 52px; border-radius: 14px; border: 0; background: #A71D31; color: #F1F0CC; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; box-shadow: 0 8px 20px rgba(20,4,6,0.5)">
+      <span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 50%; background: #F1F0CC"></span>Save this as a take
+    </button>
+  </div>
+
+  <div role="row" aria-hidden="true" style="display: grid; grid-template-columns: 52px minmax(0, 1fr) 96px; gap: 8px; padding: 14px 20px 8px; font-size: 12px; font-weight: 700; color: #D5BF86; border-bottom: 1px solid rgba(141,119,95,0.55); flex-shrink: 0">
+    <span>Take</span><span>Name</span><span style="text-align: right">When</span>
+  </div>
+
+  <ul style="list-style: none; margin: 0; padding: 0; flex: 1; overflow: hidden">
+    <li style="display: grid; grid-template-columns: 52px minmax(0, 1fr) 96px; gap: 8px; align-items: center; min-height: 56px; padding: 0 20px; border-bottom: 1px solid rgba(141,119,95,0.3)">
+      <span style="font-size: 13px; font-weight: 700; color: #D5BF86">Now</span>
+      <span style="font-size: 16px; font-weight: 600">Current draft</span>
+      <span style="font-size: 13px; color: #D5BF86; text-align: right">Editing</span>
+    </li>
+    <li style="margin: 8px 12px; padding: 4px 8px 14px; border-radius: 18px; background: radial-gradient(120% 90% at 50% 0%, rgba(213,191,134,0.16), rgba(213,191,134,0) 70%), #512220; box-shadow: 0 12px 30px rgba(20,4,6,0.55)">
+      <div style="display: grid; grid-template-columns: 52px minmax(0, 1fr) 96px; gap: 8px; align-items: center; min-height: 56px">
+        <span style="font-size: 22px; font-weight: 800; color: #D5BF86; font-variant-numeric: tabular-nums">6</span>
+        <span style="font-size: 16px; font-weight: 700">Chorus with lanterns</span>
+        <span style="font-size: 13px; color: #D5BF86; text-align: right">Today, 9:42 PM</span>
+      </div>
+      <p style="margin: 0 0 12px 60px; font-size: 14px; line-height: 22px; color: #F1F0CC">Paper lanterns in the rain / Float like promises we made</p>
+      <div style="display: flex; gap: 8px; margin-left: 60px">
+        <button style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #D5BF86; background: transparent; color: #F1F0CC; font-size: 14px; font-weight: 700; cursor: pointer">Restore</button>
+        <button style="height: 44px; padding: 0 16px; border-radius: 12px; border: 1px solid #8D775F; background: transparent; color: #F1F0CC; font-size: 14px; font-weight: 600; cursor: pointer">Compare with now</button>
+      </div>
+    </li>
+    <sc-for list="{{takes}}" as="t" hint-placeholder-count="5">
+      <li style="display: grid; grid-template-columns: 52px minmax(0, 1fr) 96px; gap: 8px; align-items: center; min-height: 56px; padding: 0 20px; border-bottom: 1px solid rgba(141,119,95,0.3)">
+        <span style="font-size: 22px; font-weight: 800; color: #B8936F; font-variant-numeric: tabular-nums">{{t.n}}</span>
+        <span style="{{t.nameStyle}}">{{t.name}}</span>
+        <span style="font-size: 13px; color: #D5BF86; text-align: right">{{t.when}}</span>
+      </li>
+    </sc-for>
+  </ul>
+  <p style="margin: 0; padding: 12px 20px 30px; font-size: 13px; line-height: 20px; color: #D5BF86; flex-shrink: 0">Autosaves every 10 minutes keep the newest 20. Named takes are never deleted.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const named = 'font-size: 16px; font-weight: 600; color: #F1F0CC';
+    const auto = 'font-size: 15px; font-weight: 500; color: #B8936F';
+    const takes = [
+      { n: '5', name: 'Autosave', when: 'Today, 9:30 PM' },
+      { n: '4', name: 'Autosave', when: 'Today, 9:20 PM' },
+      { n: '3', name: 'Bridge idea, slower', when: 'Yesterday' },
+      { n: '2', name: 'Autosave', when: 'Yesterday' },
+      { n: '1', name: 'First pass', when: 'Oct 27' }
+    ].map((t) => ({ ...t, nameStyle: t.name === 'Autosave' ? auto : named }));
+    return { takes };
+  }
+}
+</script>
+</body>
+</html>

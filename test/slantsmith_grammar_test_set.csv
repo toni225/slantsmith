@@ -1,0 +1,201 @@
+line,mode,group,expect
+I can't recieve your love tonight,lyric,spelling,flag recieve>receive
+you're definately on my mind,lyric,spelling,flag definately>definitely
+we live seperate lives now,lyric,spelling,flag seperate>separate
+I'll wait untill the morning,lyric,spelling,flag untill>until
+tommorow never comes for us,lyric,spelling,flag tommorow>tomorrow
+I beleive in you and me,lyric,spelling,flag beleive>believe
+it feels so wierd without you,lyric,spelling,flag wierd>weird
+I miss you alot these days,lyric,spelling,flag alot>a lot
+nothing occured to me that night,lyric,spelling,flag occured>occurred
+is it neccessary to say goodbye,lyric,spelling,flag neccessary>necessary
+this is the begining of the end,lyric,spelling,flag begining>beginning
+you were my best freind,lyric,spelling,flag freind>friend
+I truely loved you then,lyric,spelling,flag truely>truly
+tell me wich way to go,lyric,spelling,flag wich>which
+I stayed becuase you asked,lyric,spelling,flag becuase>because
+don't embarass me in front of them,lyric,spelling,flag embarass>embarrass
+I marked the day on my calender,lyric,spelling,flag calender>calendar
+feel the rythm in your bones,lyric,spelling,flag rythm>rhythm
+I'd run accross the world for you,lyric,spelling,flag accross>across
+I realy want you here,lyric,spelling,flag realy>really
+finaly I can breathe again,lyric,spelling,flag finaly>finally
+remeber when we danced all night,lyric,spelling,flag remeber>remember
+you look so beautifull in blue,lyric,spelling,flag beautifull>beautiful
+another heartbrake on the way,lyric,spelling,flag heartbrake>heartbreak
+watch the city lights dissapear,lyric,spelling,flag dissapear>disappear
+their going home without me,lyric,confusable,flag their>they're
+I left my heart over their,lyric,confusable,flag their>there
+they're house was always warm,lyric,confusable,flag they're>their
+there never gonna find us,lyric,confusable,flag there>they're
+we put our dreams in they're hands,lyric,confusable,flag they're>their
+I see you standing over they're,lyric,confusable,flag they're>there
+their is nothing left to say,lyric,confusable,flag their>there
+there love was a burning flame,lyric,confusable,flag there>their
+your the only one I need,lyric,confusable,flag your>you're
+I can't forget you're face,lyric,confusable,flag you're>your
+your always on my mind,lyric,confusable,flag your>you're
+I hold you're hand in mine,lyric,confusable,flag you're>your
+your never coming back,lyric,confusable,flag your>you're
+tell me you're secrets,lyric,confusable,flag you're>your
+I know your lying to me,lyric,confusable,flag your>you're
+its a long way down,lyric,confusable,flag its>it's
+the bird lost it's wings,lyric,confusable,flag it's>its
+its been a long time,lyric,confusable,flag its>it's
+"the city never sleeps, it's lights burn on",lyric,confusable,flag it's>its
+I know its over now,lyric,confusable,flag its>it's
+the song has a life of it's own,lyric,confusable,flag it's>its
+I love you more then words,lyric,confusable,flag then>than
+you're colder then the rain,lyric,confusable,flag then>than
+better late then never,lyric,confusable,flag then>than
+rather be alone then lie,lyric,confusable,flag then>than
+we danced and than we cried,lyric,confusable,flag than>then
+I don't want to loose you,lyric,confusable,flag loose>lose
+we've got nothing left to loose,lyric,confusable,flag loose>lose
+your grip is getting lose,lyric,confusable,flag lose>loose
+don't let the wild horse lose on me,lyric,confusable,flag lose>loose
+you effect me like the moon,lyric,confusable,flag effect>affect
+your words had no affect on me,lyric,confusable,flag affect>effect
+I want to go there to,lyric,confusable,flag to>too
+it's way to late for us,lyric,confusable,flag to>too
+you loved me to much,lyric,confusable,flag to>too
+I waited a hour for your call,lyric,a_an,flag a>an
+you're a honest man,lyric,a_an,flag a>an
+she was a angel in disguise,lyric,a_an,flag a>an
+we drove a old car to the sea,lyric,a_an,flag a>an
+my heart is a empty room,lyric,a_an,flag a>an
+I hear a echo in the hall,lyric,a_an,flag a>an
+there's a ocean between us,lyric,a_an,flag a>an
+I need a umbrella for this rain,lyric,a_an,flag a>an
+she rode in on an unicorn,lyric,a_an,flag an>a
+it was an one-way ticket,lyric,a_an,flag an>a
+I wrote an song for you,lyric,a_an,flag an>a
+you left an broken heart,lyric,a_an,flag an>a
+we had an European summer,lyric,a_an,flag an>a
+give me an kiss goodnight,lyric,a_an,flag an>a
+a unbroken chain of days,lyric,a_an,flag a>an
+we were walking down the the road,lyric,doubled,flag doubled the
+I gave you all of of my love,lyric,doubled,flag doubled of
+we was was dancing all night,lyric,doubled,flag doubled was
+she is is the one,lyric,doubled,flag doubled is
+take me to to the river,lyric,doubled,flag doubled to
+you and and I forever,lyric,doubled,flag doubled and
+lost in in the dead of night,lyric,doubled,flag doubled in
+it's a a cold world,lyric,doubled,flag doubled a
+I wrote it for for you,lyric,doubled,flag doubled for
+waiting at at the station,lyric,doubled,flag doubled at
+tonight i call your name,lyric,lowercase_i,flag i>I
+you know i love you,lyric,lowercase_i,flag i>I
+when i close my eyes,lyric,lowercase_i,flag i>I
+maybe i was wrong,lyric,lowercase_i,flag i>I
+all i want is you,lyric,lowercase_i,flag i>I
+every time i fall,lyric,lowercase_i,flag i>I
+baby i'm coming home,lyric,lowercase_i,flag i>I
+so i ran away,lyric,lowercase_i,flag i>I
+and then i saw your face,lyric,lowercase_i,flag i>I
+now i'm alone again,lyric,lowercase_i,flag i>I
+if i could turn back time,lyric,lowercase_i,flag i>I
+oh i miss you,lyric,lowercase_i,flag i>I
+say i'm the only one,lyric,lowercase_i,flag i>I
+cause i don't care,lyric,lowercase_i,flag i>I
+tell me what i did,lyric,lowercase_i,flag i>I
+runnin' through the night,lyric,lyric_ok,no flag
+ain't nobody love me like you,lyric,lyric_ok,no flag
+heart on fire. no sleep.,lyric,lyric_ok,no flag
+I don't need no money,lyric,lyric_ok,no flag
+gonna love you till the end,lyric,lyric_ok,no flag
+wanna hold you close tonight,lyric,lyric_ok,no flag
+gotta keep on movin',lyric,lyric_ok,no flag
+'cause you're the one,lyric,lyric_ok,no flag
+wait 'til the sun goes down,lyric,lyric_ok,no flag
+y'all ain't ready for this,lyric,lyric_ok,no flag
+she don't care about the rain,lyric,lyric_ok,no flag
+me and you against the world,lyric,lyric_ok,no flag
+baby baby please come back,lyric,lyric_ok,no flag
+no no no don't let go,lyric,lyric_ok,no flag
+lookin' for a sign,lyric,lyric_ok,no flag
+"can't stop, won't stop",lyric,lyric_ok,no flag
+kinda lost without you,lyric,lyric_ok,no flag
+outta my mind,lyric,lyric_ok,no flag
+gimme one more chance,lyric,lyric_ok,no flag
+lemme take you higher,lyric,lyric_ok,no flag
+dunno where we're going,lyric,lyric_ok,no flag
+lotta love in this room,lyric,lyric_ok,no flag
+sorta wish you'd stay,lyric,lyric_ok,no flag
+"hold me close, hold me tight",lyric,lyric_ok,no flag
+"midnight, city lights",lyric,lyric_ok,no flag
+lost in Chicago,lyric,lyric_ok,no flag
+dancing with Maria,lyric,lyric_ok,no flag
+drivin' down to Memphis,lyric,lyric_ok,no flag
+whoa oh oh,lyric,lyric_ok,no flag
+yeah yeah yeah,lyric,lyric_ok,no flag
+la la la la,lyric,lyric_ok,no flag
+ooh baby,lyric,lyric_ok,no flag
+na na na,lyric,lyric_ok,no flag
+hey hey hey,lyric,lyric_ok,no flag
+just a kid with a dream,lyric,lyric_ok,no flag
+nothin' left to lose,lyric,lyric_ok,no flag
+somethin' 'bout the way you move,lyric,lyric_ok,no flag
+feelin' like a stranger,lyric,lyric_ok,no flag
+tryin' to find my way,lyric,lyric_ok,no flag
+cryin' in the rain,lyric,lyric_ok,no flag
+burnin' up inside,lyric,lyric_ok,no flag
+rollin' with the punches,lyric,lyric_ok,no flag
+shinin' like a diamond,lyric,lyric_ok,no flag
+dreamin' of you,lyric,lyric_ok,no flag
+fallin' for you,lyric,lyric_ok,no flag
+we ain't never going back,lyric,lyric_ok,no flag
+you never told me nothin',lyric,lyric_ok,no flag
+love me like you mean it,lyric,lyric_ok,no flag
+"broken wings, open sky",lyric,lyric_ok,no flag
+summer rain on my window,lyric,lyric_ok,no flag
+the night is young,lyric,lyric_ok,no flag
+"run, run, run away",lyric,lyric_ok,no flag
+say it again,lyric,lyric_ok,no flag
+one more time,lyric,lyric_ok,no flag
+coming home,lyric,lyric_ok,no flag
+under the stars,lyric,lyric_ok,no flag
+hearts like ours,lyric,lyric_ok,no flag
+every little thing,lyric,lyric_ok,no flag
+in the dead of night,lyric,lyric_ok,no flag
+from the bottom of my heart,lyric,lyric_ok,no flag
+all the way,lyric,lyric_ok,no flag
+back to you,lyric,lyric_ok,no flag
+the way you make me feel,lyric,lyric_ok,no flag
+nowhere to go,lyric,lyric_ok,no flag
+forever young,lyric,lyric_ok,no flag
+what if we tried,lyric,lyric_ok,no flag
+here we go again,lyric,lyric_ok,no flag
+only you,lyric,lyric_ok,no flag
+this is our song,lyric,lyric_ok,no flag
+let it burn,lyric,lyric_ok,no flag
+light it up,lyric,lyric_ok,no flag
+never say never,lyric,lyric_ok,no flag
+take my hand,lyric,lyric_ok,no flag
+there's a fire in my soul,lyric,lyric_ok,no flag
+they're dancing in the street,lyric,lyric_ok,no flag
+you're my everything,lyric,lyric_ok,no flag
+its glow fades away,lyric,lyric_ok,no flag
+I lose my mind for you,lyric,lyric_ok,no flag
+then you walked in,lyric,lyric_ok,no flag
+better than I ever was,lyric,lyric_ok,no flag
+too young to know,lyric,lyric_ok,no flag
+an hour to go,lyric,lyric_ok,no flag
+a one-night stand with the moon,lyric,lyric_ok,no flag
+an honest heart,lyric,lyric_ok,no flag
+a European dream,lyric,lyric_ok,no flag
+an unbroken heart,lyric,lyric_ok,no flag
+the crowd goes wild,lyric,lyric_ok,no flag
+ride or die,lyric,lyric_ok,no flag
+sweet like honey,lyric,lyric_ok,no flag
+cold as stone,lyric,lyric_ok,no flag
+drippin' in gold,lyric,lyric_ok,no flag
+y'all know the words,lyric,lyric_ok,no flag
+she's a rebel,lyric,lyric_ok,no flag
+'til the end of time,lyric,lyric_ok,no flag
+lovin' every minute,lyric,lyric_ok,no flag
+I had had enough of the rain,lyric,lyric_ok,no flag
+we will rise,lyric,lyric_ok,no flag
+you and I,lyric,lyric_ok,no flag
+I'm still here,lyric,lyric_ok,no flag
+I know that that was a lie,lyric,lyric_ok,no flag
