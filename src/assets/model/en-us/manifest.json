@@ -54,7 +54,7 @@
     },
     "meta.bin": {
       "bytes": 60000,
-      "sha256": "0bfd1d7e53b61566dd04be9a4fcef6c54aec7c637b2c11d4f3a4a2de775432da"
+      "sha256": "93f1e59e21f84dc0a285ffea0be2fc80ff03174adaeca3914cc50229d01df133"
     },
     "commonness.bin": {
       "bytes": 60000,
@@ -64,6 +64,7 @@
   "credits": [
     "CMU Pronouncing Dictionary (BSD-style licence)",
     "wordfreq commonness ranks (CC BY-SA 4.0, commonness.bin only)",
-    "LDNOOBW English word list (CC BY 4.0)"
+    "LDNOOBW English word list (CC BY 4.0)",
+    "Open English WordNet (CC BY 4.0) and Princeton WordNet, word types only"
   ]
 }
