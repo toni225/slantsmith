@@ -4,18 +4,21 @@
 :host {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  height: 100dvh;
   background: var(--mahogany);
   color: var(--chiffon);
+  overflow: hidden;
 }
 
 .page {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
+  overflow-y: auto;
 }
 
 @media (min-width: 768px) and (max-width: 1023.98px) {
