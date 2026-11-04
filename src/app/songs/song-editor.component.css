@@ -59,6 +59,9 @@ header {
 
 .title {
   width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border: 0;
   background: transparent;
   color: var(--chiffon);
