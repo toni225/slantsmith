@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+/* US English only (v1.0): latin subset only, see CLAUDE.md */
+@import '@fontsource/manrope/latin-400.css';
+@import '@fontsource/manrope/latin-500.css';
+@import '@fontsource/manrope/latin-600.css';
+@import '@fontsource/manrope/latin-700.css';
+@import '@fontsource/manrope/latin-800.css';
+
+:root {
+  --mahogany: #3F0D12;
+  --ruby: #A71D31;
+  --chiffon: #F1F0CC;
+  --fawn: #D5BF86;
+  --copper: #8D775F;
+  --booth-dark: #29080C;
+  --lamp-lit: #512220;
+  --dim-warm: #B8936F;
+  --paper-chrome: #E9E2B8;
+}
+
+/* Paper light (FR-50): the same roles, not new ones (see DESIGN.md "Colors"). */
+:root[data-theme='light'] {
+  --mahogany: #F1F0CC;
+  --chiffon: #3F0D12;
+  --fawn: #A71D31;
+  --dim-warm: #6A4B3A;
+  --booth-dark: #E7DFB4;
+  --lamp-lit: #E9E2B8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--booth-dark);
+  color: var(--chiffon);
+  font-family: Manrope, system-ui, sans-serif;
+}
+
+::selection { background: var(--ruby); color: var(--chiffon); }
+:focus-visible { outline: 2px solid var(--fawn); outline-offset: 2px; }
+button { font-family: inherit; }

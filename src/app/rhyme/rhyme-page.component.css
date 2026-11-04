@@ -1,0 +1,129 @@
+/* Mobile-first (NFR-07: 360px+). From 1024px the rhyme sheet stops being an
+   on-demand overlay and sits permanently beside the word field (see adapt.md);
+   below that it's the phone-shaped single-lamp world DESIGN.md pins, centred
+   rather than stretched. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--mahogany);
+  color: var(--chiffon);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .page {
+    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) 1fr;
+    align-items: start;
+    gap: 24px;
+    padding: 32px 32px 0;
+  }
+
+  header {
+    grid-column: 1;
+    padding: 0;
+  }
+
+  .panel {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+}
+
+header {
+  padding: 24px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.settings-link {
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fawn);
+  border-radius: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .settings-link:hover { color: var(--chiffon); background: rgba(241, 240, 204, 0.08); }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+}
+
+input {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--copper);
+  background: var(--booth-dark);
+  color: var(--chiffon);
+  font-size: 17px;
+  font-family: inherit;
+}
+
+input::placeholder {
+  color: var(--copper);
+}
+
+.page > app-quick-rhyme-bar {
+  margin-top: auto;
+}
+
+/* shortcut: dev-only timing readout, see rhyme-page.component.ts showColdLoad */
+.debug-timing {
+  margin: 0;
+  padding: 4px 24px;
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--fawn);
+}
+
+@media (min-width: 1024px) {
+  /* The rhyme panel is always visible at this width, so the "see all" quick bar is redundant. */
+  .page > app-quick-rhyme-bar {
+    display: none;
+  }
+}

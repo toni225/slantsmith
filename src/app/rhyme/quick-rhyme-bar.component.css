@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  background: var(--booth-dark);
+  border-top: 1px solid rgba(141, 119, 95, 0.45);
+  padding: 10px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 16px 8px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.label strong {
+  color: var(--chiffon);
+  font-weight: 700;
+}
+
+.see-all {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+  background: transparent;
+  border: 0;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px;
+  overflow-x: auto;
+}
+
+.chip {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  border: 1px solid var(--copper);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 600;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chip.slant {
+  border: 1px dotted var(--fawn);
+  padding: 0 14px;
+}
+
+.chip .tag {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .see-all:hover { color: var(--chiffon); }
+  .chip:hover { border-color: var(--fawn); }
+}

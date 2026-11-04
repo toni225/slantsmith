@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "slantsmith-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start", "--", "--port", "4210"],
+      "port": 4210
+    },
+    {
+      "name": "slantsmith-prod",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start", "--", "--port", "4211", "--configuration", "production"],
+      "port": 4211
+    }
+  ]
+}

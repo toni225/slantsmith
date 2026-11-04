@@ -1,0 +1,12 @@
+<div class="head">
+  <span class="label">Rhymes for <strong>{{ word() }}</strong></span>
+  <button type="button" class="see-all" (click)="seeAll.emit()">See all</button>
+</div>
+<div class="chips" role="list">
+  @for (c of chips(); track c.word) {
+    <button type="button" role="listitem" class="chip" [class.slant]="c.type !== 'perfect'" (click)="useWord.emit(c.word)">
+      {{ c.word }}
+      @if (c.type !== 'perfect') { <span class="tag">slant</span> }
+    </button>
+  }
+</div>

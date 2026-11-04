@@ -1,0 +1,260 @@
+/* Below 1024px: a bottom sheet over a dimmed screen (DESIGN.md "Rhyme sheet").
+   From 1024px: a permanent panel beside the word field, same surface and
+   components, no overlay chrome (see rhyme-page.component.css for the grid). */
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: block;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 4, 6, 0.55);
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 22%;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 26px 26px 0 0;
+  background: radial-gradient(110% 45% at 50% 0%, rgba(213, 191, 134, 0.16), rgba(213, 191, 134, 0) 70%), var(--lamp-lit);
+  box-shadow: 0 -18px 40px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.1);
+  display: flex;
+  flex-direction: column;
+  color: var(--chiffon);
+}
+
+@media (min-width: 1024px) {
+  :host {
+    position: static;
+    inset: auto;
+    z-index: auto;
+    height: 100%;
+  }
+
+  .scrim {
+    display: none;
+  }
+
+  .sheet {
+    position: static;
+    max-width: none;
+    margin: 0;
+    height: 100%;
+    max-height: calc(100dvh - 64px);
+    border-radius: 20px;
+  }
+
+  .grabber,
+  .close {
+    display: none;
+  }
+}
+
+.grabber {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--copper);
+  margin: 10px auto 4px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 6px 12px 0 20px;
+}
+
+.head h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 38px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.close {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chiffon);
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin: 14px 20px 0;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--mahogany);
+}
+
+.tab {
+  height: 40px;
+  border-radius: 10px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: var(--fawn);
+  font-variant-numeric: tabular-nums;
+}
+
+.tab.active {
+  background: var(--ruby);
+  color: var(--chiffon);
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px 4px;
+  overflow-x: auto;
+}
+
+.filter {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1px solid var(--copper);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.filters + .filters {
+  padding-top: 0;
+}
+
+.filter.on {
+  border-color: var(--fawn);
+  background: rgba(213, 191, 134, 0.16);
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 4px 8px 0 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.rows li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  border-bottom: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+@media (min-width: 1024px) {
+  /* A wide panel reflows the single list into a word grid, same rows, more of them at once. */
+  .rows {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0 20px;
+    padding: 4px 24px 0;
+  }
+
+  .rows li {
+    min-height: 56px;
+  }
+}
+
+.rows li.empty {
+  display: block;
+  padding: 20px 0;
+  color: var(--fawn);
+  font-size: 14px;
+  border-bottom: 0;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.word-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.word {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.chip {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--chiffon);
+  border: 1px solid var(--chiffon);
+  border-radius: 10px;
+  padding: 1px 8px;
+  text-transform: capitalize;
+}
+
+.chip.dotted {
+  color: var(--fawn);
+  border: 1px dotted var(--fawn);
+}
+
+.why {
+  font-size: 13px;
+  color: var(--fawn);
+  margin-top: 2px;
+}
+
+.use {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--chiffon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.footer {
+  margin: 0;
+  padding: 12px 20px max(28px, env(safe-area-inset-bottom));
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .close:hover, .use:hover { background: rgba(241, 240, 204, 0.08); }
+  .tab:not(.active):hover { color: var(--chiffon); }
+  .filter:hover { border-color: var(--fawn); }
+  .rows li:hover .word { color: var(--fawn); }
+}

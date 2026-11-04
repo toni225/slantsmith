@@ -1,0 +1,178 @@
+/* Mobile-first (NFR-07: 360px+); matches design/screens/Settings.dc.html. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--mahogany);
+  color: var(--chiffon);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .page {
+    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+  }
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px 0;
+}
+
+.back {
+  width: 44px;
+  height: 44px;
+  margin-left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chiffon);
+  border-radius: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+main {
+  padding: 0 20px 32px;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+legend, h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+  margin: 22px 0 8px;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+label.row {
+  cursor: pointer;
+}
+
+.row span:first-child:not(.row-title) {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.row input[type='radio'] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--ruby);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.row-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.row-hint {
+  display: block;
+  font-size: 13px;
+  color: var(--fawn);
+  margin-top: 2px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--booth-dark);
+}
+
+.segment {
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fawn);
+  cursor: pointer;
+}
+
+.segment.active {
+  background: var(--ruby);
+  color: var(--chiffon);
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.switch {
+  width: 52px;
+  height: 32px;
+  border-radius: 16px;
+  border: 1px solid var(--copper);
+  background: var(--booth-dark);
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.switch .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--dim-warm);
+  transition: left 0.15s ease-out;
+}
+
+.switch.on {
+  border-color: var(--ruby);
+  background: var(--ruby);
+}
+
+.switch.on .knob {
+  left: 23px;
+  background: var(--chiffon);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover { background: rgba(241, 240, 204, 0.08); }
+  label.row:hover span:first-child { color: var(--fawn); }
+  .segment:not(.active):hover { color: var(--chiffon); }
+}

@@ -1,0 +1,59 @@
+<div class="scrim" (click)="close()"></div>
+<section #panel role="dialog" [attr.aria-label]="'Rhymes for ' + word()" class="sheet">
+  <div class="grabber" aria-hidden="true"></div>
+  <div class="head">
+    <div>
+      <h1>{{ word() }}</h1>
+      <p class="sub">{{ subtitle() }}</p>
+    </div>
+    <button type="button" class="close" aria-label="Close rhymes" (click)="close()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div role="tablist" aria-label="Rhyme type" class="tabs">
+    <button role="tab" [attr.aria-selected]="tab() === 'perfect'" class="tab" [class.active]="tab() === 'perfect'" (click)="pick('perfect')">
+      Perfect @if (result(); as r) { {{ r.perfect.length }} }
+    </button>
+    <button role="tab" [attr.aria-selected]="tab() === 'slant'" class="tab" [class.active]="tab() === 'slant'" (click)="pick('slant')">
+      Slant @if (result(); as r) { {{ r.slant.length }} }
+    </button>
+  </div>
+
+  <div class="filters">
+    <button type="button" class="filter" [attr.aria-pressed]="lengthFilter() === 'any'" [class.on]="lengthFilter() === 'any'" (click)="pickLength('any')">Any length</button>
+    <button type="button" class="filter" [attr.aria-pressed]="lengthFilter() === 1" [class.on]="lengthFilter() === 1" (click)="pickLength(1)">1 syllable</button>
+    <button type="button" class="filter" [attr.aria-pressed]="lengthFilter() === 2" [class.on]="lengthFilter() === 2" (click)="pickLength(2)">2 syllables</button>
+    <button type="button" class="filter" [attr.aria-pressed]="commonOnly()" [class.on]="commonOnly()" (click)="toggleCommon()">Common only</button>
+  </div>
+
+  <div class="filters" role="group" aria-label="Word type">
+    @for (t of typeFilters; track t) {
+      <button type="button" class="filter" [attr.aria-pressed]="typeFilter() === t" [class.on]="typeFilter() === t" (click)="pickType(t)">
+        {{ t === 'any' ? 'Any type' : t }}
+      </button>
+    }
+  </div>
+
+  <ul class="rows">
+    @for (r of rows(); track r.word) {
+      <li>
+        <div class="main">
+          <div class="word-row">
+            <span class="word">{{ r.word }}</span>
+            <span class="chip" [class.dotted]="chipKind(r) === 'dotted'">{{ r.type }}</span>
+          </div>
+          <div class="why">{{ r.why }}</div>
+        </div>
+        <button type="button" class="use" [attr.aria-label]="'Use ' + r.word">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5v8a3 3 0 0 1-3 3H6"/><path d="M10 12l-4 4 4 4"/></svg>
+        </button>
+      </li>
+    } @empty {
+      @if (result()) {
+        <li class="empty">No {{ tab() }} rhymes match these filters.</li>
+      }
+    }
+  </ul>
+  <p class="footer">{{ footer() }}</p>
+</section>
