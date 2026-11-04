@@ -105,6 +105,20 @@ One family, Manrope, self-hosted. Lyrics are the largest running text (18/32, we
 
 Single column at 390 px. 20–24 px side margins for lists and dim sections; the lamp card insets to 12 px so it reads as lifted. Lyric rows are a three-column grid: 28 px rhyme letter, text, 28 px syllable count. Touch targets at least 44 px.
 
+## Responsive
+
+Phone is the reference design (390 px); everything above it is that same world using the room it's been given, never just a wider gutter around an unchanged phone screen.
+
+- **< 768 px (phone):** the baseline above. Overlay sheets, a single stacked list, bottom tab bar.
+- **768–1023 px (tablet):** the phone-shaped screen, centred, with a soft drop shadow (`0 0 60px` mahogany-black at 50%) so it reads as a lit object on a bigger surface rather than a stretched app. Nothing reflows yet.
+- **≥ 1024 px (desktop):** a screen with two logical parts — something you pick or type plus its result — becomes a real two-column layout instead of staying centred. A screen that's one linear task stays one column; give it room, not a split.
+  - **Rhymes** (built, the reference case): word field in a left column, a permanent rhyme panel beside it (no overlay, no scrim, no close button); the rhyme list itself reflows from a single column into a word grid (`repeat(auto-fill, minmax(240px, 1fr))`).
+  - **Songs list:** the "continue" lamp card stays full width at the top of the content column — it's the one lit thing on the screen, splitting it would fight the lamp-card rule. "Earlier" reflows from a thin row list into a card grid (`repeat(auto-fill, minmax(280px, 1fr))`), each card carrying the same title / first line / section count / date a row carries now.
+  - **Lyric editor:** stays one column — long lyric text needs a steady reading measure, and splitting the page defeats the point of an editor. Widen the max content width modestly (480 px → about 640 px) with more side padding, so it reads as a considered page rather than a narrow phone column adrift in a big window. Section action buttons may sit a little tighter since a mouse doesn't need the full 44 px, but never below it.
+  - **Settings:** no desktop treatment. A flat list of choices doesn't gain anything from a second column at any width; it stays the single centred column. Don't split it just because the screen is wide.
+  - **Tab bar:** stays docked at the bottom at every width, on every screen. This is deliberate, not an unfinished desktop nav — the Overview's "standard phone patterns" is the identity, expressed through palette/type/density, not swapped out for desktop chrome (a sidebar, a top menu bar) once there's room for one.
+- **Hover:** every hover state sits behind `(hover: hover) and (pointer: fine)` so touch devices never get a stuck `:hover` state. A tablet in tablet mode gets none; a desktop with a mouse gets all of them.
+
 ## Elevation & Depth
 
 Two levels only. The lamp card and sheets: a soft radial light from the top (fawn at about 16%) over lamp-lit, a neutral dark drop shadow (0 14px 36px, mahogany-black at 60%) and a faint top highlight. Everything else is flat. No coloured glows.
