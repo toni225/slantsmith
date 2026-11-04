@@ -30,6 +30,15 @@
   color: var(--chiffon);
 }
 
+/* Only .rows is meant to shrink/scroll when content outgrows the sheet's
+   height (phone bottom sheet, or the desktop modal's max-height); without
+   this, flexbox shrinks every child by default, so the header/tabs/filters'
+   fixed-size buttons overflowed their shrunk boxes and visually overlapped
+   the row list below them whenever there were enough results to matter. */
+.sheet > *:not(.rows) {
+  flex-shrink: 0;
+}
+
 /* .overlay (set by callers like the lyric editor's tap-to-rhyme, FR-23) keeps
    this a dismissible sheet even at desktop width - there's no permanent panel
    slot to become there, unlike the Rhymes page's grid. On a narrow phone it
@@ -58,12 +67,21 @@
     border-radius: 20px;
   }
 
+  /* flex-centred, not transform: translate(-50%,-50%) - that combined with
+     .rows' own scrolling caused a real Chromium repaint glitch where the
+     scrolled list visibly overlapped the header/filters above it. */
+  :host(.overlay) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   :host(.overlay) .sheet {
-    left: 50%;
+    position: static;
+    left: auto;
     right: auto;
-    top: 50%;
+    top: auto;
     bottom: auto;
-    transform: translate(-50%, -50%);
     width: 640px;
     max-width: calc(100vw - 64px);
     max-height: calc(100vh - 64px);
