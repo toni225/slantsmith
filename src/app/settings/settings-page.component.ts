@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { TabNavComponent } from '../shell/tab-nav.component';
 import { SettingsService, type TextSize, type Theme } from './settings.service';
 
 @Component({
   selector: 'app-settings-page',
-  imports: [RouterLink],
+  imports: [TabNavComponent],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.css',
 })

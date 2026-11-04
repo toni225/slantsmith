@@ -29,17 +29,6 @@ header {
   padding: 16px 20px 0;
 }
 
-.back {
-  width: 44px;
-  height: 44px;
-  margin-left: -10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--chiffon);
-  border-radius: 12px;
-}
-
 h1 {
   margin: 0;
   font-size: 28px;
@@ -172,7 +161,6 @@ label.row {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .back:hover { background: rgba(241, 240, 204, 0.08); }
   label.row:hover span:first-child { color: var(--fawn); }
   .segment:not(.active):hover { color: var(--chiffon); }
 }

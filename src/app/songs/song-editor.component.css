@@ -1,0 +1,182 @@
+/* Mobile-first (NFR-07: 360px+); matches design/screens/Main.dc.html's header.
+   Per-line rhyme letters, syllable counts and tap-word rhyming (FR-21/22/23)
+   are not built yet; sections are plain text for now. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--mahogany);
+  color: var(--chiffon);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .page {
+    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+  }
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 8px 8px 0;
+}
+
+.back {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chiffon);
+  border-radius: 12px;
+}
+
+.spacer {
+  width: 44px;
+  flex-shrink: 0;
+}
+
+.title-block {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.title {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--chiffon);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-align: center;
+  padding: 4px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--fawn);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ruby);
+}
+
+.dot.saving {
+  background: var(--copper);
+}
+
+main {
+  flex: 1;
+  padding: 8px 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.section-name {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fawn);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 4px 0;
+}
+
+.section-actions {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.section-actions button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--fawn);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.section-actions button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.lines {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid var(--copper);
+  border-radius: 14px;
+  background: var(--booth-dark);
+  color: var(--chiffon);
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 30px;
+  font-weight: 500;
+  padding: 10px 14px;
+  resize: vertical;
+}
+
+.lines::placeholder {
+  color: var(--copper);
+}
+
+.add-section {
+  height: 48px;
+  border-radius: 14px;
+  border: 1px dashed var(--copper);
+  background: transparent;
+  color: var(--fawn);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover { background: rgba(241, 240, 204, 0.08); }
+  .section-actions button:not(:disabled):hover { background: rgba(241, 240, 204, 0.08); color: var(--chiffon); }
+  .add-section:hover { color: var(--chiffon); border-color: var(--fawn); }
+}

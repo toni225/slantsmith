@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, isDevMode, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { TabNavComponent } from '../shell/tab-nav.component';
 import { SettingsService } from '../settings/settings.service';
 import { QuickRhymeBarComponent } from './quick-rhyme-bar.component';
 import { RhymeModelService } from './rhyme-model.service';
@@ -11,7 +11,7 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 
 @Component({
   selector: 'app-rhyme-page',
-  imports: [QuickRhymeBarComponent, RhymeSheetComponent, RouterLink],
+  imports: [QuickRhymeBarComponent, RhymeSheetComponent, TabNavComponent],
   templateUrl: './rhyme-page.component.html',
   styleUrl: './rhyme-page.component.css',
 })

@@ -1,0 +1,251 @@
+/* Mobile-first (NFR-07: 360px+); matches design/screens/Songs.dc.html + SongsEmpty.dc.html. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--mahogany);
+  color: var(--chiffon);
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .page {
+    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+  }
+}
+
+header {
+  padding: 22px 20px 0;
+}
+
+.head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.new-song {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  border: 0;
+  background: var(--ruby);
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.search {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: var(--booth-dark);
+  border: 1px solid var(--copper);
+  color: var(--fawn);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--chiffon);
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+main {
+  flex: 1;
+  padding-top: 16px;
+}
+
+.lamp-card {
+  display: block;
+  margin: 0 12px;
+  padding: 16px 16px 14px;
+  border-radius: 20px;
+  background: radial-gradient(120% 90% at 50% 0%, rgba(213, 191, 134, 0.16), rgba(213, 191, 134, 0) 70%), var(--lamp-lit);
+  box-shadow: 0 14px 36px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
+  color: var(--chiffon);
+  text-decoration: none;
+}
+
+.lamp-card .title {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.lamp-card .line {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lamp-card .meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.group-label {
+  margin: 22px 20px 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.rows a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(141, 119, 95, 0.35);
+  color: var(--chiffon);
+  text-decoration: none;
+}
+
+.row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.row-sub {
+  display: block;
+  font-size: 14px;
+  color: var(--dim-warm);
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.row-when {
+  display: block;
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.row-count {
+  display: block;
+  font-size: 12px;
+  color: var(--dim-warm);
+  margin-top: 3px;
+}
+
+.no-results {
+  margin: 24px 20px;
+  font-size: 14px;
+  color: var(--fawn);
+}
+
+.empty-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 12px 40px;
+}
+
+.empty-card {
+  padding: 40px 24px 28px;
+  border-radius: 24px;
+  background: radial-gradient(90% 75% at 50% 0%, rgba(213, 191, 134, 0.2), rgba(213, 191, 134, 0) 72%), var(--lamp-lit);
+  box-shadow: 0 16px 40px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
+  text-align: center;
+  color: var(--fawn);
+}
+
+.empty-card h2 {
+  margin: 18px 0 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--chiffon);
+}
+
+.empty-card p {
+  margin: 8px auto 0;
+  max-width: 270px;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--chiffon);
+}
+
+.empty-card .primary {
+  margin: 22px auto 0;
+  height: 52px;
+  max-width: 260px;
+  width: 100%;
+  border-radius: 14px;
+  border: 0;
+  background: var(--ruby);
+  color: var(--chiffon);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .new-song:hover { filter: brightness(0.9); }
+  .lamp-card:hover .title { color: var(--fawn); }
+  .rows a:hover .row-title { color: var(--fawn); }
+  .empty-card .primary:hover { filter: brightness(0.9); }
+}

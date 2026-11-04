@@ -1,0 +1,35 @@
+/* Matches design/screens/Songs.dc.html etc.'s bottom tab bar. */
+:host {
+  flex-shrink: 0;
+  display: block;
+}
+
+nav {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: var(--booth-dark);
+  padding: 6px 8px max(22px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(141, 119, 95, 0.25);
+}
+
+a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  min-height: 44px;
+  color: var(--dim-warm);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+a.active {
+  color: var(--fawn);
+  font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:not(.active):hover { color: var(--chiffon); }
+}

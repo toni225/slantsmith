@@ -1,0 +1,48 @@
+@if (song(); as song) {
+  <div class="page">
+    <header>
+      <a routerLink="/songs" class="back" aria-label="Back to songs">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </a>
+      <div class="title-block">
+        <input class="title" [value]="song.title" (change)="setTitle($any($event.target).value)" aria-label="Song title" />
+        <div class="status">
+          <span class="dot" [class.saving]="status() === 'saving'" aria-hidden="true"></span>
+          {{ status() === 'saving' ? 'Saving…' : 'Saved' }}
+        </div>
+      </div>
+      <div class="spacer"></div>
+    </header>
+
+    <main>
+      @for (section of song.sections; track section.id; let i = $index) {
+        <section class="section">
+          <div class="section-head">
+            <input class="section-name" [value]="section.name" (change)="renameSection(section, $any($event.target).value)" aria-label="Section name" />
+            <div class="section-actions">
+              <button type="button" (click)="moveSection(i, -1)" [disabled]="i === 0" aria-label="Move section up">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+              </button>
+              <button type="button" (click)="moveSection(i, 1)" [disabled]="i === song.sections.length - 1" aria-label="Move section down">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+              </button>
+              <button type="button" (click)="duplicateSection(i)" aria-label="Duplicate section">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+              </button>
+              <button type="button" (click)="deleteSection(i)" [disabled]="song.sections.length <= 1" aria-label="Delete section">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+              </button>
+            </div>
+          </div>
+          <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" placeholder="Write this section…" rows="4"></textarea>
+        </section>
+      }
+      <button type="button" class="add-section" (click)="addSection()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Add section
+      </button>
+    </main>
+  </div>
+
+  <app-tab-nav />
+}
