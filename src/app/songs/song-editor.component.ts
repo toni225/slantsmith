@@ -92,7 +92,8 @@ export class SongEditorComponent {
     });
   }
 
-  // FR-23: find the word under the cursor on click and open the rhyme sheet for it.
+  // FR-23: find the word under the cursor on double-click and open the rhyme sheet for it.
+  // A single click has to stay a normal click (place the caret, keep typing) or editing breaks.
   tapWord(event: MouseEvent) {
     const textarea = event.target as HTMLTextAreaElement;
     const pos = textarea.selectionStart;

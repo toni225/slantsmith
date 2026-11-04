@@ -43,7 +43,7 @@
                 }
               </div>
             }
-            <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" (click)="tapWord($event)" placeholder="Write this section…" rows="4"></textarea>
+            <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" (dblclick)="tapWord($event)" placeholder="Write this section… (double-click a word for rhymes)" rows="4"></textarea>
             @if (section.text) {
               <!-- shortcut: one count per \n-separated line; a soft-wrapped long line won't line up with its count. -->
               <div class="counts" aria-hidden="true">

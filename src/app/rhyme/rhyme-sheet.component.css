@@ -31,8 +31,11 @@
 }
 
 /* .overlay (set by callers like the lyric editor's tap-to-rhyme, FR-23) keeps
-   this a dismissible bottom/side sheet even at desktop width - there's no
-   permanent panel slot to become there, unlike the Rhymes page's grid. */
+   this a dismissible sheet even at desktop width - there's no permanent panel
+   slot to become there, unlike the Rhymes page's grid. On a narrow phone it
+   stays the bottom sheet above; from 1024px it becomes a centred modal
+   dialog instead of the same 480px-wide sheet just floating mid-screen
+   (DESIGN.md "Responsive"). */
 @media (min-width: 1024px) {
   :host(:not(.overlay)) {
     position: static;
@@ -53,6 +56,22 @@
     height: 100%;
     min-height: 0;
     border-radius: 20px;
+  }
+
+  :host(.overlay) .sheet {
+    left: 50%;
+    right: auto;
+    top: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: 640px;
+    max-width: calc(100vw - 64px);
+    max-height: calc(100vh - 64px);
+    border-radius: 20px;
+  }
+
+  :host(.overlay) .grabber {
+    display: none;
   }
 }
 
