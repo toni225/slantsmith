@@ -51,11 +51,6 @@
     min-height: 0;
     border-radius: 20px;
   }
-
-  .grabber,
-  .close {
-    display: none;
-  }
 }
 
 .grabber {
@@ -98,6 +93,14 @@
   border: 0;
   border-radius: 12px;
   cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  /* Permanent panel from here, not a dismissible sheet - nothing to close. */
+  .grabber,
+  .close {
+    display: none;
+  }
 }
 
 .tabs {
