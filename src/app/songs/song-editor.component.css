@@ -18,9 +18,27 @@
   margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023.98px) {
   .page {
     box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Stays one column: lyric text needs a steady reading measure, not a split
+     page (DESIGN.md "Responsive"). Just more room than the phone column. */
+  .page {
+    max-width: 640px;
+  }
+
+  header {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  main {
+    padding-left: 32px;
+    padding-right: 32px;
   }
 }
 
@@ -130,8 +148,8 @@ main {
 }
 
 .section-actions button {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 0;
   background: transparent;
   color: var(--fawn);

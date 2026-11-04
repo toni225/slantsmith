@@ -16,9 +16,25 @@
   margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023.98px) {
   .page {
     box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 1100px;
+    padding: 0 32px;
+  }
+
+  header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .lamp-card {
+    margin: 0;
   }
 }
 
@@ -149,6 +165,50 @@ main {
   border-bottom: 1px solid rgba(141, 119, 95, 0.35);
   color: var(--chiffon);
   text-decoration: none;
+}
+
+@media (min-width: 1024px) {
+  /* "Earlier" reflows from a thin row list into a card grid; the continue
+     lamp card above stays the one lit thing on the screen (DESIGN.md). */
+  .group-label,
+  .no-results {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .rows {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 4px 0 0;
+  }
+
+  .rows li {
+    list-style: none;
+  }
+
+  .rows a {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    min-height: 0;
+    padding: 16px;
+    border-bottom: 0;
+    border-radius: 20px;
+    background: var(--booth-dark);
+    border: 1px solid rgba(141, 119, 95, 0.35);
+  }
+
+  .row-meta {
+    text-align: left;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .row-when {
+    order: 2;
+  }
 }
 
 .row-main {
