@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TabNavComponent } from '../shell/tab-nav.component';
 import { RhymeModelService } from '../rhyme/rhyme-model.service';
+import type { SchemeLetter } from '../rhyme/rhyme-protocol';
 import { SongStorageService } from './song-storage.service';
 import type { Section, Song } from './song.model';
 
@@ -26,6 +27,8 @@ export class SongEditorComponent {
   readonly status = signal<'saved' | 'saving'>('saved');
   // FR-21: live syllable count per line, keyed by section id.
   readonly lineCounts = signal<Record<string, LineCount[]>>({});
+  // FR-22: rhyme-letter scheme per line ending, keyed by section id.
+  readonly lineSchemes = signal<Record<string, SchemeLetter[]>>({});
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
@@ -33,7 +36,7 @@ export class SongEditorComponent {
     this.storage.get(id).then((song) => {
       if (!song) { this.router.navigate(['/songs']); return; }
       this.song.set(song);
-      for (const section of song.sections) this.updateLineCounts(section);
+      for (const section of song.sections) this.updateLine(section);
     });
     inject(DestroyRef).onDestroy(() => clearTimeout(this.saveTimer));
   }
@@ -44,6 +47,15 @@ export class SongEditorComponent {
 
   counts(section: Section): LineCount[] {
     return this.lineCounts()[section.id] ?? [];
+  }
+
+  scheme(section: Section): SchemeLetter[] {
+    return this.lineSchemes()[section.id] ?? [];
+  }
+
+  private updateLine(section: Section) {
+    this.updateLineCounts(section);
+    this.updateLineScheme(section);
   }
 
   private updateLineCounts(section: Section) {
@@ -62,6 +74,13 @@ export class SongEditorComponent {
         return { syllables: slice.reduce((n: number, c) => n + (c ?? 0), 0), estimated: slice.some((c) => c === undefined) };
       });
       this.lineCounts.update((m) => ({ ...m, [section.id]: perLine }));
+    });
+  }
+
+  private updateLineScheme(section: Section) {
+    const endings = section.text.split('\n').map((l) => (l.match(WORD_RE) ?? []).at(-1)?.toLowerCase() ?? '');
+    this.models.scheme(endings).then((result) => {
+      this.lineSchemes.update((m) => ({ ...m, [section.id]: result }));
     });
   }
 
@@ -85,7 +104,7 @@ export class SongEditorComponent {
 
   setSectionText(section: Section, text: string) {
     section.text = text;
-    this.updateLineCounts(section);
+    this.updateLine(section);
     this.scheduleSave();
   }
 
@@ -100,7 +119,7 @@ export class SongEditorComponent {
     const section: Section = { id: crypto.randomUUID(), name: `Section ${song.sections.length + 1}`, text: '' };
     song.sections.push(section);
     this.song.set({ ...song });
-    this.updateLineCounts(section);
+    this.updateLine(section);
     this.scheduleSave();
   }
 
@@ -110,7 +129,7 @@ export class SongEditorComponent {
     const copy: Section = { ...song.sections[index], id: crypto.randomUUID() };
     song.sections.splice(index + 1, 0, copy);
     this.song.set({ ...song });
-    this.updateLineCounts(copy);
+    this.updateLine(copy);
     this.scheduleSave();
   }
 

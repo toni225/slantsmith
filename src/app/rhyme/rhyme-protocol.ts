@@ -24,4 +24,10 @@ export type RhymeResponse = { id: number; result: UiRhymeResult } | { id: number
 export interface SyllablesRequest { id: number; kind: 'syllables'; words: string[] }
 export interface SyllablesResponse { id: number; result: (number | undefined)[] }
 
-export type WorkerRequest = RhymeRequest | SyllablesRequest;
+// FR-22: rhyme-letter scheme (A, B, C...) per line ending in the lyric editor.
+export interface SchemeRequest { id: number; kind: 'scheme'; words: string[] }
+export interface SchemeResponse { id: number; result: SchemeLetter[] }
+
+export type WorkerRequest = RhymeRequest | SyllablesRequest | SchemeRequest;
+
+export interface SchemeLetter { letter: string | null; type: 'perfect' | 'slant' | null }

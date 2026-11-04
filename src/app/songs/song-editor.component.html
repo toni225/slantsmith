@@ -35,6 +35,14 @@
             </div>
           </div>
           <div class="lines-wrap">
+            @if (section.text) {
+              <!-- shortcut: one letter per \n-separated line; a soft-wrapped long line won't line up with its letter. -->
+              <div class="letters" aria-hidden="true">
+                @for (line of lines(section); track $index) {
+                  <span class="letter" [attr.data-letter]="scheme(section)[$index]?.letter" [class.perfect]="scheme(section)[$index]?.type === 'perfect'" [class.slant]="scheme(section)[$index]?.type === 'slant'"></span>
+                }
+              </div>
+            }
             <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" placeholder="Write this section…" rows="4"></textarea>
             @if (section.text) {
               <!-- shortcut: one count per \n-separated line; a soft-wrapped long line won't line up with its count. -->
