@@ -1,10 +1,14 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TabNavComponent } from '../shell/tab-nav.component';
+import { RhymeModelService } from '../rhyme/rhyme-model.service';
 import { SongStorageService } from './song-storage.service';
 import type { Section, Song } from './song.model';
 
 const AUTOSAVE_MS = 2000; // FR-32: autosave within 2s
+const WORD_RE = /[a-zA-Z']+/g;
+
+export interface LineCount { syllables: number; estimated: boolean }
 
 @Component({
   selector: 'app-song-editor',
@@ -14,11 +18,14 @@ const AUTOSAVE_MS = 2000; // FR-32: autosave within 2s
 })
 export class SongEditorComponent {
   private readonly storage = inject(SongStorageService);
+  private readonly models = inject(RhymeModelService);
   private readonly router = inject(Router);
   private saveTimer?: ReturnType<typeof setTimeout>;
 
   readonly song = signal<Song | null>(null);
   readonly status = signal<'saved' | 'saving'>('saved');
+  // FR-21: live syllable count per line, keyed by section id.
+  readonly lineCounts = signal<Record<string, LineCount[]>>({});
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
@@ -26,8 +33,36 @@ export class SongEditorComponent {
     this.storage.get(id).then((song) => {
       if (!song) { this.router.navigate(['/songs']); return; }
       this.song.set(song);
+      for (const section of song.sections) this.updateLineCounts(section);
     });
     inject(DestroyRef).onDestroy(() => clearTimeout(this.saveTimer));
+  }
+
+  lines(section: Section): string[] {
+    return section.text.split('\n');
+  }
+
+  counts(section: Section): LineCount[] {
+    return this.lineCounts()[section.id] ?? [];
+  }
+
+  private updateLineCounts(section: Section) {
+    const lines = section.text.split('\n');
+    const words = lines.map((l) => l.match(WORD_RE) ?? []);
+    const flat = words.flat();
+    if (!flat.length) {
+      this.lineCounts.update((m) => ({ ...m, [section.id]: lines.map(() => ({ syllables: 0, estimated: false })) }));
+      return;
+    }
+    this.models.syllables(flat).then((counts) => {
+      let at = 0;
+      const perLine = words.map((ws) => {
+        const slice = counts.slice(at, at + ws.length);
+        at += ws.length;
+        return { syllables: slice.reduce((n: number, c) => n + (c ?? 0), 0), estimated: slice.some((c) => c === undefined) };
+      });
+      this.lineCounts.update((m) => ({ ...m, [section.id]: perLine }));
+    });
   }
 
   private scheduleSave() {
@@ -50,6 +85,7 @@ export class SongEditorComponent {
 
   setSectionText(section: Section, text: string) {
     section.text = text;
+    this.updateLineCounts(section);
     this.scheduleSave();
   }
 
@@ -61,8 +97,10 @@ export class SongEditorComponent {
   addSection() {
     const song = this.song();
     if (!song) return;
-    song.sections.push({ id: crypto.randomUUID(), name: `Section ${song.sections.length + 1}`, text: '' });
+    const section: Section = { id: crypto.randomUUID(), name: `Section ${song.sections.length + 1}`, text: '' };
+    song.sections.push(section);
     this.song.set({ ...song });
+    this.updateLineCounts(section);
     this.scheduleSave();
   }
 
@@ -72,6 +110,7 @@ export class SongEditorComponent {
     const copy: Section = { ...song.sections[index], id: crypto.randomUUID() };
     song.sections.splice(index + 1, 0, copy);
     this.song.set({ ...song });
+    this.updateLineCounts(copy);
     this.scheduleSave();
   }
 

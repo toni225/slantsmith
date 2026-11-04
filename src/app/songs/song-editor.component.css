@@ -165,8 +165,15 @@ main {
   cursor: default;
 }
 
+.lines-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
 .lines {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   min-height: 120px;
   border: 1px solid var(--copper);
   border-radius: 14px;
@@ -178,6 +185,27 @@ main {
   font-weight: 500;
   padding: 10px 14px;
   resize: vertical;
+}
+
+/* FR-21: syllable count per line, lined up with .lines' line-height/padding. */
+.counts {
+  flex-shrink: 0;
+  width: 28px;
+  padding-top: 10px;
+}
+
+.count {
+  display: block;
+  height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fawn);
+  text-align: right;
+}
+
+.count.estimated {
+  font-style: italic;
 }
 
 .lines::placeholder {

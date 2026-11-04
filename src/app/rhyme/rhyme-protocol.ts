@@ -17,5 +17,11 @@ export interface UiRhymeResult {
   slant: UiRhyme[];
 }
 
-export interface RhymeRequest { id: number; word: string; hideExplicit: boolean }
+export interface RhymeRequest { id: number; kind: 'rhyme'; word: string; hideExplicit: boolean }
 export type RhymeResponse = { id: number; result: UiRhymeResult } | { id: number; error: string };
+
+// FR-21: live syllable count per line in the lyric editor.
+export interface SyllablesRequest { id: number; kind: 'syllables'; words: string[] }
+export interface SyllablesResponse { id: number; result: (number | undefined)[] }
+
+export type WorkerRequest = RhymeRequest | SyllablesRequest;

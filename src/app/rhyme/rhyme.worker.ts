@@ -2,7 +2,7 @@
 import { loadModel } from '../../engines/model';
 import { RhymeEngine, type Rhyme } from '../../engines/rhyme';
 import { syllableCount } from './syllables';
-import type { RhymeRequest, RhymeResponse, UiRhyme } from './rhyme-protocol';
+import type { RhymeResponse, SyllablesResponse, UiRhyme, WorkerRequest } from './rhyme-protocol';
 
 async function load() {
   const base = 'assets/model/en-us/';
@@ -29,10 +29,16 @@ function enrich(model: Awaited<ReturnType<typeof load>>['model'], r: Rhyme): UiR
   };
 }
 
-addEventListener('message', async ({ data }: MessageEvent<RhymeRequest>) => {
-  const { id, word, hideExplicit } = data;
+addEventListener('message', async ({ data }: MessageEvent<WorkerRequest>) => {
+  const { id } = data;
   try {
     const { engine, model } = await ready;
+    if (data.kind === 'syllables') {
+      const result = data.words.map((w) => syllableCount(model, w));
+      postMessage({ id, result } satisfies SyllablesResponse);
+      return;
+    }
+    const { word, hideExplicit } = data;
     const r = engine.rhymes(word, hideExplicit);
     const response: RhymeResponse = {
       id,

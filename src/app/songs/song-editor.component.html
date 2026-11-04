@@ -34,7 +34,17 @@
               </button>
             </div>
           </div>
-          <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" placeholder="Write this section…" rows="4"></textarea>
+          <div class="lines-wrap">
+            <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" placeholder="Write this section…" rows="4"></textarea>
+            @if (section.text) {
+              <!-- shortcut: one count per \n-separated line; a soft-wrapped long line won't line up with its count. -->
+              <div class="counts" aria-hidden="true">
+                @for (line of lines(section); track $index) {
+                  <span class="count" [class.estimated]="counts(section)[$index]?.estimated">{{ counts(section)[$index]?.syllables }}</span>
+                }
+              </div>
+            }
+          </div>
         </section>
       }
       <button type="button" class="add-section" (click)="addSection()">
