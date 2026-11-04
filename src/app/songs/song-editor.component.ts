@@ -3,6 +3,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TabNavComponent } from '../shell/tab-nav.component';
 import { RhymeModelService } from '../rhyme/rhyme-model.service';
 import type { SchemeLetter } from '../rhyme/rhyme-protocol';
+import { RhymeSheetComponent } from '../rhyme/rhyme-sheet.component';
+import { SettingsService } from '../settings/settings.service';
 import { SongStorageService } from './song-storage.service';
 import type { Section, Song } from './song.model';
 
@@ -11,9 +13,12 @@ const WORD_RE = /[a-zA-Z']+/g;
 
 export interface LineCount { syllables: number; estimated: boolean }
 
+// FR-23: the word tapped in a section's textarea, with enough to replace it in place.
+interface TappedWord { textarea: HTMLTextAreaElement; start: number; end: number; word: string }
+
 @Component({
   selector: 'app-song-editor',
-  imports: [RouterLink, TabNavComponent],
+  imports: [RouterLink, TabNavComponent, RhymeSheetComponent],
   templateUrl: './song-editor.component.html',
   styleUrl: './song-editor.component.css',
 })
@@ -29,6 +34,9 @@ export class SongEditorComponent {
   readonly lineCounts = signal<Record<string, LineCount[]>>({});
   // FR-22: rhyme-letter scheme per line ending, keyed by section id.
   readonly lineSchemes = signal<Record<string, SchemeLetter[]>>({});
+  // FR-23: tap a word, see rhymes, tap a result to replace it; undo (Ctrl/Cmd+Z) restores it.
+  readonly hideExplicit = inject(SettingsService).hideExplicit;
+  readonly tapped = signal<TappedWord | null>(null);
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
@@ -82,6 +90,33 @@ export class SongEditorComponent {
     this.models.scheme(endings).then((result) => {
       this.lineSchemes.update((m) => ({ ...m, [section.id]: result }));
     });
+  }
+
+  // FR-23: find the word under the cursor on click and open the rhyme sheet for it.
+  tapWord(event: MouseEvent) {
+    const textarea = event.target as HTMLTextAreaElement;
+    const pos = textarea.selectionStart;
+    const text = textarea.value;
+    let start = pos, end = pos;
+    while (start > 0 && /[a-zA-Z']/.test(text[start - 1])) start--;
+    while (end < text.length && /[a-zA-Z']/.test(text[end])) end++;
+    if (start === end) { this.tapped.set(null); return; }
+    this.tapped.set({ textarea, start, end, word: text.slice(start, end) });
+  }
+
+  closeTap() {
+    this.tapped.set(null);
+  }
+
+  useTappedWord(replacement: string) {
+    const tapped = this.tapped();
+    if (!tapped) return;
+    const { textarea, start, end } = tapped;
+    textarea.focus();
+    textarea.setSelectionRange(start, end);
+    // execCommand (not a direct .value assignment) keeps this on the native undo stack, so Ctrl/Cmd+Z restores it.
+    document.execCommand('insertText', false, replacement);
+    this.tapped.set(null);
   }
 
   private scheduleSave() {

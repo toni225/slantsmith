@@ -30,8 +30,11 @@
   color: var(--chiffon);
 }
 
+/* .overlay (set by callers like the lyric editor's tap-to-rhyme, FR-23) keeps
+   this a dismissible bottom/side sheet even at desktop width - there's no
+   permanent panel slot to become there, unlike the Rhymes page's grid. */
 @media (min-width: 1024px) {
-  :host {
+  :host(:not(.overlay)) {
     position: static;
     inset: auto;
     z-index: auto;
@@ -39,11 +42,11 @@
     min-height: 0;
   }
 
-  .scrim {
+  :host(:not(.overlay)) .scrim {
     display: none;
   }
 
-  .sheet {
+  :host(:not(.overlay)) .sheet {
     position: static;
     max-width: none;
     margin: 0;
@@ -97,8 +100,8 @@
 
 @media (min-width: 1024px) {
   /* Permanent panel from here, not a dismissible sheet - nothing to close. */
-  .grabber,
-  .close {
+  :host(:not(.overlay)) .grabber,
+  :host(:not(.overlay)) .close {
     display: none;
   }
 }

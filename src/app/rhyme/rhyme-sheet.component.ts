@@ -24,6 +24,7 @@ export class RhymeSheetComponent {
   readonly word = input.required<string>();
   readonly hideExplicit = input(false);
   readonly closed = output<void>();
+  readonly used = output<string>();
 
   readonly tab = signal<Tab>('perfect');
   readonly lengthFilter = signal<LengthFilter>('any');
@@ -80,6 +81,7 @@ export class RhymeSheetComponent {
   pickType(type: TypeFilter) { this.typeFilter.set(type); }
   toggleCommon() { this.commonOnly.update((v) => !v); }
   close() { this.closed.emit(); }
+  use(word: string) { this.used.emit(word); }
 
   chipKind(r: UiRhyme): 'solid' | 'dotted' {
     return r.type === 'perfect' ? 'solid' : 'dotted';
