@@ -4,46 +4,50 @@
   </header>
 
   <main>
-    <fieldset>
-      <legend>Look</legend>
-      @for (t of themes; track t.value) {
-        <label class="row">
-          <span>{{ t.label }}</span>
-          <input type="radio" name="theme" [checked]="settings.theme() === t.value" (change)="pickTheme(t.value)" />
-        </label>
-      }
-    </fieldset>
-
-    <fieldset>
-      <legend>Lyric text size</legend>
-      <div class="segmented">
-        @for (s of sizes; track s.value) {
-          <label class="segment" [class.active]="settings.textSize() === s.value">
-            <input type="radio" name="size" [checked]="settings.textSize() === s.value" (change)="pickSize(s.value)" />
-            {{ s.label }}
+    <div class="col">
+      <fieldset>
+        <legend>Look</legend>
+        @for (t of themes; track t.value) {
+          <label class="row">
+            <span>{{ t.label }}</span>
+            <input type="radio" name="theme" [checked]="settings.theme() === t.value" (change)="pickTheme(t.value)" />
           </label>
         }
-      </div>
-    </fieldset>
-
-    <h2>Writing</h2>
-    <div class="row">
-      <label for="lyric">
-        <span class="row-title">Lyric mode for new songs</span>
-        <span class="row-hint">Slang, dropped letters and fragments are not flagged</span>
-      </label>
-      <button id="lyric" type="button" role="switch" [attr.aria-checked]="settings.lyricModeDefault()" class="switch" [class.on]="settings.lyricModeDefault()" (click)="toggleLyricMode()">
-        <span class="knob" aria-hidden="true"></span>
-      </button>
+      </fieldset>
     </div>
-    <div class="row">
-      <label for="explicit">
-        <span class="row-title">Hide explicit words</span>
-        <span class="row-hint">In rhyme results only</span>
-      </label>
-      <button id="explicit" type="button" role="switch" [attr.aria-checked]="settings.hideExplicit()" class="switch" [class.on]="settings.hideExplicit()" (click)="toggleHideExplicit()">
-        <span class="knob" aria-hidden="true"></span>
-      </button>
+
+    <div class="col">
+      <fieldset>
+        <legend>Lyric text size</legend>
+        <div class="segmented">
+          @for (s of sizes; track s.value) {
+            <label class="segment" [class.active]="settings.textSize() === s.value">
+              <input type="radio" name="size" [checked]="settings.textSize() === s.value" (change)="pickSize(s.value)" />
+              {{ s.label }}
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <h2>Writing</h2>
+      <div class="row">
+        <label for="lyric">
+          <span class="row-title">Lyric mode for new songs</span>
+          <span class="row-hint">Slang, dropped letters and fragments are not flagged</span>
+        </label>
+        <button id="lyric" type="button" role="switch" [attr.aria-checked]="settings.lyricModeDefault()" class="switch" [class.on]="settings.lyricModeDefault()" (click)="toggleLyricMode()">
+          <span class="knob" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="row">
+        <label for="explicit">
+          <span class="row-title">Hide explicit words</span>
+          <span class="row-hint">In rhyme results only</span>
+        </label>
+        <button id="explicit" type="button" role="switch" [attr.aria-checked]="settings.hideExplicit()" class="switch" [class.on]="settings.hideExplicit()" (click)="toggleHideExplicit()">
+          <span class="knob" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
   </main>
 </div>
