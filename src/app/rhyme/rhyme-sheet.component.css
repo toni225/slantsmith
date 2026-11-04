@@ -67,9 +67,8 @@
     border-radius: 20px;
   }
 
-  /* flex-centred, not transform: translate(-50%,-50%) - that combined with
-     .rows' own scrolling caused a real Chromium repaint glitch where the
-     scrolled list visibly overlapped the header/filters above it. */
+  /* Flex-centred, not transform: translate(-50%,-50%) - simpler and avoids
+     relying on a fixed/known size to centre against. */
   :host(.overlay) {
     display: flex;
     align-items: center;
@@ -77,7 +76,10 @@
   }
 
   :host(.overlay) .sheet {
-    position: static;
+    /* position: relative, not static - .scrim is position: absolute and
+       always paints above static content regardless of DOM order, which
+       made the whole dialog look darkened and swallowed every click. */
+    position: relative;
     left: auto;
     right: auto;
     top: auto;
