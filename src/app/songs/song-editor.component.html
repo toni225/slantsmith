@@ -11,7 +11,9 @@
           {{ status() === 'saving' ? 'Saving…' : 'Saved' }}
         </div>
       </div>
-      <div class="spacer"></div>
+      <a [routerLink]="['/songs', song.id, 'takes']" class="takes" aria-label="Takes">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M7 16h10"/><circle cx="7" cy="12" r="1"/><circle cx="17" cy="12" r="1"/></svg>
+      </a>
     </header>
 
     <main>

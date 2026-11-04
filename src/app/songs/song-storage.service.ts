@@ -1,11 +1,12 @@
 import { Injectable, signal } from '@angular/core';
-import type { Song } from './song.model';
+import type { Section, Song, Take } from './song.model';
 
 const DB_NAME = 'slantsmith';
 const DB_VERSION = 1;
 const SONGS_STORE = 'songs';
-// shortcut: reserved for FR-32 auto-snapshots/named takes (ADR-07: versions in their own store), unused until that's built.
+// FR-32: snapshots of a song (ADR-07: versions in their own store).
 const TAKES_STORE = 'takes';
+const MAX_AUTO_TAKES = 20; // named takes are never pruned
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -71,5 +72,39 @@ export class SongStorageService {
       req.onerror = () => reject(req.error);
     });
     await this.refresh();
+  }
+
+  async listTakes(songId: string): Promise<Take[]> {
+    const db = await this.db;
+    const all = await new Promise<Take[]>((resolve, reject) => {
+      const req = db.transaction(TAKES_STORE, 'readonly').objectStore(TAKES_STORE).index('songId').getAll(songId);
+      req.onsuccess = () => resolve(req.result as Take[]);
+      req.onerror = () => reject(req.error);
+    });
+    return all.sort((a, b) => b.n - a.n);
+  }
+
+  // FR-32: name === null for an automatic 10-minute snapshot; a string for a take the writer named on purpose.
+  async saveTake(songId: string, title: string, sections: Section[], name: string | null): Promise<void> {
+    const db = await this.db;
+    const existing = await this.listTakes(songId);
+    const take: Take = {
+      id: crypto.randomUUID(),
+      songId,
+      n: (existing[0]?.n ?? 0) + 1,
+      name,
+      title,
+      sections: sections.map((s) => ({ ...s })),
+      createdAt: Date.now(),
+    };
+    const tx = db.transaction(TAKES_STORE, 'readwrite');
+    tx.objectStore(TAKES_STORE).put(take);
+    // Auto takes beyond the newest 20 are pruned; named takes are never deleted.
+    const autoTakes = existing.filter((t) => t.name === null);
+    for (const stale of autoTakes.slice(MAX_AUTO_TAKES - 1)) tx.objectStore(TAKES_STORE).delete(stale.id);
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
   }
 }

@@ -64,9 +64,15 @@ header {
   border-radius: 12px;
 }
 
-.spacer {
+.takes {
   width: 44px;
+  height: 44px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chiffon);
+  border-radius: 12px;
 }
 
 .title-block {
@@ -268,7 +274,7 @@ main {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .back:hover { background: rgba(241, 240, 204, 0.08); }
+  .back:hover, .takes:hover { background: rgba(241, 240, 204, 0.08); }
   .section-actions button:not(:disabled):hover { background: rgba(241, 240, 204, 0.08); color: var(--chiffon); }
   .add-section:hover { color: var(--chiffon); border-color: var(--fawn); }
 }

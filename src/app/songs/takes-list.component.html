@@ -1,0 +1,55 @@
+@if (song(); as song) {
+  <div class="page">
+    <header>
+      <a [routerLink]="['/songs', song.id]" class="back" aria-label="Back to {{ song.title }}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </a>
+      <div>
+        <h1>Takes</h1>
+        <p class="song-title">{{ song.title }}</p>
+      </div>
+    </header>
+
+    <div class="save-row">
+      <button type="button" class="save" (click)="saveAsTake()">
+        <span class="dot" aria-hidden="true"></span>
+        Save this as a take
+      </button>
+    </div>
+
+    <div class="col-head" role="row" aria-hidden="true">
+      <span>Take</span><span>Name</span><span class="when">When</span>
+    </div>
+
+    <ul class="rows">
+      <li class="row now">
+        <span class="n">Now</span>
+        <span class="name">Current draft</span>
+        <span class="when">Editing</span>
+      </li>
+
+      @if (takes().length) {
+        @let latest = takes()[0];
+        <li class="latest">
+          <div class="row">
+            <span class="n">{{ latest.n }}</span>
+            <span class="name" [class.auto]="!latest.name">{{ latest.name ?? 'Autosave' }}</span>
+            <span class="when">{{ when(latest.createdAt) }}</span>
+          </div>
+          <button type="button" class="restore" (click)="restore(latest)">Restore</button>
+        </li>
+
+        @for (take of takes().slice(1); track take.id) {
+          <li class="row">
+            <span class="n dim">{{ take.n }}</span>
+            <span class="name" [class.auto]="!take.name">{{ take.name ?? 'Autosave' }}</span>
+            <span class="when">{{ when(take.createdAt) }}</span>
+          </li>
+        }
+      }
+    </ul>
+    <p class="footer">Autosaves every 10 minutes keep the newest 20. Named takes are never deleted.</p>
+  </div>
+
+  <app-tab-nav />
+}

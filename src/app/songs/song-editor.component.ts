@@ -9,6 +9,7 @@ import { SongStorageService } from './song-storage.service';
 import type { Section, Song } from './song.model';
 
 const AUTOSAVE_MS = 2000; // FR-32: autosave within 2s
+const AUTO_TAKE_MS = 10 * 60 * 1000; // FR-32: auto snapshot every 10 min
 const WORD_RE = /[a-zA-Z']+/g;
 
 export interface LineCount { syllables: number; estimated: boolean }
@@ -27,6 +28,7 @@ export class SongEditorComponent {
   private readonly models = inject(RhymeModelService);
   private readonly router = inject(Router);
   private saveTimer?: ReturnType<typeof setTimeout>;
+  private autoTakeTimer?: ReturnType<typeof setInterval>;
 
   readonly song = signal<Song | null>(null);
   readonly status = signal<'saved' | 'saving'>('saved');
@@ -46,7 +48,14 @@ export class SongEditorComponent {
       this.song.set(song);
       for (const section of song.sections) this.updateLine(section);
     });
-    inject(DestroyRef).onDestroy(() => clearTimeout(this.saveTimer));
+    this.autoTakeTimer = setInterval(() => {
+      const song = this.song();
+      if (song) this.storage.saveTake(song.id, song.title, song.sections, null);
+    }, AUTO_TAKE_MS);
+    inject(DestroyRef).onDestroy(() => {
+      clearTimeout(this.saveTimer);
+      clearInterval(this.autoTakeTimer);
+    });
   }
 
   lines(section: Section): string[] {

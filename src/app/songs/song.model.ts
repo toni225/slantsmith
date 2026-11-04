@@ -12,6 +12,19 @@ export interface Song {
   updatedAt: number;
 }
 
+// FR-32: a snapshot of a song at a point in time. name === null means an
+// automatic 10-minute snapshot; a string name means the writer saved it on
+// purpose. Auto takes are capped (newest 20 kept); named takes never expire.
+export interface Take {
+  id: string;
+  songId: string;
+  n: number; // 1-based, increases per song regardless of auto/named
+  name: string | null;
+  title: string;
+  sections: Section[];
+  createdAt: number;
+}
+
 export function newSong(): Song {
   const now = Date.now();
   return {
