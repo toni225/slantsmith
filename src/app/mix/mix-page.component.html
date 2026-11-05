@@ -27,6 +27,7 @@
       <li class="eq-row">
         <details>
           <summary>
+            <svg class="row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 4v16M12 4v16M18 4v16"/><path d="M4 14h4M10 8h4M16 12h4"/></svg>
             <span class="row-main">
               <span class="row-title">EQ frequency guide</span>
               <span class="row-sub">Ranges for vocals, kick, bass, guitar, keys</span>
@@ -44,6 +45,7 @@
       <li class="before-row">
         <details>
           <summary>
+            <svg class="row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M8.5 13l2 2 4.5-4.5"/></svg>
             <span class="row-main">
               <span class="row-title">Before mastering</span>
               <span class="row-sub">
@@ -53,6 +55,9 @@
                   Start a song to track this
                 }
               </span>
+              @if (currentSong()) {
+                <span class="progress" [style.--pct.%]="checklistDone() / beforeMastering.length * 100"></span>
+              }
             </span>
             <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
           </summary>
@@ -75,6 +80,7 @@
       <li class="delivery-row">
         <details>
           <summary>
+            <svg class="row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>
             <span class="row-main">
               <span class="row-title">Delivery checklist</span>
               <span class="row-sub">Formats, peaks and metadata</span>
@@ -91,6 +97,7 @@
       <li class="faq-row">
         <details open>
           <summary>
+            <svg class="row-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-1.2 2-2 2.6-.5.4-.8.8-.8 1.4"/><circle cx="12" cy="17" r="0.75" fill="currentColor" stroke="none"/></svg>
             <span class="row-main">
               <span class="row-title">Questions and answers</span>
               <span class="row-sub">{{ filteredFaq().length }} answer{{ filteredFaq().length === 1 ? '' : 's' }}, works offline</span>

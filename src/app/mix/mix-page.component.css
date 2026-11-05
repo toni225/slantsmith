@@ -216,6 +216,11 @@ summary::-webkit-details-marker {
   display: none;
 }
 
+.row-icon {
+  flex-shrink: 0;
+  color: var(--fawn);
+}
+
 .chevron {
   flex-shrink: 0;
   color: var(--fawn);
@@ -229,6 +234,27 @@ details[open] .chevron {
 .row-main {
   flex: 1;
   min-width: 0;
+}
+
+/* Before mastering: a thin fill showing how much of the checklist is done. */
+.progress {
+  display: block;
+  margin-top: 8px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(141, 119, 95, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: var(--pct);
+  background: var(--ruby);
+  border-radius: 2px;
+  transition: width 0.2s ease-out;
 }
 
 .row-title {
@@ -253,6 +279,11 @@ details[open] .chevron {
   font-size: 15px;
   font-weight: 700;
   margin-top: 12px;
+}
+
+.faq-list dt:not(:first-child) {
+  padding-top: 12px;
+  border-top: 1px solid rgba(141, 119, 95, 0.35);
 }
 
 .eq-list dd, .faq-list dd {
