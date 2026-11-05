@@ -2,7 +2,7 @@
   "name": "Slantsmith",
   "short_name": "Slantsmith",
   "description": "Offline rhyme, slant and grammar helper for songwriters.",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#3F0D12",
   "theme_color": "#3F0D12",
