@@ -64,6 +64,31 @@
               </div>
             }
           </div>
+          <!-- FR-09/10/11: grammar flags for this section, listed below (not inline - it's a plain textarea). -->
+          @if (grammarFlags(section); as flags) {
+            @if (flags.length) {
+              <ul class="flags">
+                @for (sf of flags; track sf.flag.key + sf.lineIndex + sf.flag.start) {
+                  <li class="flag">
+                    <span class="flag-text">
+                      <strong>{{ sf.flag.word }}</strong>
+                      @if (sf.flag.suggestion) { → {{ sf.flag.suggestion }} } @else { repeated word }
+                    </span>
+                    <span class="flag-actions">
+                      @if (sf.flag.suggestion) {
+                        <button type="button" (click)="fixFlag(section, sf)">Fix</button>
+                      } @else {
+                        <button type="button" (click)="fixFlag(section, sf)">Remove</button>
+                      }
+                      <button type="button" (click)="ignoreOnce(section, sf)">Ignore</button>
+                      <button type="button" (click)="ignoreInSong(section, sf.flag)">Ignore in song</button>
+                      <button type="button" (click)="addToDictionary(sf.flag)">Add to dictionary</button>
+                    </span>
+                  </li>
+                }
+              </ul>
+            }
+          }
         </section>
       }
       <button type="button" class="add-section" (click)="addSection()">

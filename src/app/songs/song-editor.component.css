@@ -306,6 +306,62 @@ main {
   color: var(--copper);
 }
 
+/* FR-09/10/11: grammar flags for a section, listed below its textarea (plain textarea, no inline
+   underline - same reasoning as .letters/.counts being gutters rather than in-text decoration). */
+.flags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flag {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--copper);
+  background: var(--booth-dark);
+}
+
+.flag-text {
+  font-size: 13px;
+  color: var(--copper);
+}
+
+.flag-text strong {
+  color: var(--chiffon);
+  font-weight: 700;
+}
+
+.flag-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.flag-actions button {
+  height: 28px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fawn);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.flag-actions button:first-child {
+  color: var(--chiffon);
+  background: rgba(241, 240, 204, 0.08);
+}
+
 .add-section {
   height: 48px;
   border-radius: 14px;
@@ -344,7 +400,7 @@ main {
     box-shadow: none;
   }
 
-  .back, .takes, .more, .status, .letters, .counts, .section-actions, .add-section,
+  .back, .takes, .more, .status, .letters, .counts, .section-actions, .add-section, .flags,
   app-tab-nav, app-rhyme-sheet {
     display: none !important;
   }

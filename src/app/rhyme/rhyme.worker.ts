@@ -1,9 +1,10 @@
 /// <reference lib="webworker" />
 import { loadModel } from '../../engines/model';
 import { RhymeEngine, type Rhyme } from '../../engines/rhyme';
+import { checkLine } from '../../engines/grammar';
 import { detectScheme } from './scheme';
 import { syllableCount } from './syllables';
-import type { RhymeResponse, SchemeResponse, SyllablesResponse, UiRhyme, WorkerRequest } from './rhyme-protocol';
+import type { GrammarResponse, RhymeResponse, SchemeResponse, SyllablesResponse, UiRhyme, WorkerRequest } from './rhyme-protocol';
 
 async function load() {
   const base = 'assets/model/en-us/';
@@ -42,6 +43,11 @@ addEventListener('message', async ({ data }: MessageEvent<WorkerRequest>) => {
     if (data.kind === 'scheme') {
       const result = detectScheme(engine, data.words);
       postMessage({ id, result } satisfies SchemeResponse);
+      return;
+    }
+    if (data.kind === 'grammar') {
+      const result = checkLine(data.line);
+      postMessage({ id, result } satisfies GrammarResponse);
       return;
     }
     const { word, hideExplicit } = data;

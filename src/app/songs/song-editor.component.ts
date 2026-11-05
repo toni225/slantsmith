@@ -5,14 +5,19 @@ import { RhymeModelService } from '../rhyme/rhyme-model.service';
 import type { SchemeLetter } from '../rhyme/rhyme-protocol';
 import { RhymeSheetComponent } from '../rhyme/rhyme-sheet.component';
 import { SettingsService } from '../settings/settings.service';
+import { PersonalDictionaryService } from './personal-dictionary.service';
 import { SongStorageService } from './song-storage.service';
 import type { Section, Song } from './song.model';
+import type { GrammarFlag } from '../../engines/grammar';
 
 const AUTOSAVE_MS = 2000; // FR-32: autosave within 2s
 const AUTO_TAKE_MS = 10 * 60 * 1000; // FR-32: auto snapshot every 10 min
 const WORD_RE = /[a-zA-Z']+/g;
 
 export interface LineCount { syllables: number; estimated: boolean }
+
+// FR-09/10/11: a grammar flag plus which line of the section it's in (flag.start/end are line-relative).
+export interface SectionFlag { lineIndex: number; flag: GrammarFlag }
 
 // FR-23: the word tapped in a section's textarea, with enough to replace it in place.
 interface TappedWord { textarea: HTMLTextAreaElement; start: number; end: number; word: string }
@@ -36,6 +41,11 @@ export class SongEditorComponent {
   readonly lineCounts = signal<Record<string, LineCount[]>>({});
   // FR-22: rhyme-letter scheme per line ending, keyed by section id.
   readonly lineSchemes = signal<Record<string, SchemeLetter[]>>({});
+  // FR-09/10: grammar flags per line, keyed by section id.
+  readonly lineGrammar = signal<Record<string, GrammarFlag[][]>>({});
+  // FR-11: "ignore once" - dismissed for this editing session only, not persisted.
+  private readonly ignoredOnce = signal(new Set<string>());
+  private readonly dictionary = inject(PersonalDictionaryService);
   // FR-23: tap a word, see rhymes, tap a result to replace it; undo (Ctrl/Cmd+Z) restores it.
   readonly hideExplicit = inject(SettingsService).hideExplicit;
   readonly tapped = signal<TappedWord | null>(null);
@@ -70,9 +80,33 @@ export class SongEditorComponent {
     return this.lineSchemes()[section.id] ?? [];
   }
 
+  // FR-11: flags not dismissed once, ignored in this song, or added to the personal dictionary.
+  grammarFlags(section: Section): SectionFlag[] {
+    const perLine = this.lineGrammar()[section.id] ?? [];
+    const once = this.ignoredOnce();
+    const ignored = new Set(section.ignoredFlags ?? []);
+    const out: SectionFlag[] = [];
+    perLine.forEach((flags, lineIndex) => {
+      for (const flag of flags) {
+        const onceKey = `${section.id}:${lineIndex}:${flag.key}:${flag.start}`;
+        if (once.has(onceKey) || ignored.has(flag.key) || this.dictionary.has(flag.word)) continue;
+        out.push({ lineIndex, flag });
+      }
+    });
+    return out;
+  }
+
   private updateLine(section: Section) {
     this.updateLineCounts(section);
     this.updateLineScheme(section);
+    this.updateLineGrammar(section);
+  }
+
+  private updateLineGrammar(section: Section) {
+    const lines = section.text.split('\n');
+    Promise.all(lines.map((l) => this.models.checkGrammar(l))).then((perLine) => {
+      this.lineGrammar.update((m) => ({ ...m, [section.id]: perLine }));
+    });
   }
 
   private updateLineCounts(section: Section) {
@@ -116,6 +150,32 @@ export class SongEditorComponent {
 
   closeTap() {
     this.tapped.set(null);
+  }
+
+  // FR-09/11: apply a grammar flag's suggestion (or, for a doubled word, remove the repeat).
+  fixFlag(section: Section, sf: SectionFlag) {
+    const lines = section.text.split('\n');
+    const line = lines[sf.lineIndex];
+    const { start, end, suggestion } = sf.flag;
+    lines[sf.lineIndex] = suggestion
+      ? line.slice(0, start) + suggestion + line.slice(end)
+      : (line.slice(0, start).replace(/\s+$/, '') + line.slice(end)).replace(/^ /, '');
+    this.setSectionText(section, lines.join('\n'));
+  }
+
+  ignoreOnce(section: Section, sf: SectionFlag) {
+    const key = `${section.id}:${sf.lineIndex}:${sf.flag.key}:${sf.flag.start}`;
+    this.ignoredOnce.update((s) => new Set(s).add(key));
+  }
+
+  ignoreInSong(section: Section, flag: GrammarFlag) {
+    section.ignoredFlags = [...(section.ignoredFlags ?? []), flag.key];
+    this.song.set({ ...this.song()! });
+    this.scheduleSave();
+  }
+
+  addToDictionary(flag: GrammarFlag) {
+    this.dictionary.add(flag.word);
   }
 
   useTappedWord(replacement: string) {

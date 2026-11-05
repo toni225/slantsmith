@@ -1,5 +1,6 @@
 import type { Rhyme } from '../../engines/rhyme';
 import type { WordType } from '../../engines/model';
+import type { GrammarFlag } from '../../engines/grammar';
 
 // The engine (and the Model it needs for syllable counts / commonness) lives in
 // the worker (ADR-04); these are the enriched, structured-cloneable shapes it posts back.
@@ -28,6 +29,10 @@ export interface SyllablesResponse { id: number; result: (number | undefined)[] 
 export interface SchemeRequest { id: number; kind: 'scheme'; words: string[] }
 export interface SchemeResponse { id: number; result: SchemeLetter[] }
 
-export type WorkerRequest = RhymeRequest | SyllablesRequest | SchemeRequest;
+// FR-09/10: grammar flags for one line in the lyric editor.
+export interface GrammarRequest { id: number; kind: 'grammar'; line: string }
+export interface GrammarResponse { id: number; result: GrammarFlag[] }
+
+export type WorkerRequest = RhymeRequest | SyllablesRequest | SchemeRequest | GrammarRequest;
 
 export interface SchemeLetter { letter: string | null; type: 'perfect' | 'slant' | null }
