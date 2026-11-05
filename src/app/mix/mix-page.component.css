@@ -29,8 +29,12 @@
 }
 
 @media (min-width: 1024px) {
+  /* Two columns, same grouping principle as Settings: reference material you look
+     up (loudness, EQ, delivery) on the left, the two things you work through or
+     search (the song-specific checklist, the FAQ) on the right. */
   .page {
-    max-width: 760px;
+    max-width: 880px;
+    padding: 0 32px;
   }
 
   header {
@@ -38,9 +42,37 @@
     padding-right: 0;
   }
 
+  main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+    align-content: start;
+  }
+
   .lamp-card {
+    grid-column: 1;
+    grid-row: 1;
     margin: 0;
   }
+
+  .rows {
+    display: contents;
+    padding: 0;
+  }
+
+  .rows > li {
+    margin-top: 10px;
+  }
+
+  /* FAQ shares Delivery's row (not EQ's): CSS Grid stretches a shared row to its
+     tallest item, and FAQ (open, can run long) sharing a row with something short
+     earlier in the column would shove whatever comes after it down into a gap.
+     Sharing the last row instead means any extra height lands as trailing space
+     at the bottom of the shorter column, not a hole in the middle of it. */
+  .eq-row { grid-column: 1; grid-row: 2; }
+  .before-row { grid-column: 2; grid-row: 1; }
+  .delivery-row { grid-column: 1; grid-row: 3; }
+  .faq-row { grid-column: 2; grid-row: 3; }
 }
 
 header {
