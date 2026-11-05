@@ -1,6 +1,8 @@
-/* Mobile-first (NFR-07: 360px+). From 1024px the rhyme sheet stops being an
-   on-demand overlay and sits permanently beside the word field (see adapt.md);
-   below that it's the phone-shaped single-lamp world DESIGN.md pins, centred
+/* Mobile-first (NFR-07: 360px+). From 768px (tablet) the rhyme sheet stops
+   being an on-demand overlay and becomes a permanent panel beside/below the
+   word field (see adapt.md) - stacked full-width at tablet (not enough room
+   yet for a sidebar beside a usable word grid), side-by-side from 1024px.
+   Below 768px it's the phone-shaped single-lamp world DESIGN.md pins, centred
    rather than stretched. */
 :host {
   display: flex;
@@ -23,8 +25,23 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023.98px) {
+  /* Real tablet layout, not a scaled phone: the word field stays full width up
+     top (a sidebar this narrow would squeeze the rhyme grid to one column,
+     losing the point of reflowing it), and the now-permanent panel fills the
+     rest of the height below it, flush rather than floating with a shadow. */
   .page {
-    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+    max-width: 700px;
+    padding: 0 8px;
+  }
+
+  header {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .panel {
+    flex: 1;
+    min-height: 0;
   }
 }
 
@@ -97,7 +114,7 @@ input {
 }
 
 input::placeholder {
-  color: var(--copper);
+  color: var(--fawn);
 }
 
 .page > app-quick-rhyme-bar {
@@ -116,7 +133,7 @@ input::placeholder {
   color: var(--fawn);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   /* The rhyme panel is always visible at this width, so the "see all" quick bar is redundant. */
   .page > app-quick-rhyme-bar {
     display: none;

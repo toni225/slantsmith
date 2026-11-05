@@ -20,8 +20,18 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023.98px) {
+  /* A real intermediate step, not the phone column floated in a shadow: a
+     little wider than phone, a little narrower than desktop's 640px - still
+     one column (long lyric text needs a steady reading measure regardless of
+     width), but it reads as a considered tablet page rather than a scaled-up
+     phone screen. */
   .page {
-    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+    max-width: 560px;
+  }
+
+  main {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
@@ -303,7 +313,7 @@ main {
 }
 
 .lines::placeholder {
-  color: var(--copper);
+  color: var(--fawn);
 }
 
 /* FR-09/10/11: grammar flags for a section, listed below its textarea (plain textarea, no inline
@@ -331,7 +341,7 @@ main {
 
 .flag-text {
   font-size: 13px;
-  color: var(--copper);
+  color: var(--fawn);
 }
 
 .flag-text strong {

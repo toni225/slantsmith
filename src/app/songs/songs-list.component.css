@@ -19,9 +19,48 @@
   overflow-y: auto;
 }
 
+/* Tablet gets its own layout, not the phone centred under a shadow: the continue
+   card stays full width (still the one lit thing), but "Earlier" reflows into a
+   fixed two-up grid - there's room for it, and a single column of rows wastes
+   the width. Desktop below grows this into an auto-fill grid with more columns. */
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .page {
-    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+    max-width: 700px;
+    padding: 0 8px;
+  }
+
+  .rows {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 4px 12px 0;
+  }
+
+  .rows li {
+    list-style: none;
+  }
+
+  .rows a {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    min-height: 0;
+    padding: 14px;
+    border-bottom: 0;
+    border-radius: 18px;
+    background: var(--booth-dark);
+    border: 1px solid rgba(141, 119, 95, 0.35);
+  }
+
+  .row-meta {
+    text-align: left;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .row-when {
+    order: 2;
   }
 }
 

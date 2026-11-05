@@ -53,7 +53,7 @@
       <div class="backup-row">
         <button type="button" class="backup-btn primary" (click)="exportBackup()">Export backup</button>
         <button type="button" class="backup-btn" (click)="chooseImportFile()">Import backup</button>
-        <input #fileInput type="file" accept="application/json" class="sr-only" (change)="importBackup($event)" />
+        <input #fileInput type="file" accept="application/json" class="sr-only" aria-label="Import backup file" (change)="importBackup($event)" />
       </div>
       <p class="row-hint">Your songs stay on this device. Nothing is sent anywhere.</p>
 

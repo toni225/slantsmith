@@ -12,10 +12,10 @@
   </div>
 
   <div role="tablist" aria-label="Rhyme type" class="tabs">
-    <button role="tab" [attr.aria-selected]="tab() === 'perfect'" class="tab" [class.active]="tab() === 'perfect'" (click)="pick('perfect')">
+    <button type="button" role="tab" [attr.aria-selected]="tab() === 'perfect'" class="tab" [class.active]="tab() === 'perfect'" (click)="pick('perfect')">
       Perfect @if (result(); as r) { {{ r.perfect.length }} }
     </button>
-    <button role="tab" [attr.aria-selected]="tab() === 'slant'" class="tab" [class.active]="tab() === 'slant'" (click)="pick('slant')">
+    <button type="button" role="tab" [attr.aria-selected]="tab() === 'slant'" class="tab" [class.active]="tab() === 'slant'" (click)="pick('slant')">
       Slant @if (result(); as r) { {{ r.slant.length }} }
     </button>
   </div>

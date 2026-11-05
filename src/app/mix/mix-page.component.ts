@@ -20,9 +20,12 @@ export const LOUDNESS: LoudnessRow[] = [
 export const EQ_GUIDE: { source: string; ranges: string }[] = [
   { source: 'Vocals', ranges: 'Low-cut below 80–100 Hz (rumble); body 150–500 Hz; presence 2–5 kHz; air above 10 kHz' },
   { source: 'Kick drum', ranges: 'Thump 40–80 Hz; beater click 2–4 kHz' },
+  { source: 'Snare', ranges: 'Body 150–250 Hz; crack 2–5 kHz; snap/rattle 5–8 kHz' },
   { source: 'Bass', ranges: 'Fundamental 40–200 Hz; definition/finger noise 700 Hz–1 kHz' },
   { source: 'Guitar', ranges: 'Body 100–250 Hz; presence/pick attack 2–4 kHz' },
   { source: 'Keys / piano', ranges: 'Wide range, 30 Hz–5 kHz+; watch for buildup around 200–400 Hz with other instruments' },
+  { source: 'Hi-hats / cymbals', ranges: 'Shimmer and air, mostly above 8 kHz; low-cut below 400 Hz to clear room for everything else' },
+  { source: 'Strings / pads', ranges: 'Wide and sustained, 200 Hz–8 kHz; low-cut below 150 Hz so they sit behind the bass, not on top of it' },
 ];
 
 export const BEFORE_MASTERING: ChecklistItem[] = [
@@ -41,6 +44,8 @@ export const DELIVERY: ChecklistItem[] = [
   { id: 'loudness', label: 'Loudness in range for where it’s going (see the table above)' },
   { id: 'metadata', label: 'Title, artist and any ISRC filled in' },
   { id: 'filename', label: 'File named clearly - artist - title, no special characters' },
+  { id: 'clean-file', label: 'No reference track or click track bleeding into the file' },
+  { id: 'backed-up', label: 'Project file and stems backed up somewhere other than this one device' },
 ];
 
 export const FAQ: FaqEntry[] = [
@@ -53,6 +58,15 @@ export const FAQ: FaqEntry[] = [
   { q: 'Why is my mix muddy?', a: 'Usually too much buildup in the 200–500 Hz range across several instruments at once. Try a gentle cut there on anything that doesn’t need its own low-mid warmth, and check your low end in mono.' },
   { q: "What's the difference between EQ and compression?", a: 'EQ shapes which frequencies are louder or quieter. Compression shapes how loud the loudest and quietest moments are relative to each other, over time. Most mixes need both, in that rough order.' },
   { q: 'Do I need stems, or just the final mix?', a: 'For your own distribution, just the final stereo mix. Keep your project file and stems anyway - for a future remix, a sync license, or if mastering reveals something you want to fix in the mix.' },
+  { q: 'What is a limiter, and when do I use one?', a: 'A limiter is a fast, hard compressor that stops a signal from going above a set ceiling - it’s the last thing in the chain, used to raise loudness and catch stray peaks without changing the overall balance underneath it.' },
+  { q: 'How do I avoid clipping?', a: 'Leave headroom while mixing (keep your loudest moment a few dB under 0) and use a limiter, not raw gain, to bring the final level up. Clipping happens when a signal is pushed past 0 dBFS with nothing to catch it.' },
+  { q: 'What’s the difference between mixing and mastering?', a: 'Mixing balances the individual tracks of one song against each other - levels, panning, EQ, compression. Mastering treats the finished mix as a single file, polishing and setting its final loudness so it holds up next to other songs.' },
+  { q: 'Why does my vocal sound thin?', a: 'Often a missing low-mid body (150–500 Hz) or too much cut below 100 Hz. Check it’s not too quiet relative to the instruments either - a vocal sitting just under the mix reads as thin even with the EQ right.' },
+  { q: 'How do I make my mix louder without clipping?', a: 'A limiter on the master bus, pushed gradually - watch the gain reduction, not just the loudness number, and stop once it starts audibly squashing the loudest hits. Loudness should be the last step, not something you mix toward.' },
+  { q: 'What is a reference track, and how do I use one?', a: 'A finished, professionally mixed song in a similar style to yours, played at matched loudness alongside your mix so you’re comparing balance and tone on equal footing, not just "mine sounds quieter so something’s wrong."' },
+  { q: 'Why do my kick and bass fight each other?', a: 'They usually overlap in the same low frequencies. Carve a small pocket for each - a slight cut in the bass where the kick’s thump peaks, or the reverse - so they take turns in that low-end space instead of masking each other.' },
+  { q: 'Do I need expensive headphones or monitors to mix?', a: 'No - consistency matters more than price. Learn one set of headphones or speakers well, check mixes on a second device (phone speaker, car, earbuds), and a reference track will catch more problems than better hardware alone.' },
+  { q: 'What is panning, and when should I use it?', a: 'Placing a sound left-to-right in the stereo field instead of dead center. Spreading out guitars, backing vocals or hi-hats gives the lead vocal and bass (usually kept centered) room to stand out instead of competing for the same space.' },
 ];
 
 function matches(q: string, ...text: string[]): boolean {

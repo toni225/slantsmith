@@ -13,7 +13,7 @@
 
   <app-quick-rhyme-bar [word]="word()" [hideExplicit]="hideExplicit()" (useWord)="useWord($event)" (seeAll)="openSheet()" />
 
-  @if (isDesktop() || sheetOpen()) {
+  @if (showPanel() || sheetOpen()) {
     <app-rhyme-sheet class="panel" [word]="word()" [hideExplicit]="hideExplicit()" (closed)="closeSheet()" />
   }
 </div>

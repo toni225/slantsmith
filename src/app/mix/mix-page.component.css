@@ -22,19 +22,15 @@
   overflow-y: auto;
 }
 
-@media (min-width: 768px) and (max-width: 1023.98px) {
+/* Two columns from tablet up, same grouping principle as Settings: reference
+   material you look up (loudness, EQ, delivery) on the left, the two things
+   you work through or search (the song-specific checklist, the FAQ) on the
+   right. Tighter width/gap at tablet, where there's less room to spare;
+   desktop below widens both out. */
+@media (min-width: 768px) {
   .page {
-    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
-  }
-}
-
-@media (min-width: 1024px) {
-  /* Two columns, same grouping principle as Settings: reference material you look
-     up (loudness, EQ, delivery) on the left, the two things you work through or
-     search (the song-specific checklist, the FAQ) on the right. */
-  .page {
-    max-width: 880px;
-    padding: 0 32px;
+    max-width: 760px;
+    padding: 0 16px;
   }
 
   header {
@@ -45,7 +41,7 @@
   main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 32px;
+    column-gap: 20px;
     align-content: start;
   }
 
@@ -73,6 +69,17 @@
   .before-row { grid-column: 2; grid-row: 1; }
   .delivery-row { grid-column: 1; grid-row: 3; }
   .faq-row { grid-column: 2; grid-row: 3; }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 880px;
+    padding: 0 32px;
+  }
+
+  main {
+    column-gap: 32px;
+  }
 }
 
 header {

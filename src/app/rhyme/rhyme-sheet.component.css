@@ -1,6 +1,8 @@
-/* Below 1024px: a bottom sheet over a dimmed screen (DESIGN.md "Rhyme sheet").
-   From 1024px: a permanent panel beside the word field, same surface and
-   components, no overlay chrome (see rhyme-page.component.css for the grid). */
+/* Below 768px (phone): a bottom sheet over a dimmed screen (DESIGN.md "Rhyme
+   sheet"). From 768px (tablet and up): a permanent panel beside the word
+   field, same surface and components, no overlay chrome (see
+   rhyme-page.component.css for the grid, stacked at tablet / side-by-side at
+   desktop). */
 :host {
   position: fixed;
   inset: 0;
@@ -40,12 +42,13 @@
 }
 
 /* .overlay (set by callers like the lyric editor's tap-to-rhyme, FR-23) keeps
-   this a dismissible sheet even at desktop width - there's no permanent panel
-   slot to become there, unlike the Rhymes page's grid. On a narrow phone it
-   stays the bottom sheet above; from 1024px it becomes a centred modal
+   this a dismissible sheet even at tablet/desktop width - there's no
+   permanent panel slot to become there, unlike the Rhymes page's grid. On a
+   narrow phone it stays the bottom sheet above; from 768px (a 640px modal
+   plus margin already fits at the tablet minimum) it becomes a centred modal
    dialog instead of the same 480px-wide sheet just floating mid-screen
    (DESIGN.md "Responsive"). */
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   :host(:not(.overlay)) {
     position: static;
     inset: auto;
@@ -137,7 +140,7 @@
   cursor: pointer;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   /* Permanent panel from here, not a dismissible sheet - nothing to close. */
   :host(:not(.overlay)) .grabber,
   :host(:not(.overlay)) .close {
@@ -219,7 +222,7 @@
   border-bottom: 1px solid rgba(141, 119, 95, 0.35);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   /* A wide panel reflows the single list into a word grid, same rows, more of them at once. */
   .rows {
     display: grid;
