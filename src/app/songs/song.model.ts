@@ -11,6 +11,7 @@ export interface Song {
   sections: Section[];
   createdAt: number;
   updatedAt: number;
+  checklist?: Record<string, boolean>; // Mix help's "before mastering" checklist, keyed by item id
 }
 
 // FR-32: a snapshot of a song at a point in time. name === null means an

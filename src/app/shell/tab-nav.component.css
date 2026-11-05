@@ -6,7 +6,7 @@
 
 nav {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   background: var(--booth-dark);
   padding: 6px 8px max(22px, env(safe-area-inset-bottom));
   border-top: 1px solid rgba(141, 119, 95, 0.25);

@@ -1,0 +1,116 @@
+<div class="page">
+  <header>
+    <h1>Mix help</h1>
+    <label class="search">
+      <span class="sr-only">Search mix help</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+      <input type="search" placeholder="Try &quot;vocal harshness&quot; or &quot;how loud&quot;" [value]="search()" (input)="setSearch($any($event.target).value)" />
+    </label>
+  </header>
+
+  <main>
+    <section class="lamp-card" aria-labelledby="loud-h">
+      <h2 id="loud-h">How loud for streaming</h2>
+      <p class="hint">Where each platform plays your song back. Louder masters get turned down.</p>
+      <table>
+        <thead><tr><th scope="col">Platform</th><th scope="col" class="num">Loudness</th><th scope="col" class="num">Peak</th></tr></thead>
+        <tbody>
+          @for (row of loudness; track row.platform) {
+            <tr><th scope="row">{{ row.platform }}</th><td class="num">{{ row.lufs }}</td><td class="num dim">{{ row.peak }}</td></tr>
+          }
+        </tbody>
+      </table>
+      <p class="checked">Checked 2026-11-05. Platforms change these occasionally - check again before each release.</p>
+    </section>
+
+    <ul class="rows">
+      <li>
+        <details>
+          <summary>
+            <span class="row-main">
+              <span class="row-title">EQ frequency guide</span>
+              <span class="row-sub">Ranges for vocals, kick, bass, guitar, keys</span>
+            </span>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </summary>
+          <dl class="eq-list">
+            @for (row of eqGuide; track row.source) {
+              <dt>{{ row.source }}</dt>
+              <dd>{{ row.ranges }}</dd>
+            }
+          </dl>
+        </details>
+      </li>
+      <li>
+        <details>
+          <summary>
+            <span class="row-main">
+              <span class="row-title">Before mastering</span>
+              <span class="row-sub">
+                @if (currentSong(); as song) {
+                  {{ checklistDone() }} of {{ beforeMastering.length }} done for {{ song.title }}
+                } @else {
+                  Start a song to track this
+                }
+              </span>
+            </span>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </summary>
+          @if (currentSong(); as song) {
+            <ul class="checklist">
+              @for (item of beforeMastering; track item.id) {
+                <li>
+                  <label>
+                    <input type="checkbox" [checked]="isChecked(item.id)" (change)="toggleChecklist(item.id)" />
+                    {{ item.label }}
+                  </label>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="hint"><a routerLink="/songs">Start a song</a> to track this checklist against it.</p>
+          }
+        </details>
+      </li>
+      <li>
+        <details>
+          <summary>
+            <span class="row-main">
+              <span class="row-title">Delivery checklist</span>
+              <span class="row-sub">Formats, peaks and metadata</span>
+            </span>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </summary>
+          <ul class="plain-list">
+            @for (item of delivery; track item.id) {
+              <li>{{ item.label }}</li>
+            }
+          </ul>
+        </details>
+      </li>
+      <li>
+        <details open>
+          <summary>
+            <span class="row-main">
+              <span class="row-title">Questions and answers</span>
+              <span class="row-sub">{{ filteredFaq().length }} answer{{ filteredFaq().length === 1 ? '' : 's' }}, works offline</span>
+            </span>
+            <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+          </summary>
+          @if (filteredFaq().length) {
+            <dl class="faq-list">
+              @for (entry of filteredFaq(); track entry.q) {
+                <dt>{{ entry.q }}</dt>
+                <dd>{{ entry.a }}</dd>
+              }
+            </dl>
+          } @else {
+            <p class="hint">No answers match "{{ search() }}".</p>
+          }
+        </details>
+      </li>
+    </ul>
+  </main>
+</div>
+
+<app-tab-nav />
