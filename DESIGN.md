@@ -137,6 +137,8 @@ Radii grow with size: 6 px badges, 12 px controls, 14 px primary buttons, 20 px 
 - **Tab bar**: four tabs (Songs, Rhymes, Mix help, Settings) on booth-dark; active tab fawn and bold.
 - **Switch**: ruby track when on, chiffon knob.
 - **Grammar flag**: copper wavy underline, never ruby.
+- **Checkbox**: 22×22, 6px radius (the badge token), copper border; checked fills ruby with a lemon-chiffon checkmark (the fixed off-white token, not the `chiffon` role - it must stay light on ruby in both themes).
+- **Scrollbar**: a copper pill inset from a booth-dark track (both swap with the theme), not the OS default - styled once, globally.
 
 ## Do's and Don'ts
 

@@ -39,3 +39,52 @@ body {
 ::selection { background: var(--ruby); color: var(--chiffon); }
 :focus-visible { outline: 2px solid var(--fawn); outline-offset: 2px; }
 button { font-family: inherit; }
+
+/* Themed scrollbar (browser surfaces carry the design too, not just what's drawn) -
+   a floating copper pill inset from the track, not the OS default. */
+:root {
+  scrollbar-color: var(--copper) var(--booth-dark);
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: var(--booth-dark); }
+*::-webkit-scrollbar-thumb {
+  background: var(--copper);
+  border-radius: 6px;
+  border: 2px solid var(--booth-dark);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--fawn); }
+
+/* A checkbox, drawn to match the app's own shape language (6px badge radius,
+   copper border, ruby fill - same tokens as the rhyme-letter badge) instead of
+   the OS default. */
+input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  margin: 0;
+  border-radius: 6px;
+  border: 1.5px solid var(--copper);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+  cursor: pointer;
+  transition: background-color 0.1s ease-out, border-color 0.1s ease-out;
+}
+
+input[type='checkbox']:checked {
+  background-color: var(--ruby);
+  border-color: var(--ruby);
+  /* Literal lemon-chiffon, not --chiffon: DESIGN.md pairs ruby with the fixed
+     off-white token (button-primary, active-word), not the role that flips to a
+     dark color in paper light - a dark mark on ruby would all but disappear. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F1F0CC' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='5 13 10 18 19 7'/%3E%3C/svg%3E");
+}
+
+@media (hover: hover) and (pointer: fine) {
+  input[type='checkbox']:not(:checked):hover { border-color: var(--fawn); }
+}

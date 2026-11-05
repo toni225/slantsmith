@@ -288,14 +288,6 @@ details[open] .chevron {
   cursor: pointer;
 }
 
-.checklist input[type='checkbox'] {
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  accent-color: var(--ruby);
-  margin: 0;
-}
-
 @media (hover: hover) and (pointer: fine) {
   summary:hover .row-title { color: var(--fawn); }
 }
