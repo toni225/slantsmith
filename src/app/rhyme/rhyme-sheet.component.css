@@ -68,6 +68,11 @@
     height: 100%;
     min-height: 0;
     border-radius: 20px;
+    /* The base rule's heavy upward shadow (0 -18px 40px) reads as "rising
+       off the bottom of the screen" - right for a sheet lifting over a
+       dimmed scrim, wrong for a panel that's just docked in the page layout
+       here. Same soft downward shadow every other lamp-card/sheet uses. */
+    box-shadow: 0 14px 36px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
   }
 
   /* Flex-centred, not transform: translate(-50%,-50%) - simpler and avoids
