@@ -40,21 +40,12 @@ body {
 :focus-visible { outline: 2px solid var(--fawn); outline-offset: 2px; }
 button { font-family: inherit; }
 
-/* Themed scrollbar (browser surfaces carry the design too, not just what's drawn) -
-   a floating copper pill inset from the track, not the OS default. */
+/* Scrolling stays enabled everywhere; the scrollbar itself is just not drawn. */
 :root {
-  scrollbar-color: var(--copper) var(--booth-dark);
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
 
-*::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track { background: var(--booth-dark); }
-*::-webkit-scrollbar-thumb {
-  background: var(--copper);
-  border-radius: 6px;
-  border: 2px solid var(--booth-dark);
-}
-*::-webkit-scrollbar-thumb:hover { background: var(--fawn); }
+*::-webkit-scrollbar { display: none; }
 
 /* A checkbox, drawn to match the app's own shape language (6px badge radius,
    copper border, ruby fill - same tokens as the rhyme-letter badge) instead of

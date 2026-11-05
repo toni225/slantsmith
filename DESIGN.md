@@ -139,7 +139,7 @@ Radii grow with size: 6 px badges, 12 px controls, 14 px primary buttons, 20 px 
 - **Grammar flag**: copper wavy underline, never ruby.
 - **Checkbox**: 22×22, 6px radius (the badge token), copper border; checked fills ruby with a lemon-chiffon checkmark (the fixed off-white token, not the `chiffon` role - it must stay light on ruby in both themes).
 - **Progress fill**: a 4px rounded track (faded copper at low opacity), ruby fill - Mix help's before-mastering checklist is the first use, under its disclosure-row subtitle.
-- **Scrollbar**: a copper pill inset from a booth-dark track (both swap with the theme), not the OS default - styled once, globally.
+- **Scrollbar**: hidden everywhere, globally - scrolling itself is untouched, just no bar drawn over it.
 
 ## Do's and Don'ts
 
