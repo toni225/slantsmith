@@ -195,4 +195,25 @@ export class SongEditorComponent {
     this.song.set({ ...song });
     this.scheduleSave();
   }
+
+  // FR-33: export .txt / PDF for this one song.
+  exportText() {
+    const song = this.song();
+    if (!song) return;
+    const text = `${song.title}\n\n${song.sections.map((s) => `${s.name}\n${s.text}`).join('\n\n')}\n`;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${song.title || 'untitled song'}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // The browser's own print dialog has a "Save as PDF" destination on every platform
+  // this app ships to - no PDF library needed. .print-only in the stylesheet hides
+  // everything but the title and lyrics for this.
+  exportPdf() {
+    window.print();
+  }
 }

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import type { Section, Song, Take } from './song.model';
+import type { Backup, Section, Song, Take } from './song.model';
 
 const DB_NAME = 'slantsmith';
 const DB_VERSION = 1;
@@ -106,5 +106,44 @@ export class SongStorageService {
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
+  }
+
+  // FR-33: full backup, all songs and takes on the device - lyrics never leave it unless the writer exports this file themselves.
+  async exportAll(): Promise<Backup> {
+    const db = await this.db;
+    const [songs, takes] = await Promise.all([
+      new Promise<Song[]>((resolve, reject) => {
+        const req = db.transaction(SONGS_STORE, 'readonly').objectStore(SONGS_STORE).getAll();
+        req.onsuccess = () => resolve(req.result as Song[]);
+        req.onerror = () => reject(req.error);
+      }),
+      new Promise<Take[]>((resolve, reject) => {
+        const req = db.transaction(TAKES_STORE, 'readonly').objectStore(TAKES_STORE).getAll();
+        req.onsuccess = () => resolve(req.result as Take[]);
+        req.onerror = () => reject(req.error);
+      }),
+    ]);
+    return { version: 1, exportedAt: Date.now(), songs, takes };
+  }
+
+  // Throws if `json` isn't a Slantsmith backup; nothing is written in that case. Upserts by id otherwise.
+  async importAll(json: string): Promise<number> {
+    let backup: Backup;
+    try {
+      backup = JSON.parse(json);
+    } catch {
+      throw new Error('not-a-backup');
+    }
+    if (backup?.version !== 1 || !Array.isArray(backup.songs)) throw new Error('not-a-backup');
+    const db = await this.db;
+    const tx = db.transaction([SONGS_STORE, TAKES_STORE], 'readwrite');
+    for (const song of backup.songs) tx.objectStore(SONGS_STORE).put(song);
+    for (const take of backup.takes ?? []) tx.objectStore(TAKES_STORE).put(take);
+    await new Promise<void>((resolve, reject) => {
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    await this.refresh();
+    return backup.songs.length;
   }
 }

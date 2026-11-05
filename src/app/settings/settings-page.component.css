@@ -183,7 +183,67 @@ label.row {
   background: var(--chiffon);
 }
 
+/* FR-33: full backup, from Settings.dc.html / ImportError.dc.html. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.backup-row {
+  display: flex;
+  gap: 8px;
+}
+
+.backup-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--copper);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.backup-btn.primary {
+  border-color: var(--fawn);
+  font-weight: 700;
+}
+
+.import-result {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--booth-dark);
+  border: 1px solid var(--copper);
+}
+
+.import-result.error {
+  border-color: var(--ruby);
+}
+
+.import-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.import-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.import-result .backup-btn {
+  height: 44px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   label.row:hover span:first-child { color: var(--fawn); }
   .segment:not(.active):hover { color: var(--chiffon); }
+  .backup-btn:hover { border-color: var(--fawn); }
 }

@@ -48,6 +48,30 @@
           <span class="knob" aria-hidden="true"></span>
         </button>
       </div>
+
+      <h2>Your songs</h2>
+      <div class="backup-row">
+        <button type="button" class="backup-btn primary" (click)="exportBackup()">Export backup</button>
+        <button type="button" class="backup-btn" (click)="chooseImportFile()">Import backup</button>
+        <input #fileInput type="file" accept="application/json" class="sr-only" (change)="importBackup($event)" />
+      </div>
+      <p class="row-hint">Your songs stay on this device. Nothing is sent anywhere.</p>
+
+      @if (importState(); as state) {
+        <div class="import-result" [class.error]="state.kind === 'error'">
+          @if (state.kind === 'error') {
+            <p class="import-title">This file isn't a Slantsmith backup</p>
+            <p class="row-hint">Nothing was changed. Pick the .json file you saved with Export backup.</p>
+            <div class="import-actions">
+              <button type="button" class="backup-btn primary" (click)="chooseImportFile()">Choose another file</button>
+              <button type="button" class="backup-btn" (click)="dismissImportState()">Cancel</button>
+            </div>
+          } @else {
+            <p class="import-title">Imported {{ state.count }} song{{ state.count === 1 ? '' : 's' }}</p>
+            <button type="button" class="backup-btn" (click)="dismissImportState()">Dismiss</button>
+          }
+        </div>
+      }
     </div>
   </main>
 </div>

@@ -25,6 +25,14 @@ export interface Take {
   createdAt: number;
 }
 
+// FR-33: full backup, all songs and takes on the device.
+export interface Backup {
+  version: 1;
+  exportedAt: number;
+  songs: Song[];
+  takes: Take[];
+}
+
 export function newSong(): Song {
   const now = Date.now();
   return {
