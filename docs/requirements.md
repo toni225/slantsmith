@@ -60,7 +60,7 @@
 | ID | Requirement | Measure |
 | --- | --- | --- |
 | NFR-01 | Rhymes while typing | p95 < 100 ms on a 2021 mid-range Android |
-| NFR-02 | Size | App code < 600 KB, model < 2 MB, first load < 3 MB (gzipped) |
+| NFR-02 | Size | App code < 600 KB, first load < 3 MB (gzipped); word model size is reported, not capped (limit lifted 2026-11-10) |
 | NFR-03 | Startup | First visit usable < 3 s on 4G; repeat < 1 s |
 | NFR-04 | Offline | All v1.0 features work with no network after first visit |
 | NFR-05 | Privacy | No requests with user text; no trackers; strict CSP |

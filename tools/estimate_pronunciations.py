@@ -7,8 +7,8 @@ so the model build itself never needs g2p_en.
 Most words are built from real CMU entries: walk + -ing, un- + broken, heart + strings.
 g2p_en (a small letter-to-sound model trained on CMU) predicts whatever is left.
 """
-import sys
-from wordfreq import zipf_frequency
+import re, sys
+from wordfreq import iter_wordlist, zipf_frequency
 from build_word_model import DATA, SOUNDS, WORD_RE, dictionary_words, load_dict, load_word_types, word_list
 
 SIBILANT = {"S", "Z", "SH", "ZH", "CH", "JH"}
@@ -123,7 +123,10 @@ def main():
     deriver = Deriver(dict(cmu), dictionary)
     check(deriver)
     drop = word_list(DATA / "misspelling_blocklist.txt") | word_list(DATA / "slur_blocklist.txt")
-    todo = sorted(w for w in dictionary if w not in cmu and w not in drop and WORD_RE.fullmatch(w))
+    # Dictionary words, plus words people actually write (names, slang, "dont") that no dictionary lists.
+    # shortcut: zipf >= 2.5 and 3+ letters keeps most abbreviations/typos out; lower it for more names/slang.
+    common = {w for w in iter_wordlist("en") if len(w) >= 3 and re.search("[aeiouy]", w) and zipf_frequency(w, "en") >= 2.5}
+    todo = sorted(w for w in dictionary | common if w not in cmu and w not in drop and WORD_RE.fullmatch(w))
 
     from g2p_en import G2p  # build-time only
     g2p = G2p()

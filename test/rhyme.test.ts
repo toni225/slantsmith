@@ -54,7 +54,8 @@ test('lookups are fast (p95 under 100 ms)', () => {
 test('explicit words can be hidden', () => {
   const all = engine.rhymes('duck').perfect.map((x) => x.word);
   const clean = engine.rhymes('duck', true).perfect.map((x) => x.word);
-  assert.ok(all.length > clean.length && clean.every((w) => !model.explicit(model.ids.get(w)!)));
+  // Both lists are capped at 50, so compare contents, not lengths.
+  assert.ok(all.some((w) => !clean.includes(w)) && clean.every((w) => !model.explicit(model.ids.get(w)!)));
 });
 
 test('dictionary words CMU lacks are in the model, flagged estimated', () => {

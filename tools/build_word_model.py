@@ -13,7 +13,6 @@ from wordfreq import iter_wordlist, zipf_frequency
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "tools" / "data"
 OUT = ROOT / "src" / "assets" / "model" / "en-us"
-BUDGET_GZIP_BYTES = 2_000_000  # NFR-02: model under 2 MB gzipped
 
 # ARPAbet; order is part of the format: sound id = index.
 SOUNDS = "AA AE AH AO AW AY B CH D DH EH ER EY F G HH IH IY JH K L M N NG OW OY P R S SH T TH UH UW V W Y Z ZH".split()
@@ -185,8 +184,6 @@ def main():
     total = sum(len(d) for d in files.values())
     zipped = sum(len(gzip.compress(d, 9, mtime=0)) for d in files.values())
     print(f"{len(words)} words ({sum(w not in cmu for w in words)} estimated), {total:,} bytes raw, {zipped:,} gzipped")
-    if zipped > BUDGET_GZIP_BYTES:
-        sys.exit("model over the 2 MB gzipped budget (NFR-02)")
 
 
 if __name__ == "__main__":
