@@ -34,7 +34,9 @@
 | --- | --- | --- |
 | CMU Pronouncing Dictionary | BSD-style | Pronunciations; keep its notice on the credits page |
 | wordfreq | Code Apache 2.0, data CC BY-SA 4.0 | Ranks only in commonness.bin, shipped under CC BY-SA 4.0 with credit |
-| Open English WordNet | CC BY 4.0 (+ Princeton WordNet licence) | Word types (Sprint 2); credit both |
+| Open English WordNet | CC BY 4.0 (+ Princeton WordNet licence) | Word types (Sprint 2) and part of the word list; credit both |
+| ENABLE word list | Public domain | Which words are English (vocabulary); build input, fetched on demand |
+| g2p_en | Apache 2.0 | Build-time only: predicts pronunciations in tools/data/estimated.dict; code not shipped |
 | LDNOOBW English list | CC BY 4.0 | explicit_words.txt, slur_blocklist.txt; credit |
 | codespell list | CC BY-SA 3.0 | Build-time misspelling blocklist only, not shipped |
 | Manrope (Mikhail Sharanda) | SIL Open Font License | Self-hosted font; keep the licence file |

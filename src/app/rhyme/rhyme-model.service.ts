@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import type { GrammarFlag } from '../../engines/grammar';
-import type { GrammarResponse, RhymeResponse, SchemeLetter, SchemeResponse, SyllablesResponse, UiRhymeResult } from './rhyme-protocol';
+import type { GrammarResponse, RhymeResponse, SchemeLetter, SchemeResponse, SyllablesResponse, UiRhymeResult, WordSyllables } from './rhyme-protocol';
 
 // Rhyme/grammar engines run off the main thread (ADR-04).
 @Injectable({ providedIn: 'root' })
@@ -32,8 +32,8 @@ export class RhymeModelService {
     });
   }
 
-  /** FR-21: syllable count per word, undefined for unknown words. */
-  syllables(words: string[]): Promise<(number | undefined)[]> {
+  /** FR-21: syllable count per word (undefined for unknown words), and whether it's estimated. */
+  syllables(words: string[]): Promise<WordSyllables[]> {
     const id = this.nextId++;
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve: resolve as (r: never) => void, reject: (e) => { this.error.set(e.message); reject(e); } });

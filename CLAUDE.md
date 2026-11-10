@@ -16,13 +16,17 @@ Read first: `PRODUCT.md` (users, purpose, principles), `DESIGN.md` (visual rules
 ```bash
 pip install wordfreq      # only to rebuild the model
 npm run build:model       # tools/build_word_model.py -> src/assets/model/en-us/
+pip install g2p_en        # only to regenerate tools/data/estimated.dict (rare; ~6 min)
+python3 tools/estimate_pronunciations.py
 npm test                  # node --test on test/*.test.ts (rhyme set, speed, explicit filter, dropped-g)
 ```
 
 ## Layout
 
 - `tools/build_word_model.py`, `tools/data/` (CMU dict, misspelling/slur blocklists, explicit list)
-- `src/assets/model/en-us/` generated: lexicon.txt, phones.bin (1 length byte + 1 byte per sound: low 6 bits sound id, high 2 bits stress), meta.bin (bit 4 = explicit, bit 5 = function word, bits 0-3 = noun/verb/adjective/adverb bitmask), commonness.bin (zipf*32), manifest.json
+- `src/assets/model/en-us/` generated: lexicon.txt, phones.bin (1 length byte + 1 byte per sound: low 6 bits sound id, high 2 bits stress), meta.bin (bit 6 = estimated pronunciation, bit 4 = explicit, bit 5 = function word, bits 0-3 = noun/verb/adjective/adverb bitmask), commonness.bin (zipf*32), manifest.json. `.gitattributes` keeps these byte-exact (a CRLF lexicon matches no words).
+- Vocabulary = every dictionary word (ENABLE, public domain, fetched on demand to `tools/data/enable/`, sha256-pinned; plus WordNet lemmas) + every wordfreq word CMU can pronounce. No word cap; the only limit is NFR-02 (2 MB gzipped).
+- `tools/estimate_pronunciations.py` -> `tools/data/estimated.dict` (committed): pronunciations for dictionary words CMU lacks. Built from known words first (walk+ing, un+broken, heart+strings; shortest-first so an inflection uses its base), g2p_en for the rest. Its self-check rebuilds CMU's own words and asserts >=88% keep CMU's rhyme (89.9% now).
 - `src/engines/model.ts` (decode: `wordTypes()`, `isFunctionWord()`), `src/engines/rhyme.ts` (RhymeEngine: rhymes(), phrase())
 - `tools/data/wordnet/` Open English WordNet LMF XML, fetched on demand by `build_word_model.py` (gitignored, like wordfreq's own data; not shipped)
 - `test/` rhyme and grammar test sets (CSV) + tests
@@ -54,6 +58,8 @@ PWA install (service worker, manifest, icons) was a gap found 2026-11-05 and clo
 Prod bundle 82.73 KB gzipped (well under the 600 KB budget; the service worker adds its own files, not counted against this budget), 15/15 tests pass.
 
 Word model grown from 60k to 97,875 words (~696 KB gzipped, up from ~420 KB) and word-type coverage roughly doubled via a WordNet morphology fallback - see "Word model improvements" below.
+
+Word model grown again (2026-11-10) to **230,824 words** (1.69 MB gzipped, under NFR-02's 2 MB) by adding every dictionary word, not only those CMU∩wordfreq covers: 131,869 have estimated pronunciations (83,888 built from known words, 47,981 by g2p_en), flagged in meta.bin bit 6 so the rhyme sheet says "estimated pronunciation" and the editor italicizes their syllable counts (the worker's syllables response is now `{count, estimated}[]`). The model-size check (script and CI) now measures gzipped size, matching NFR-02's wording, instead of raw. Costs: cold start to first rhyme ~230 ms -> ~590 ms on a desktop (index build over 230k words, in the worker, UI not blocked) - fold into Sprint 2 item 3's real-phone check. Compounds (`waterfall`, `daydreams`, `heartstrings`) carry main stress on the first part, so their full perfect-rhyme key finds ~0 rhymes; fixed in the engine (2026-11-10): `RhymeEngine.lastPart()` takes the key from a secondary stress after the main one, its perfect rhymes are appended after the full-key ones, and slant uses it too (`heartstrings` 0 -> 27 perfect: things, wings, kings...).
 
 ## Sprint 2 — done (item 3 skipped, see below)
 

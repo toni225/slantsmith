@@ -1,30 +1,37 @@
-"""Build the en-us word model from the CMU dictionary and wordfreq.
+"""Build the en-us word model: every dictionary word, plus every common word the CMU dictionary knows.
 
 Usage: python3 tools/build_word_model.py   (needs: pip install wordfreq)
 Output: src/assets/model/en-us/{lexicon.txt,phones.bin,meta.bin,commonness.bin,manifest.json}
+Pronunciations come from the CMU dictionary, or from tools/data/estimated.dict (made by
+tools/estimate_pronunciations.py) for dictionary words CMU lacks; those are flagged estimated.
 Same inputs give byte-identical files.
 """
 import gzip, hashlib, html, json, re, sys, urllib.request
 from pathlib import Path
-from wordfreq import top_n_list, zipf_frequency
+from wordfreq import iter_wordlist, zipf_frequency
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "tools" / "data"
 OUT = ROOT / "src" / "assets" / "model" / "en-us"
-MAX_WORDS = 100000  # the real ceiling is ~97,875 (every wordfreq "en" word with a CMU pronunciation); this just needs to clear it
-BUDGET_BYTES = 2_000_000  # NFR-02, checked on raw size (hosts compress it further)
+BUDGET_GZIP_BYTES = 2_000_000  # NFR-02: model under 2 MB gzipped
 
 # ARPAbet; order is part of the format: sound id = index.
 SOUNDS = "AA AE AH AO AW AY B CH D DH EH ER EY F G HH IH IY JH K L M N NG OW OY P R S SH T TH UH UW V W Y Z ZH".split()
 SID = {s: i for i, s in enumerate(SOUNDS)}
 FLAG_EXPLICIT = 1 << 4
 FLAG_FUNCTION = 1 << 5  # closed-class word, see FUNCTION_WORDS
+FLAG_ESTIMATED = 1 << 6  # pronunciation predicted, not from the CMU dictionary
 # bits 0-3: word-type bitmask (noun/verb/adjective/adverb), from Open English WordNet
 TYPE_BIT = {"n": 1, "v": 2, "a": 4, "s": 4, "r": 8}  # 's' = satellite adjective, folds into adjective
+WORD_RE = re.compile(r"[a-z']+")
 
 WORDNET_URL = "https://en-word.net/downloads/english-wordnet-2025.xml.gz"
 WORDNET_GZ = DATA / "wordnet" / "english-wordnet-2025.xml.gz"
 LEMMA_RE = re.compile(r'<Lemma writtenForm="([^"]*)" partOfSpeech="([nvasr])"\s*/?>')
+# ENABLE: public-domain English word list (172,823 words, inflected forms included), pinned to a commit.
+ENABLE_URL = "https://raw.githubusercontent.com/dolph/dictionary/233d25a56b9ac8bef906916ccf091a976995cce0/enable1.txt"
+ENABLE_TXT = DATA / "enable" / "enable1.txt"
+ENABLE_SHA256 = "3f16130220645692ed49c7134e24a18504c2ca55b3c012f7290e3e77c63b1a89"
 
 # WordNet only tags base/lemma forms ("walk", not "walking" or "walked"), so a direct
 # lookup alone misses most inflected words. These are WordNet's own documented
@@ -58,12 +65,38 @@ def word_list(path):
     return {l.split("->")[0].strip() for l in path.read_text().splitlines() if l.strip() and not l.startswith("#")}
 
 
+def fetch(url, path):
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        print(f"downloading {url} ...")
+        urllib.request.urlretrieve(url, path)
+
+
+def load_dict(path):
+    """CMU-format file -> word: phones (first pronunciation only)."""
+    pron = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.split("#")[0].strip()
+        if not line:
+            continue
+        w, *ph = line.split()
+        if "(" not in w and w not in pron:
+            pron[w] = ph
+    return pron
+
+
+def dictionary_words(by_pos):
+    """ENABLE (public domain) plus every WordNet lemma: what counts as an English word."""
+    fetch(ENABLE_URL, ENABLE_TXT)
+    data = ENABLE_TXT.read_bytes()
+    if hashlib.sha256(data).hexdigest() != ENABLE_SHA256:
+        sys.exit(f"{ENABLE_TXT} does not match the pinned ENABLE list; delete it and rebuild")
+    return set(data.decode().split()).union(*by_pos.values())
+
+
 def load_word_types():
     """part-of-speech letter -> set of WordNet lemmas for that POS (CC BY 4.0, Sprint 2)."""
-    if not WORDNET_GZ.exists():
-        WORDNET_GZ.parent.mkdir(parents=True, exist_ok=True)
-        print(f"downloading {WORDNET_URL} ...")
-        urllib.request.urlretrieve(WORDNET_URL, WORDNET_GZ)
+    fetch(WORDNET_URL, WORDNET_GZ)
     by_pos = {"n": set(), "v": set(), "a": set(), "s": set(), "r": set()}
     with gzip.open(WORDNET_GZ, "rt", encoding="utf-8") as f:
         for line in f:
@@ -94,28 +127,18 @@ def word_type_bits(word, by_pos):
 
 
 def main():
-    pron = {}
-    for line in (DATA / "cmudict.dict").read_text(encoding="utf-8").splitlines():
-        line = line.split("#")[0].strip()
-        if not line:
-            continue
-        w, *ph = line.split()
-        if "(" not in w and w not in pron:  # first pronunciation only
-            pron[w] = ph
-
+    cmu = load_dict(DATA / "cmudict.dict")
+    estimated = load_dict(DATA / "estimated.dict")
+    pron = {**estimated, **cmu}
     drop = word_list(DATA / "misspelling_blocklist.txt") | word_list(DATA / "slur_blocklist.txt")
     explicit = word_list(DATA / "explicit_words.txt")
     by_pos = load_word_types()
-    words = []
-    # wordfreq's "en" list tops out around 320k words; ask for all of it so the
-    # candidate pool isn't the bottleneck - MAX_WORDS (and the byte budget below)
-    # are what actually cap the vocabulary.
-    for w in top_n_list("en", 400_000):
-        if re.fullmatch(r"[a-z']+", w) and w in pron and w not in drop and any(p[-1].isdigit() for p in pron[w]):
-            words.append(w)
-            if len(words) == MAX_WORDS:
-                break
-    words.sort()
+    # Dictionary words, plus common non-dictionary words CMU knows (names, slang like "gonna").
+    wanted = dictionary_words(by_pos) | set(iter_wordlist("en"))
+    words = sorted(
+        w for w in wanted
+        if w in pron and WORD_RE.fullmatch(w) and w not in drop and any(p[-1].isdigit() for p in pron[w])
+    )
 
     phones, meta, common = bytearray(), bytearray(), bytearray()
     for w in words:
@@ -129,6 +152,8 @@ def main():
             flags |= FLAG_EXPLICIT
         if w in FUNCTION_WORDS:
             flags |= FLAG_FUNCTION
+        if w not in cmu:
+            flags |= FLAG_ESTIMATED
         meta.append(flags)
         common.append(min(255, round(zipf_frequency(w, "en") * 32)))
 
@@ -151,14 +176,17 @@ def main():
             "CMU Pronouncing Dictionary (BSD-style licence)",
             "wordfreq commonness ranks (CC BY-SA 4.0, commonness.bin only)",
             "LDNOOBW English word list (CC BY 4.0)",
-            "Open English WordNet (CC BY 4.0) and Princeton WordNet, word types only",
+            "Open English WordNet (CC BY 4.0) and Princeton WordNet, word types and word list",
+            "ENABLE word list (public domain)",
+            "Estimated pronunciations: built from CMU entries, the rest predicted by g2p_en (Apache 2.0)",
         ],
     }
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     total = sum(len(d) for d in files.values())
-    print(f"{len(words)} words, {total:,} bytes raw")
-    if total > BUDGET_BYTES:
-        sys.exit("model over the 2 MB budget")
+    zipped = sum(len(gzip.compress(d, 9, mtime=0)) for d in files.values())
+    print(f"{len(words)} words ({sum(w not in cmu for w in words)} estimated), {total:,} bytes raw, {zipped:,} gzipped")
+    if zipped > BUDGET_GZIP_BYTES:
+        sys.exit("model over the 2 MB gzipped budget (NFR-02)")
 
 
 if __name__ == "__main__":

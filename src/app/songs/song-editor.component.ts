@@ -122,7 +122,7 @@ export class SongEditorComponent {
       const perLine = words.map((ws) => {
         const slice = counts.slice(at, at + ws.length);
         at += ws.length;
-        return { syllables: slice.reduce((n: number, c) => n + (c ?? 0), 0), estimated: slice.some((c) => c === undefined) };
+        return { syllables: slice.reduce((n: number, c) => n + (c.count ?? 0), 0), estimated: slice.some((c) => c.estimated) };
       });
       this.lineCounts.update((m) => ({ ...m, [section.id]: perLine }));
     });

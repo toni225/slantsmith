@@ -63,6 +63,17 @@ export class RhymeEngine {
     let i = stress.lastIndexOf(1);
     if (i < 0) i = stress.lastIndexOf(2);
     if (i < 0) i = sym.map(isVowel).lastIndexOf(true);
+    return this.splitAt(sym, stress, i);
+  }
+
+  // Compounds (heartstrings, waterfall) stress the first part, so the full key finds ~nothing; the last part rhymes on its own.
+  private lastPart(p: Uint8Array): Split | undefined {
+    const stress = Array.from(p, (b) => b >> 6);
+    const main = stress.lastIndexOf(1), i = stress.lastIndexOf(2);
+    return main >= 0 && i > main ? this.splitAt(Array.from(p, (b) => this.m.sounds[b & 63]), stress, i) : undefined;
+  }
+
+  private splitAt(sym: string[], stress: number[], i: number): Split {
     const tail = sym.slice(i + 1).map((s, j) => (isVowel(s) && stress[i + 1 + j] === 0 ? 'AH' : s));
     return { onset: sym[i - 1] ?? '', vowel: normVowel(sym[i], sym[i + 1]), tail, multi: tail.some(isVowel) };
   }
@@ -74,7 +85,14 @@ export class RhymeEngine {
     const s = id !== undefined ? this.splits[id] : this.estimate(word);
     if (!s) return { word, estimated: true, perfect: [], slant: [] };
     const keep = (c: number) => c !== id && !(hideExplicit && this.m.explicit(c)) && this.m.words[c] !== word;
-    return { word, estimated: id === undefined, perfect: this.perfect(s, keep), slant: s.multi ? [] : this.slant(s, keep) };
+    const part = id !== undefined ? this.lastPart(this.m.phones[id]) : undefined;
+    let perfect = this.perfect(s, keep);
+    if (part) {
+      const seen = new Set(perfect.map((r) => r.word));
+      perfect = [...perfect, ...this.perfect(part, keep).filter((r) => !seen.has(r.word))].slice(0, MAX);
+    }
+    const base = part ?? s;
+    return { word, estimated: id === undefined || this.m.isEstimated(id), perfect, slant: base.multi ? [] : this.slant(base, keep) };
   }
 
   // Rhymes for each stressed content word of a phrase; the UI combines them.
@@ -114,6 +132,7 @@ export class RhymeEngine {
     if (!this.suffixKeys) {
       this.suffixKeys = new Map();
       this.m.words.forEach((w, id) => {
+        if (this.m.isEstimated(id)) return; // guess only from real pronunciations
         const k = key(this.splits[id]);
         for (let n = 2; n <= 8 && n <= w.length; n++) {
           const sk = ending(w, n);

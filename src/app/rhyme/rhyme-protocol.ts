@@ -23,7 +23,8 @@ export type RhymeResponse = { id: number; result: UiRhymeResult } | { id: number
 
 // FR-21: live syllable count per line in the lyric editor.
 export interface SyllablesRequest { id: number; kind: 'syllables'; words: string[] }
-export interface SyllablesResponse { id: number; result: (number | undefined)[] }
+export interface WordSyllables { count: number | undefined; estimated: boolean }
+export interface SyllablesResponse { id: number; result: WordSyllables[] }
 
 // FR-22: rhyme-letter scheme (A, B, C...) per line ending in the lyric editor.
 export interface SchemeRequest { id: number; kind: 'scheme'; words: string[] }

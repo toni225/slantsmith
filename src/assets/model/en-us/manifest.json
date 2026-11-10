@@ -1,7 +1,7 @@
 {
   "lang": "en-us",
   "format": 1,
-  "words": 97875,
+  "words": 230824,
   "sounds": [
     "AA",
     "AE",
@@ -45,26 +45,28 @@
   ],
   "files": {
     "lexicon.txt": {
-      "bytes": 822690,
-      "sha256": "756f194d18b87de2ea0395fcb7a7cc786d79314039e6e77819751afca4515915"
+      "bytes": 2229732,
+      "sha256": "1cf5dbff09e94a412443fd5261488d9260c7a7cc0462e5b51bbe664b1aaad68f"
     },
     "phones.bin": {
-      "bytes": 714002,
-      "sha256": "6d540dfa5b7cc0e6fcd99c81c898aec57a49412e96704050f8798069c6aa2977"
+      "bytes": 1956354,
+      "sha256": "5fc227c7c62a92cef1a6cf7a49c600f8955393dc9fb5d63307122f45a802d0dc"
     },
     "meta.bin": {
-      "bytes": 97875,
-      "sha256": "195e87377827764766fe56e4960a67968d1ab5a3f75c684b69aceb1c9a817c11"
+      "bytes": 230824,
+      "sha256": "75effd13178a5a2b5c2bb911fee8421cfc6f4420c7041217c641cad7dbfabc43"
     },
     "commonness.bin": {
-      "bytes": 97875,
-      "sha256": "1ad1d6732299605eeb1d93f7373c13a038f80488b283355b574a224598779a2c"
+      "bytes": 230824,
+      "sha256": "f0474cabc5fdb09df349e91c2c1ed863df49d03f03f3f04f0b6801a8ff37c898"
     }
   },
   "credits": [
     "CMU Pronouncing Dictionary (BSD-style licence)",
     "wordfreq commonness ranks (CC BY-SA 4.0, commonness.bin only)",
     "LDNOOBW English word list (CC BY 4.0)",
-    "Open English WordNet (CC BY 4.0) and Princeton WordNet, word types only"
+    "Open English WordNet (CC BY 4.0) and Princeton WordNet, word types and word list",
+    "ENABLE word list (public domain)",
+    "Estimated pronunciations: built from CMU entries, the rest predicted by g2p_en (Apache 2.0)"
   ]
 }

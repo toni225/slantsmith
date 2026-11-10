@@ -11,10 +11,12 @@ export interface Model {
   commonness: Uint8Array; // 0-255, higher = more common
   wordTypes: (id: number) => WordType[]; // from Open English WordNet, [] if untyped
   isFunctionWord: (id: number) => boolean;
+  isEstimated: (id: number) => boolean; // predicted pronunciation, not from the CMU dictionary
 }
 
 const FLAG_EXPLICIT = 1 << 4;
 const FLAG_FUNCTION = 1 << 5;
+const FLAG_ESTIMATED = 1 << 6;
 // bits 0-3: see tools/build_word_model.py TYPE_BIT
 const TYPE_FLAG: [number, WordType][] = [[1, 'noun'], [2, 'verb'], [4, 'adjective'], [8, 'adverb']];
 
@@ -38,5 +40,6 @@ export function loadModel(lexicon: string, phonesBin: Uint8Array, meta: Uint8Arr
     commonness,
     wordTypes: (id) => TYPE_FLAG.filter(([bit]) => (meta[id] & bit) !== 0).map(([, t]) => t),
     isFunctionWord: (id) => (meta[id] & FLAG_FUNCTION) !== 0,
+    isEstimated: (id) => (meta[id] & FLAG_ESTIMATED) !== 0,
   };
 }

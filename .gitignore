@@ -48,3 +48,4 @@ __pycache__/
 
 # Word model build inputs fetched on demand (see tools/build_word_model.py)
 /tools/data/wordnet/
+/tools/data/enable/

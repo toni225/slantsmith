@@ -57,6 +57,21 @@ test('explicit words can be hidden', () => {
   assert.ok(all.length > clean.length && clean.every((w) => !model.explicit(model.ids.get(w)!)));
 });
 
+test('dictionary words CMU lacks are in the model, flagged estimated', () => {
+  assert.ok(model.ids.has('aahed') && engine.rhymes('aahed').estimated);
+  assert.ok(!engine.rhymes('walking').estimated);
+  const id = (w: string) => model.ids.get(w)!;
+  // Inflections are built on their base, so a plural rhymes like its singular plus "z".
+  assert.deepEqual([...model.phones[id('cartographers')]].slice(0, -1), [...model.phones[id('cartographer')]]);
+});
+
+test('compounds also rhyme on their last part', () => {
+  const words = (w: string) => engine.rhymes(w).perfect.map((x) => x.word);
+  assert.ok(words('heartstrings').includes('things'));
+  assert.ok(words('waterfall').includes('call'));
+  assert.ok(words('daydreams').includes('seems'));
+});
+
 test('dropped-g words rhyme like the full word', () => {
   assert.deepEqual(engine.rhymes("runnin'").perfect.slice(0, 5), engine.rhymes('running').perfect.slice(0, 5));
 });

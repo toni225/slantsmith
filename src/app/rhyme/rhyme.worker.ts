@@ -36,7 +36,10 @@ addEventListener('message', async ({ data }: MessageEvent<WorkerRequest>) => {
   try {
     const { engine, model } = await ready;
     if (data.kind === 'syllables') {
-      const result = data.words.map((w) => syllableCount(model, w));
+      const result = data.words.map((w) => {
+        const id = model.ids.get(w.toLowerCase());
+        return { count: syllableCount(model, w), estimated: id === undefined || model.isEstimated(id) };
+      });
       postMessage({ id, result } satisfies SyllablesResponse);
       return;
     }
