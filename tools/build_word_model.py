@@ -133,7 +133,11 @@ def main():
     explicit = word_list(DATA / "explicit_words.txt")
     by_pos = load_word_types()
     # Dictionary words, plus common non-dictionary words CMU knows (names, slang like "gonna").
-    wanted = dictionary_words(by_pos) | set(iter_wordlist("en"))
+    # Also every other CMU word (real pronunciations: 'bout, 'til, 'twas, place and family names),
+    # except possessives like ross's and guys' (they only repeat each word, and crowd out real rhymes) and dropped-g forms like runnin', which the
+    # engine already rhymes as the full word (running).
+    extra = {w for w in cmu if not w.endswith(("'s", "s'")) and not (w.endswith("in'") and w[:-1] + "g" in cmu)}
+    wanted = dictionary_words(by_pos) | set(iter_wordlist("en")) | extra
     words = sorted(
         w for w in wanted
         if w in pron and WORD_RE.fullmatch(w) and w not in drop and any(p[-1].isdigit() for p in pron[w])

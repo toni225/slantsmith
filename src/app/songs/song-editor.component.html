@@ -21,6 +21,7 @@
         <div class="menu">
           <button type="button" (click)="exportText(); $any($event.target).closest('details').open = false">Export as text</button>
           <button type="button" (click)="exportPdf(); $any($event.target).closest('details').open = false">Export as PDF</button>
+          <button type="button" (click)="deleteSong()">Delete song</button>
         </div>
       </details>
     </header>
@@ -45,6 +46,7 @@
               </button>
             </div>
           </div>
+          <input class="chords" [class.beside-letters]="section.text" [value]="section.chords ?? ''" (change)="setChords(section, $any($event.target).value)" [attr.aria-label]="'Chords for ' + section.name" placeholder="Add chords (Am  F  C  G)" autocomplete="off" autocapitalize="off" spellcheck="false" />
           <div class="lines-wrap">
             @if (section.text) {
               <!-- shortcut: one letter per \n-separated line; a soft-wrapped long line won't line up with its letter. -->

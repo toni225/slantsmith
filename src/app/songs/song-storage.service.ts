@@ -64,12 +64,17 @@ export class SongStorageService {
     await this.refresh();
   }
 
+  // Deletes the song and its takes together, so no orphan takes are left behind.
   async remove(id: string): Promise<void> {
     const db = await this.db;
     await new Promise<void>((resolve, reject) => {
-      const req = db.transaction(SONGS_STORE, 'readwrite').objectStore(SONGS_STORE).delete(id);
-      req.onsuccess = () => resolve();
-      req.onerror = () => reject(req.error);
+      const tx = db.transaction([SONGS_STORE, TAKES_STORE], 'readwrite');
+      tx.objectStore(SONGS_STORE).delete(id);
+      const takes = tx.objectStore(TAKES_STORE);
+      const req = takes.index('songId').getAllKeys(id);
+      req.onsuccess = () => req.result.forEach((key) => takes.delete(key));
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
     });
     await this.refresh();
   }

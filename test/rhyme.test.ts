@@ -76,3 +76,16 @@ test('compounds also rhyme on their last part', () => {
 test('dropped-g words rhyme like the full word', () => {
   assert.deepEqual(engine.rhymes("runnin'").perfect.slice(0, 5), engine.rhymes('running').perfect.slice(0, 5));
 });
+
+test("word model: lyric forms are in, British spellings and silent-e words rhyme right", () => {
+  const perfect = (w: string) => engine.rhymes(w).perfect.map((x) => x.word);
+  assert.ok(model.words.includes("'til") && model.words.includes("'twas"));
+  assert.ok(!model.words.includes("guys'") && !model.words.includes("runnin'"));
+  assert.deepEqual(perfect('colour').slice(0, 5), perfect('color').slice(0, 5));
+  assert.deepEqual(perfect('agonised').filter((w) => w !== 'agonized'), perfect('agonized').filter((w) => w !== 'agonised'));
+  assert.ok(perfect('gamed').includes('named')); // game + d, not gam + ed
+  assert.ok(perfect('rebilled').includes('filled')); // re + billed, built from known words, not guessed
+  assert.ok(model.words.includes('firetruck') && model.words.includes('bassline')); // rarer words, buildable
+  assert.ok(perfect('xylography').includes('photography')); // guessed word, rhyme taken from look-alike endings
+  assert.ok(perfect('postatomic').includes('economic'));
+});

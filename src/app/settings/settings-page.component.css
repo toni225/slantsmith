@@ -29,26 +29,26 @@
     max-width: 760px;
   }
 
-  main {
+  .page main {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0 24px;
-    padding: 0 16px 32px;
+    padding: 0 24px 32px;
   }
 
-  header {
-    padding-left: 16px;
-    padding-right: 16px;
+  .page header {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
 @media (min-width: 1024px) {
-  main {
+  .page main {
     gap: 0 48px;
     padding: 0 32px 32px;
   }
 
-  header {
+  .page header {
     padding-left: 32px;
     padding-right: 32px;
   }
@@ -58,7 +58,7 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 16px 20px 0;
+  padding: 20px 20px 0;
 }
 
 h1 {
@@ -72,9 +72,10 @@ main {
   padding: 0 20px 32px;
 }
 
+/* A legend sits in its fieldset's border and ignores margin, so the fieldset carries the group gap. */
 fieldset {
   border: 0;
-  margin: 0;
+  margin: 24px 0 0;
   padding: 0;
 }
 
@@ -82,8 +83,12 @@ legend, h2 {
   font-size: 13px;
   font-weight: 700;
   color: var(--fawn);
-  margin: 22px 0 8px;
-  padding: 0;
+  margin: 0;
+  padding: 0 0 8px;
+}
+
+h2 {
+  margin-top: 24px;
 }
 
 .row {
@@ -225,7 +230,7 @@ label.row {
 
 .import-result {
   margin-top: 12px;
-  padding: 14px 16px;
+  padding: 16px;
   border-radius: 14px;
   background: var(--booth-dark);
   border: 1px solid var(--copper);
@@ -244,7 +249,7 @@ label.row {
 .import-actions {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .import-result .backup-btn {

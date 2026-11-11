@@ -1,7 +1,7 @@
 {
   "lang": "en-us",
   "format": 1,
-  "words": 234631,
+  "words": 262631,
   "sounds": [
     "AA",
     "AE",
@@ -45,20 +45,20 @@
   ],
   "files": {
     "lexicon.txt": {
-      "bytes": 2254982,
-      "sha256": "eddaf668e7bb8f36743b0877a20ed5972bbd9b7ed6fd3904fb737d7e9f287b71"
+      "bytes": 2495485,
+      "sha256": "0ed34622fef7d3c0c1b8a549fe5c47f036500097008062485fd28e916ec56f67"
     },
     "phones.bin": {
-      "bytes": 1978977,
-      "sha256": "502f7c865980ee7f05f3156656b42f8c6073eaa58a3d3800e62b8e5e081cf781"
+      "bytes": 2184576,
+      "sha256": "8295697b5d21fee82c342ca08f21dedc14bece18a14cb464cf68108e4d96a699"
     },
     "meta.bin": {
-      "bytes": 234631,
-      "sha256": "3ef0292bf4b9348c32c8dea99a433821482636cb755eccabd0ce8e937d3d8824"
+      "bytes": 262631,
+      "sha256": "45308d9ad9c11e785d7b11f39855c7738b5074064637aca9451578c6b25c1e87"
     },
     "commonness.bin": {
-      "bytes": 234631,
-      "sha256": "e5f7937240c89813669ba5df4c7ba63fc9f895f1ab99acc88b4e3631fd3f9806"
+      "bytes": 262631,
+      "sha256": "3dc9fed66a1cf0c29d205ba00b39b176f74336766f1b55fb3d4c2bb473ebccc0"
     }
   },
   "credits": [

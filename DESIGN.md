@@ -52,8 +52,10 @@ spacing:
   xs: "4px"
   sm: "8px"
   md: "12px"
+  base: "16px"
   lg: "20px"
   xl: "24px"
+  xxl: "32px"
 components:
   button-primary:
     backgroundColor: "{colors.ruby-red}"
@@ -74,7 +76,7 @@ components:
     backgroundColor: "{colors.lamp-lit}"
     textColor: "{colors.lemon-chiffon}"
     rounded: "{rounded.card}"
-    padding: "14px 12px"
+    padding: "16px 16px 14px"
   sheet:
     backgroundColor: "{colors.lamp-lit}"
     rounded: "{rounded.sheet}"
@@ -103,7 +105,7 @@ One family, Manrope, self-hosted. Lyrics are the largest running text (18/32, we
 
 ## Layout
 
-Single column at 390 px. 20–24 px side margins for lists and dim sections; the lamp card insets to 12 px so it reads as lifted. Lyric rows are a three-column grid: 28 px rhyme letter, text, 28 px syllable count. Touch targets at least 44 px.
+Single column at 390 px. Spacing stays on the 4 / 8 / 12 / 16 / 20 / 24 / 32 scale. Page gutter: 20 px on phone, 24 px on tablet, 32 px on desktop, the same on every screen. Tab-screen titles sit 20 px from the top at every width. The lamp card (and Rhymes' docked panel) insets 8 px inside the gutter so it reads as lifted. Group labels get 24 px above, 8 px below; the search field sits 16 px under the title; header to first content is 16 px. Lyric rows are a three-column grid: 28 px rhyme letter, text, 28 px syllable count. Touch targets at least 44 px.
 
 ## Responsive
 
@@ -134,9 +136,11 @@ Radii grow with size: 6 px badges, 12 px controls, 14 px primary buttons, 20 px 
 - **Lamp card**: the one focused thing on a screen (active section, last song, selected take, loudness table). One per screen.
 - **Rhyme chip**: outlined pill; slant chips use a dotted fawn border and a small "slant" word.
 - **Rhyme sheet**: bottom sheet over a dimmed screen; tabs Perfect / Slant / Phrase, each result has word, type and a plain reason.
-- **Tab bar**: four tabs (Songs, Rhymes, Mix help, Settings) on booth-dark; active tab fawn and bold.
+- **Tab bar**: five tabs (Songs, Rhymes, Chords, Mix help, Settings) on booth-dark; active tab fawn and bold.
 - **Switch**: ruby track when on, chiffon knob.
 - **Grammar flag**: copper wavy underline, never ruby.
+- **Chords page**: the pad is the instrument and the one lamp card. Top of the card is a display (booth-dark): the chord just heard, its notes, and a three-octave piano with those notes lit ruby (the piano is ivory and black in both themes). Under it a circle of fifths (SVG, C at the top): 12 major chords outside, their relative minors inside, the key's diminished chord in the centre. Chords of the key are booth-dark with chiffon text, the home chord has a chiffon outline, borrowed chords are faint (fawn text, no fill) but still play; the chord sounding is ruby. One tap plays, double tap adds; then a scrolling row of chord colours (selected = inverted chiffon chip, not ruby), and under it a Sound row in the same chip style (Soft keys, Piano, Organ, Guitar, Warm pad). The key folds into a pill in the header ("Key C major") that opens the Major/Minor + 12-key picker. The progression is a transport bar docked above the tab bar at every width, in two rows split by a hairline. Tools row: round ruby Play, Loop (inverted chiffon when on), tempo stepper, then at the right Put-into-song (a menu that opens upward, lists the last song's sections), Copy, Clear. Chords row: scrolling pills; tapping one selects it (inverted chiffon) and shows a move-earlier / move-later / remove group at the row's end. Any pill can be dragged to reorder (touch: hold, then drag): it lifts (lamp-lit fill, chiffon border, shadow, 6% larger) and follows the pointer while the others slide aside over 180 ms. The chord playing is ruby. Genres are disclosure rows like Mix help. Two columns from tablet up.
+- **Chord row**: one line per section between its name and its lyrics, the progression as typed (`Am  F  C  G`, whitespace normalised to two spaces). Chiffon, 16px bold, tabular figures, a dashed copper underline. Its text starts exactly over the lyric text, not the box edge. Printed and exported with the section; an empty row doesn't print.
 - **Checkbox**: 22×22, 6px radius (the badge token), copper border; checked fills ruby with a lemon-chiffon checkmark (the fixed off-white token, not the `chiffon` role - it must stay light on ruby in both themes).
 - **Progress fill**: a 4px rounded track (faded copper at low opacity), ruby fill - Mix help's before-mastering checklist is the first use, under its disclosure-row subtitle.
 - **Scrollbar**: hidden everywhere, globally - scrolling itself is untouched, just no bar drawn over it.

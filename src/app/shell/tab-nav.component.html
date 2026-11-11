@@ -7,6 +7,10 @@
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
     Rhymes
   </a>
+  <a routerLink="/chords" routerLinkActive="active" #chordsRla="routerLinkActive" [attr.aria-current]="chordsRla.isActive ? 'page' : null">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12M6 4v16M10 4v16M14 4v16M18 4v16M6 9h12M6 14h12"/><circle cx="12" cy="11.5" r="1.2" fill="currentColor"/></svg>
+    Chords
+  </a>
   <a routerLink="/mix" routerLinkActive="active" #mixRla="routerLinkActive" [attr.aria-current]="mixRla.isActive ? 'page' : null">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M6 4v16M12 4v16M18 4v16"/><path d="M4 14h4M10 8h4M16 12h4"/></svg>
     Mix help

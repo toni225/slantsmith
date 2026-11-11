@@ -2,6 +2,7 @@ export interface Section {
   id: string;
   name: string;
   text: string; // one line per lyric line; rhyme letters/syllable counts are v1.1 (FR-21/22)
+  chords?: string; // the section's chord progression as typed ("Am  F  C  G"), shown above its lyrics
   ignoredFlags?: string[]; // FR-11: grammar flag keys ("rule|word") ignored for this song
 }
 

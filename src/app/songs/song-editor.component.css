@@ -29,7 +29,7 @@
     max-width: 560px;
   }
 
-  main {
+  .page main {
     padding-left: 24px;
     padding-right: 24px;
   }
@@ -42,12 +42,12 @@
     max-width: 640px;
   }
 
-  header {
+  .page header {
     padding-left: 16px;
     padding-right: 16px;
   }
 
-  main {
+  .page main {
     padding-left: 32px;
     padding-right: 32px;
   }
@@ -227,6 +227,40 @@ main {
 .section-actions button:disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+/* The section's chord progression, read across the top of the verse like a chart. */
+.chords {
+  height: 44px;
+  border: 0;
+  border-bottom: 1px dashed rgba(141, 119, 95, 0.55);
+  border-radius: 0;
+  background: transparent;
+  color: var(--chiffon);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  font-feature-settings: 'tnum';
+  word-spacing: 0.35em;
+  padding: 0 2px 0 15px;
+  margin-bottom: 8px;
+}
+
+/* Chords sit over the lyric text, not the box: 15px = textarea border + padding; 30px/36px = the letter and count columns plus their gaps. */
+.chords.beside-letters {
+  margin-left: 30px;
+  margin-right: 36px;
+}
+
+.chords::placeholder {
+  color: var(--fawn);
+  font-weight: 500;
+  word-spacing: normal;
+}
+
+.chords:focus-visible {
+  outline: none;
+  border-bottom: 1px solid var(--fawn);
 }
 
 .lines-wrap {
@@ -422,6 +456,15 @@ main {
 
   .section-name {
     color: #000;
+  }
+
+  .chords {
+    color: #000;
+    border: 0;
+  }
+
+  .chords:placeholder-shown {
+    display: none;
   }
 
   .lines {

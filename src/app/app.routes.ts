@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ChordsPageComponent } from './chords/chords-page.component';
 import { MixPageComponent } from './mix/mix-page.component';
 import { RhymePageComponent } from './rhyme/rhyme-page.component';
 import { SettingsPageComponent } from './settings/settings-page.component';
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: 'songs/:id', component: SongEditorComponent },
   { path: 'songs/:id/takes', component: TakesListComponent },
   { path: 'rhymes', component: RhymePageComponent },
+  { path: 'chords', component: ChordsPageComponent },
   { path: 'mix', component: MixPageComponent },
   { path: 'settings', component: SettingsPageComponent },
 ];

@@ -26,21 +26,21 @@
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .page {
     max-width: 700px;
-    padding: 0 8px;
+    padding: 0 4px;
   }
 
-  .rows {
+  .page .rows {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     padding: 4px 12px 0;
   }
 
-  .rows li {
+  .page .rows li {
     list-style: none;
   }
 
-  .rows a {
+  .page .rows a {
     flex-direction: column;
     align-items: stretch;
     gap: 2px;
@@ -52,14 +52,14 @@
     border: 1px solid rgba(141, 119, 95, 0.35);
   }
 
-  .row-meta {
+  .page .row-meta {
     text-align: left;
     margin-top: 8px;
     display: flex;
     justify-content: space-between;
   }
 
-  .row-when {
+  .page .row-when {
     order: 2;
   }
 }
@@ -70,18 +70,19 @@
     padding: 0 32px;
   }
 
-  header {
+  .page header {
     padding-left: 0;
     padding-right: 0;
   }
 
-  .lamp-card {
+  .page .lamp-card {
     margin: 0;
   }
 }
 
+/* 16px, not 20: the title centres on the 44px New song button, which drops it ~4px - this keeps it level with the other tabs' titles. */
 header {
-  padding: 22px 20px 0;
+  padding: 16px 20px 0;
 }
 
 .head-row {
@@ -186,7 +187,7 @@ main {
 }
 
 .group-label {
-  margin: 22px 20px 4px;
+  margin: 24px 20px 8px;
   font-size: 13px;
   font-weight: 700;
   color: var(--fawn);
@@ -306,7 +307,7 @@ main {
 }
 
 .empty-card {
-  padding: 40px 24px 28px;
+  padding: 40px 24px 32px;
   border-radius: 24px;
   background: radial-gradient(90% 75% at 50% 0%, rgba(213, 191, 134, 0.2), rgba(213, 191, 134, 0) 72%), var(--lamp-lit);
   box-shadow: 0 16px 40px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
@@ -315,7 +316,7 @@ main {
 }
 
 .empty-card h2 {
-  margin: 18px 0 0;
+  margin: 16px 0 0;
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -331,7 +332,7 @@ main {
 }
 
 .empty-card .primary {
-  margin: 22px auto 0;
+  margin: 24px auto 0;
   height: 52px;
   max-width: 260px;
   width: 100%;

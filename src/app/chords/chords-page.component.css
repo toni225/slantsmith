@@ -1,0 +1,822 @@
+/* Mobile-first (NFR-07: 360px+). The pad is the instrument (the one lamp); the key folds away in the header;
+   the progression is a transport bar docked above the tabs. Two columns from tablet up. */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--mahogany);
+  color: var(--chiffon);
+  overflow: hidden;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px 0; /* 16, not 20: the title is centred on the 44px key button */
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* Key: one pill in the header; the picker opens under it. */
+.key-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 12px 0 16px;
+  border: 1px solid var(--copper);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+}
+
+.key-label {
+  color: var(--fawn);
+  font-weight: 600;
+}
+
+.key-name {
+  font-weight: 800;
+}
+
+.key-toggle .chevron {
+  color: var(--fawn);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.key-toggle[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+.key-panel {
+  padding: 12px 20px 0;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--booth-dark);
+}
+
+.segmented button {
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--fawn);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.keys button {
+  height: 44px;
+  border: 1px solid var(--copper);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Selected key/mode = the record light (ruby, with the fixed off-white, see DESIGN.md). */
+.segmented button[aria-pressed='true'],
+.keys button[aria-pressed='true'] {
+  background: var(--ruby);
+  border-color: var(--ruby);
+  color: #f1f0cc;
+}
+
+main {
+  flex: 1;
+  padding: 16px 0 24px;
+}
+
+/* The one lamp: the instrument. */
+.lamp-card {
+  margin: 0 12px;
+  padding: 16px;
+  border-radius: 20px;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(213, 191, 134, 0.16), rgba(213, 191, 134, 0) 70%), var(--lamp-lit);
+  box-shadow: 0 14px 36px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
+}
+
+/* Display: the chord just heard, its notes, and where they sit on a keyboard. */
+.display {
+  padding: 12px 12px 10px;
+  border-radius: 12px;
+  background: var(--booth-dark);
+}
+
+.now-chord {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  min-height: 32px;
+  margin: 0 0 8px;
+}
+
+.now-chord strong {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 32px;
+}
+
+.now-chord .notes {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--fawn);
+  white-space: pre;
+}
+
+.now-chord.idle {
+  align-items: center;
+  font-size: 14px;
+  color: var(--fawn);
+}
+
+/* A piano is ivory and black in both themes; the notes sounding are the record light. */
+.piano {
+  display: block;
+  width: 100%;
+  height: 48px;
+}
+
+.piano .white {
+  fill: #f1f0cc;
+  stroke: rgba(28, 10, 12, 0.3); /* keeps the keys apart on the paper-light theme */
+  stroke-width: 0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.piano .black {
+  fill: #1c0a0c;
+}
+
+.piano .on {
+  fill: var(--ruby);
+}
+
+.piano rect {
+  transition: fill 0.12s ease-out;
+}
+
+/* Circle of fifths: majors outside, relative minors inside, the key's diminished chord in the middle. */
+.wheel {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 12px auto 0;
+  touch-action: manipulation; /* a double tap adds the chord, it must not zoom the page */
+  user-select: none;
+}
+
+.seg {
+  cursor: pointer;
+  outline: none;
+}
+
+.seg path,
+.seg circle {
+  fill: transparent;
+  stroke: rgba(141, 119, 95, 0.5);
+  stroke-width: 1;
+  transition: fill 0.12s ease-out;
+}
+
+.seg text {
+  fill: var(--fawn);
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.seg.minor text {
+  font-size: 9.5px;
+}
+
+.seg.in-key path,
+.seg.in-key circle {
+  fill: var(--booth-dark);
+  stroke: var(--copper);
+}
+
+.seg.in-key text {
+  fill: var(--chiffon);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.seg.in-key.minor text {
+  font-size: 11px;
+}
+
+/* Long names (F#9sus4, Bbmaj13) step down so they stay inside their wedge. */
+.seg.long text,
+.seg.in-key.long text {
+  font-size: 10px;
+}
+
+.seg.minor.long text,
+.seg.in-key.minor.long text {
+  font-size: 8px;
+}
+
+.seg.home path {
+  stroke: var(--chiffon);
+  stroke-width: 2;
+}
+
+.seg.lit path,
+.seg.lit circle {
+  fill: var(--ruby);
+  stroke: var(--ruby);
+}
+
+.seg.lit text {
+  fill: #f1f0cc;
+}
+
+.seg:focus-visible path,
+.seg:focus-visible circle {
+  stroke: var(--chiffon);
+  stroke-width: 2.5;
+}
+
+.lamp-card h2 {
+  margin-top: 20px;
+}
+
+/* Colours: one scrolling row. Selected = inverted (chiffon fill), so ruby stays for key, mode and sound. */
+.colours {
+  display: flex;
+  gap: 8px;
+  margin: 8px -16px 0;
+  padding: 0 16px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0 16px;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent);
+}
+
+.colours::-webkit-scrollbar {
+  display: none;
+}
+
+.colours button {
+  flex: none;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--copper);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 700;
+  scroll-snap-align: start;
+}
+
+.colours button[aria-pressed='true'] {
+  background: var(--chiffon);
+  border-color: var(--chiffon);
+  color: var(--mahogany);
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--fawn);
+}
+
+/* Genres: same disclosure pattern as Mix help. */
+.genres {
+  padding: 32px 20px 0;
+}
+
+.genres h2 {
+  font-size: 17px;
+}
+
+.rows {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.rows > li {
+  border-bottom: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 4px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.row-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+summary .chevron {
+  flex-shrink: 0;
+  color: var(--fawn);
+  transition: transform 0.15s ease-out;
+}
+
+details[open] summary .chevron {
+  transform: rotate(90deg);
+}
+
+.tip {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.presets {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.presets li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preset-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.preset-chords {
+  font-size: 16px;
+  font-weight: 800;
+  font-feature-settings: 'tnum';
+}
+
+.preset-num,
+.preset-note {
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.presets button {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--copper);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Transport: docked above the tabs at every width. Tools on the first row, the chords on the second. */
+.transport {
+  flex: none;
+  background: var(--booth-dark);
+  border-top: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+.transport-inner {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 8px 12px;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  margin: 0;
+  padding: 0 8px;
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--fawn);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tools .gap {
+  flex: 1;
+}
+
+.play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-right: 4px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ruby);
+  color: #f1f0cc;
+}
+
+.tool {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--chiffon);
+  cursor: pointer;
+}
+
+.tool:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Loop on = inverted, like the selected colour chip. */
+.toggle[aria-pressed='true'] {
+  background: var(--chiffon);
+  color: var(--mahogany);
+}
+
+.tempo {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(141, 119, 95, 0.5);
+  border-radius: 22px;
+}
+
+.tempo .tool {
+  width: 38px;
+}
+
+.bpm {
+  min-width: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--fawn);
+  font-feature-settings: 'tnum';
+}
+
+.bpm strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--chiffon);
+}
+
+.bpm .unit {
+  display: none; /* no room on a phone; the group is labelled for screen readers */
+}
+
+/* Put-into-song menu: opens upward from the bar. */
+.send {
+  position: relative;
+}
+
+.send summary {
+  list-style: none;
+}
+
+.send summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  bottom: 52px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: max-content;
+  min-width: 200px;
+  max-width: min(300px, 80vw);
+  max-height: 50dvh;
+  padding: 8px;
+  overflow-y: auto;
+  border-radius: 14px;
+  background: var(--lamp-lit);
+  box-shadow: 0 14px 36px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
+}
+
+.menu-title {
+  margin: 0;
+  padding: 4px 12px 8px;
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.menu button,
+.menu a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+}
+
+.menu .has {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fawn);
+}
+
+/* Chords row: a hairline apart from the tools. Tap a chord to select it; its move/remove buttons sit at the end. */
+.chords-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(141, 119, 95, 0.25);
+}
+
+.prog {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0 0 0 8px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* fade the right edge so a long progression reads as scrollable */
+  mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent);
+}
+
+.prog::-webkit-scrollbar {
+  display: none;
+}
+
+.prog li {
+  flex: none;
+}
+
+.prog li:last-child {
+  margin-right: 20px;
+}
+
+.prog .pill {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--copper);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.prog .pill[aria-pressed='true'] {
+  background: var(--chiffon);
+  border-color: var(--chiffon);
+  color: var(--mahogany);
+}
+
+/* Reorder by drag: the lifted chord follows the pointer, the others slide aside to show where it lands. */
+.prog {
+  touch-action: pan-x;
+}
+
+.prog .pill {
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.prog.sorting li {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prog.sorting li.dragging {
+  position: relative;
+  z-index: 1;
+  transition: none;
+}
+
+.prog li.dragging .pill {
+  cursor: grabbing;
+  background: var(--lamp-lit);
+  border-color: var(--chiffon);
+  box-shadow: 0 10px 24px rgba(20, 4, 6, 0.7);
+  scale: 1.06;
+}
+
+.prog li.now .pill {
+  background: var(--ruby);
+  border-color: var(--ruby);
+  color: #f1f0cc;
+}
+
+.edit {
+  flex: none;
+  display: flex;
+  border: 1px solid rgba(141, 119, 95, 0.5);
+  border-radius: 22px;
+}
+
+.edit .tool {
+  width: 40px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .key-toggle:hover,
+  .keys button[aria-pressed='false']:hover,
+  .segmented button[aria-pressed='false']:hover,
+  .colours button[aria-pressed='false']:hover,
+  .presets button:hover,
+  .menu button:hover,
+  .menu a:hover,
+  .prog .pill[aria-pressed='false']:hover,
+  .tool:not(:disabled):not([aria-pressed='true']):hover {
+    background: rgba(241, 240, 204, 0.08);
+  }
+
+  .seg:not(.lit):hover path,
+  .seg:not(.lit):hover circle {
+    fill: rgba(241, 240, 204, 0.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prog.sorting li,
+  .seg path,
+  .piano rect,
+  .chevron {
+    transition: none;
+  }
+}
+
+/* Two columns from tablet up, like Mix help: the instrument on the left, the genre reference on the right. */
+@media (min-width: 768px) {
+  .page {
+    max-width: 760px;
+    padding: 0 24px;
+  }
+
+  .page header,
+  .page .key-panel {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .page .key-panel {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .page .keys {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    margin-top: 0;
+  }
+
+  .page main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); /* minmax(0): the scrolling colour row must not widen its column */
+    column-gap: 24px;
+    align-items: start;
+  }
+
+  .page .lamp-card {
+    margin: 0;
+  }
+
+  .page .genres {
+    padding: 0;
+  }
+
+  .transport-inner {
+    max-width: 760px;
+    padding: 8px 16px;
+  }
+
+  .bpm {
+    min-width: 64px;
+  }
+
+  .bpm .unit {
+    display: inline;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 1100px;
+    padding: 0 32px;
+  }
+
+  .page main {
+    column-gap: 40px;
+  }
+
+  .page .piano {
+    height: 56px;
+  }
+
+  .transport-inner {
+    max-width: 1100px;
+    padding: 8px 24px;
+  }
+}

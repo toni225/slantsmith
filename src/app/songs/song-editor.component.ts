@@ -213,6 +213,12 @@ export class SongEditorComponent {
     this.scheduleSave();
   }
 
+  // shortcut: one free-text progression per section, not chords placed over each line; upgrade to per-line chords if writers ask.
+  setChords(section: Section, chords: string) {
+    section.chords = chords.trim().split(/\s+/).filter(Boolean).join('  ') || undefined;
+    this.scheduleSave();
+  }
+
   renameSection(section: Section, name: string) {
     section.name = name.trim() || section.name;
     this.scheduleSave();
@@ -257,10 +263,18 @@ export class SongEditorComponent {
   }
 
   // FR-33: export .txt / PDF for this one song.
+  async deleteSong() {
+    const song = this.song();
+    if (!song || !confirm(`Delete "${song.title || 'Untitled song'}" and its takes? This cannot be undone.`)) return;
+    clearTimeout(this.saveTimer); // a pending autosave would bring the song back
+    await this.storage.remove(song.id);
+    await this.router.navigate(['/songs']);
+  }
+
   exportText() {
     const song = this.song();
     if (!song) return;
-    const text = `${song.title}\n\n${song.sections.map((s) => `${s.name}\n${s.text}`).join('\n\n')}\n`;
+    const text = `${song.title}\n\n${song.sections.map((s) => `${s.name}\n${s.chords ? s.chords + '\n' : ''}${s.text}`).join('\n\n')}\n`;
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

@@ -19,9 +19,18 @@
   overflow-y: auto;
 }
 
+/* Tablet steps up like the editor: wider column, 24px gutter, no phone-under-a-shadow. */
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .page {
-    box-shadow: 0 0 60px rgba(20, 4, 6, 0.5);
+    max-width: 560px;
+  }
+
+  .page .save-row,
+  .page .col-head,
+  .page .rows,
+  .page .footer {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
@@ -30,15 +39,15 @@
     max-width: 640px;
   }
 
-  header {
+  .page header {
     padding-left: 16px;
     padding-right: 16px;
   }
 
-  .save-row,
-  .col-head,
-  .rows,
-  .footer {
+  .page .save-row,
+  .page .col-head,
+  .page .rows,
+  .page .footer {
     padding-left: 32px;
     padding-right: 32px;
   }
@@ -108,7 +117,7 @@ h1 {
   display: grid;
   grid-template-columns: 52px minmax(0, 1fr) 96px;
   gap: 8px;
-  padding: 14px 20px 8px;
+  padding: 16px 20px 8px;
   font-size: 12px;
   font-weight: 700;
   color: var(--fawn);
@@ -208,7 +217,7 @@ h1 {
 
 .footer {
   margin: 0;
-  padding: 12px 20px max(28px, env(safe-area-inset-bottom));
+  padding: 12px 20px max(32px, env(safe-area-inset-bottom));
   font-size: 13px;
   line-height: 20px;
   color: var(--fawn);

@@ -25,8 +25,8 @@ npm test                  # node --test on test/*.test.ts (rhyme set, speed, exp
 
 - `tools/build_word_model.py`, `tools/data/` (CMU dict, misspelling/slur blocklists, explicit list)
 - `src/assets/model/en-us/` generated: lexicon.txt, phones.bin (1 length byte + 1 byte per sound: low 6 bits sound id, high 2 bits stress), meta.bin (bit 6 = estimated pronunciation, bit 4 = explicit, bit 5 = function word, bits 0-3 = noun/verb/adjective/adverb bitmask), commonness.bin (zipf*32), manifest.json. `.gitattributes` keeps these byte-exact (a CRLF lexicon matches no words).
-- Vocabulary = every dictionary word (ENABLE, public domain, fetched on demand to `tools/data/enable/`, sha256-pinned; plus WordNet lemmas) + every wordfreq word CMU can pronounce. No word cap and no size cap (the 2 MB NFR-02 limit was lifted 2026-11-10; the build and CI just report the size).
-- `tools/estimate_pronunciations.py` -> `tools/data/estimated.dict` (committed): pronunciations for dictionary words CMU lacks. Built from known words first (walk+ing, un+broken, heart+strings; shortest-first so an inflection uses its base), g2p_en for the rest. Its self-check rebuilds CMU's own words and asserts >=88% keep CMU's rhyme (89.9% now).
+- Vocabulary (262,631 words, 2026-11-11) = every dictionary word (ENABLE, public domain, fetched on demand to `tools/data/enable/`, sha256-pinned; plus WordNet lemmas) + every wordfreq word CMU can pronounce. No word cap and no size cap (the 2 MB NFR-02 limit was lifted 2026-11-10; the build and CI just report the size).
+- `tools/estimate_pronunciations.py` -> `tools/data/estimated.dict` (committed): pronunciations for dictionary words CMU lacks. Built from known words first (walk+ing, un+broken, heart+strings; shortest-first so an inflection uses its base), g2p_en for the rest. Its self-check rebuilds CMU's own words and asserts >=90% keep CMU's rhyme (91.6% now).
 - `src/engines/model.ts` (decode: `wordTypes()`, `isFunctionWord()`), `src/engines/rhyme.ts` (RhymeEngine: rhymes(), phrase())
 - `tools/data/wordnet/` Open English WordNet LMF XML, fetched on demand by `build_word_model.py` (gitignored, like wordfreq's own data; not shipped)
 - `test/` rhyme and grammar test sets (CSV) + tests
@@ -34,7 +34,8 @@ npm test                  # node --test on test/*.test.ts (rhyme set, speed, exp
 - Grammar rule data for Sprint 4 is ready in `tools/data/`: lyric_allowlist.txt, doubled_word_rule.json.
 - `src/app/settings/` SettingsService (signals, localStorage-persisted) + `/settings` route, built from the approved `Settings.dc.html` artboard.
 - `src/app/songs/` SongStorageService (IndexedDB, ADR-07) + Songs list (`/songs`), lyric editor (`/songs/:id`), and Takes (`/songs/:id/takes`) routes, built from `Songs.dc.html`/`SongsEmpty.dc.html`/`Main.dc.html`/`Takes.dc.html`.
-- `src/app/shell/tab-nav.component.ts` the shared bottom tab bar (Songs/Rhymes/Mix help/Settings), used by all four screens.
+- `src/app/shell/tab-nav.component.ts` the shared bottom tab bar (Songs/Rhymes/Chords/Mix help/Settings), used by all four screens.
+- `src/engines/chords.ts` chord theory (`chordFor(numeral, root, mode)`, `DIATONIC`, `chordFrequencies`); `src/app/chords/` the Chords page (`/chords`: key picker, tap-to-hear chord pad, progression builder with Play/Copy, genre tips + presets in `genres.ts`). Sound is Web Audio triangle oscillators, no samples, works offline.
 - `src/app/mix/mix-page.component.ts` Mix help (`/mix`), built from `Mix.dc.html`: loudness table, EQ guide, before-mastering checklist (per-song, on `Song.checklist`), delivery checklist, searchable FAQ.
 - `ngsw-config.json`, `public/manifest.webmanifest`, `public/icon.svg` the PWA install setup (ADR-01) - service worker caching groups, app manifest, the app's own "lamp" icon.
 
@@ -59,7 +60,7 @@ Prod bundle 82.73 KB gzipped (well under the 600 KB budget; the service worker a
 
 Word model grown from 60k to 97,875 words (~696 KB gzipped, up from ~420 KB) and word-type coverage roughly doubled via a WordNet morphology fallback - see "Word model improvements" below.
 
-Word model grown again (2026-11-10; later the same day +3,807 common written words - names, slang, `dont` - via zipf>=2.5 in the estimator, now 234,631 words, 1.71 MB gzipped) to **230,824 words** (1.69 MB gzipped, under NFR-02's 2 MB) by adding every dictionary word, not only those CMU∩wordfreq covers: 131,869 have estimated pronunciations (83,888 built from known words, 47,981 by g2p_en), flagged in meta.bin bit 6 so the rhyme sheet says "estimated pronunciation" and the editor italicizes their syllable counts (the worker's syllables response is now `{count, estimated}[]`). The model-size check (script and CI) now measures gzipped size, matching NFR-02's wording, instead of raw. Costs: cold start to first rhyme ~230 ms -> ~590 ms on a desktop (index build over 230k words, in the worker, UI not blocked) - fold into Sprint 2 item 3's real-phone check. Compounds (`waterfall`, `daydreams`, `heartstrings`) carry main stress on the first part, so their full perfect-rhyme key finds ~0 rhymes; fixed in the engine (2026-11-10): `RhymeEngine.lastPart()` takes the key from a secondary stress after the main one, its perfect rhymes are appended after the full-key ones, and slant uses it too (`heartstrings` 0 -> 27 perfect: things, wings, kings...).
+Word model grown again (2026-11-10) to **234,631 words** (1.71 MB gzipped; the 2 MB cap was lifted the same day) by adding every dictionary word, plus 3,807 common written words no dictionary lists (names, slang, `dont`; zipf >= 2.5 in the estimator), not only those CMU∩wordfreq covers: 131,869 have estimated pronunciations (83,888 built from known words, 47,981 by g2p_en), flagged in meta.bin bit 6 so the rhyme sheet says "estimated pronunciation" and the editor italicizes their syllable counts (the worker's syllables response is now `{count, estimated}[]`). The model-size check (script and CI) now measures gzipped size, matching NFR-02's wording, instead of raw. Costs: cold start to first rhyme ~230 ms -> ~590 ms on a desktop (index build over 230k words, in the worker, UI not blocked) - fold into Sprint 2 item 3's real-phone check. Compounds (`waterfall`, `daydreams`, `heartstrings`) carry main stress on the first part, so their full perfect-rhyme key finds ~0 rhymes; fixed in the engine (2026-11-10): `RhymeEngine.lastPart()` takes the key from a secondary stress after the main one, its perfect rhymes are appended after the full-key ones, and slant uses it too (`heartstrings` 0 -> 27 perfect: things, wings, kings...).
 
 ## Sprint 2 — done (item 3 skipped, see below)
 
@@ -169,4 +170,87 @@ Two real bugs reported after trying the work above.
 - **Mix help "feels crowded" at desktop**: the page was centred correctly (verified via computed styles: equal margins both sides), so the complaint wasn't layout breakage - it was density. 880px split into two ~400px columns worked fine for Settings' compact toggles, but Mix help's right column now carries 18 FAQ entries and a 7-item checklist; narrow columns meant lots of text wrapping to 4-5 lines each, packed tight, while 280px of visibly empty margin sat unused on each side at a normal 1440px desktop width - dense text next to wasted space reads as crowded even with nothing technically wrong. Widened the desktop breakpoint's `.page` from 880px to 1100px (each column now ~470-500px, a proper reading measure), widened the column gap 32px → 40px, and loosened vertical rhythm slightly (`.eq-list`/`.faq-list` entry spacing 12px → 18px, `.checklist` row gap 2px → 6px). Tablet (760px, unaffected by this) still matches Settings' narrower treatment, since it doesn't carry the same FAQ length problem at that breakpoint's own component (Settings has no FAQ). Verified at 1100px in the browser - comfortably spaced, no wrapping-heavy walls of text.
 - **Rhyme sheet shadow too heavy on the Rhymes page**: `.sheet`'s shadow (`0 -18px 40px`, a strong *upward* glow) is right for a bottom sheet rising over a dimmed scrim on phone, but the same rule was still applying, unchanged, once that sheet becomes the *permanent, statically-positioned panel* on Rhymes from tablet up (`rhyme-sheet.component.css`, `:host(:not(.overlay)) .sheet` block) - a panel docked in the page layout doesn't need to look like it's dramatically lifting off the bottom of the screen. Added a `box-shadow` override in that same tablet/desktop-only block, switching to the standard soft downward shadow every other lamp-card/sheet in the app uses (`0 14px 36px rgba(20,4,6,0.6), inset 0 1px 0 rgba(241,240,204,0.08)`). Verified at tablet (820px) and desktop (1100px) - visibly lighter, grounded rather than floating; confirmed the mobile bottom sheet and the tap-to-rhyme overlay modal (both still legitimately need the stronger shadow) are untouched, since the override only targets `:not(.overlay)` at ≥768px.
 
+## Spacing pass and chord row (2026-11-11)
+
+- **Spacing**: one scale (4/8/12/16/20/24/32) and one gutter per width (20 phone / 24 tablet / 32 desktop), titles 20px from the top on every tab screen - DESIGN.md "Layout" has the rules. Fixed real drift: titles at 16/22/24px tops, Rhymes on a 24px phone gutter, tablet gutters ranging 16-28px, Settings' "Look"/"Lyric text size" labels with no space above (a `<legend>` ignores margin - the fieldset carries the gap now), Takes still on the old phone-under-a-shadow tablet layout. Root cause of most tablet/desktop drift: early `@media` blocks sat *before* the base `header`/`main`/`.lamp-card` rules in six component stylesheets, so the base rules silently won; those media selectors are now `.page`-prefixed so they win regardless of order. Verified by measuring every screen at 390/820/1440px.
+- **Chord row** (pulled forward from v1.1, PRODUCT.md updated): `Section.chords?: string`, an input between each section's name and its lyrics, whitespace normalised to two spaces, its text aligned over the lyric text. Saved with the song (so takes and backups carry it), in the `.txt` export under the section name, printed in the PDF (hidden when empty). `shortcut: one progression per section, not chords placed over each line; upgrade to per-line chords if writers ask.`
+
+## Chords page (2026-11-11)
+
+- **Per-line vs per-section chords, decided**: kept one progression per section. A song's verse is a 4-chord loop far more often than a chord per line, the lyric box is a plain `<textarea>` (per-line chords at word positions needs a rebuilt line-by-line editor and would break the syllable/rhyme-letter gutters), and typing "Am F C G" once is faster on a phone. Revisit only if writers ask for chord-over-word charts.
+- **`/chords`** (5th tab): pick key + major/minor, tap a diatonic chord to hear it and add it to a progression (stored as roman numerals, so it follows the key), Play steps through at ~0.9 s a chord, Copy puts "Am  F  C  G" on the clipboard to paste into a section's chord row. Ten genres (pop, rock, blues, jazz, hip-hop/trap, R&B/soul, country, folk, reggae, EDM) each have a tip and 1-3 presets; Use loads one, in the chosen key. Tested in `test/chords.test.ts` (diatonic chords, flat/sharp spelling, borrowed/seventh/diminished, every preset in all 12 keys). `shortcut: no "add to song" button (Copy then paste), chords spelled by key signature only (no enharmonic choice), triads and simple 7ths only; upgrade if writers want direct insert or fancier chords.` Superseded the same day, see below.
+
 Reviews done 2026-10-30: slur and explicit lists final; test sets checked (every grammar-set line matches the lexicon and rule files, no flagged words in the rhyme set, all expected words in the model). Full plan doc exported to docs/plan/ (diagrams there are placeholders; see the online doc).
+
+## Chords page redesign and extensions (2026-11-11)
+
+- **Chord colour row** between the key and the pad: Triad, 6th, 7th, 9th, 11th, 13th, sus2, sus4, add9. The pad (and every tap) plays in that colour. `extend(numeral, ext, mode)` in `src/engines/chords.ts` picks maj or dominant/minor 7ths to match the key (scale note a 7th above the root), so C major gives Cmaj9 Dm9 Em9 Fmaj9 G9 Am9. Numerals now carry the colour (`V9`, `Imaj13`, `iisus2`, `viiø`); progressions and presets store them.
+- `chordFor` also returns `root` and `notes` (spelled by key). The lamp card shows the last chord heard with its notes. Progression pills: tap to hear, × to remove. Play gain is split by note count so a 13th is not louder than a triad. An 11th on a major chord drops its third.
+- Selected colour is chiffon fill (inverted), not ruby: ruby stays for key, mode and the chord being heard.
+- Also colours: 6/9, 7sus4, 9sus4. The vii° takes 6 (dim7), 7/9/11/13 (m7b5 and up), sus2, sus4, add9; 6/9 and the 7sus/9sus colours leave it a triad. `shortcut: one colour at a time (no free mixing of sus + any extension); upgrade if writers want a modifier row.` Light theme checked. Tests in `test/chords.test.ts` (26 pass).
+
+## Chords page, second redesign (2026-11-11)
+
+Asked again to redesign; the first pass only added things to an already full lamp card. This one restructures, same studio-dark world:
+- **Key** is a pill in the header that opens the picker (set once, then out of the way).
+- **Lamp card = the instrument**: display (chord, notes, 3-octave SVG piano with lit keys, `piano` computed in `chords-page.component.ts`), pad (home chord double width), colour row.
+- **Transport bar** docked above the tabs holds the progression (Play, pills, Copy, Clear), so it stays in reach while browsing genres. Undo button removed: × on each pill covers it. An `effect` scrolls the strip to the newest chord.
+- Bug caught at desktop: the non-wrapping colour row widened its grid column to 912px and crushed the genre column to 111px; fixed with `minmax(0, 1fr)` columns.
+- Component CSS is 7.3 kB, over the 6 kB warning budget (warning only, build passes).
+
+## Chords page: circle of fifths, delete song (2026-11-11)
+
+- **Chord pad is now a circle of fifths** (`wheel` computed in `chords-page.component.ts`, drawn as SVG wedges): majors outside, relative minors inside, the key's dim chord in the centre, C fixed at the top. In-key chords are marked; all 24 play, via `numeralAt(semis, minor, mode)` in `src/engines/chords.ts` (flat names for borrowed majors, sharp for borrowed minors: Bb, Eb, F#m, C#m). The colour row applies to the whole wheel. `extend()` now gives a minor chord the minor 7th always.
+- **One tap plays, double tap adds** to the progression (Enter / Shift+Enter on the keyboard). Wedges are `role="button"` with `tabindex`.
+- **Delete song**: editor's ⋮ menu, `confirm()`, then back to `/songs`. `SongStorageService.remove()` now deletes the song's takes in the same transaction.
+- Not checked: double tap and sound on a real phone; wheel at desktop width by eye. Component CSS ~7.9 kB (over the 6 kB warning budget, build passes).
+
+## Chords transport: loop, tempo, memory (2026-11-11)
+
+- **Loop** toggle and **tempo** stepper (60-180 BPM, steps of 10, default 100; one chord = two beats) in the transport bar. On a phone the tools wrap to a second row (bar is ~118px tall with a progression, 64px without).
+- **Remembered**: key, mode, progression, tempo and loop persist in localStorage (`slantsmith.chords`), validated on load (`saved()` in `chords-page.component.ts`); bad data falls back to defaults.
+- `angular.json` per-component style budget raised from 6/8 kB to 10/12 kB: the Chords stylesheet is 8.4 kB. The dev preview must be restarted after a budget change (it kept failing on the old limit).
+- The prod preview registers the service worker; a stale bundle after a failed rebuild looked like a code bug.
+
+## Chords transport, second pass (2026-11-11)
+
+- **Two rows**: tools (Play, Loop, tempo, Put into song, Copy, Clear) above, chords below. About 140px tall with a progression at every width.
+- **Select and move**: tap a pill to select it (`selected` signal); a group at the row's end moves it earlier/later or removes it. The per-pill x is gone.
+- **Silent double tap**: `press()` delays a wheel tap's sound by 220 ms; a second click or `add()` cancels it. Cost: single taps sound 220 ms late. Keyboard Enter still plays at once.
+- **Put into song**: `sendTo(sectionId)` writes the progression into that section's chord row of `storage.songs()[0]` (the song edited last) and bumps `updatedAt`. It replaces what was there; the menu shows the old chords first. `shortcut: last-edited song only; add a song picker if writers juggle several songs.`
+- **Drag to reorder** (same day): the selected pill drags along the row (`dragStart/dragMove/dragEnd`, pointer events on the `ol`, so mouse and touch share one path). Only the selected pill has `touch-action: none`, so the row still scrolls by touch. It swaps with a neighbour once dragged past its middle. Pointer capture starts only after 6px of movement, so a plain tap still toggles selection. The auto-scroll effect now fires only when a chord is added, not on reorder.
+- **Drag redesigned** (same day, the first version was disliked): no need to select first. Mouse: press any chord and drag. Touch: hold 250 ms (short vibrate), then drag; a quick swipe still scrolls the row. The lifted chord follows the pointer and the others slide aside to show the landing spot (`shift(i)`); the progression only changes on drop (`dragEnd`). The row scrolls when the pointer is within 32px of either end. A non-passive `touchmove` listener stops the browser scrolling once a chord is lifted. The dropped chord becomes the selected one.
+
+## Chords sounds (2026-11-11)
+
+- **Sound row** in the lamp card under Colour: Soft keys (the old triangle), Piano, Organ, Guitar (strummed, low-passed sawtooth), Warm pad (two detuned sawtooths, slow attack). All oscillators, no samples (`SOUNDS` in `chords-page.component.ts`; `hear()` builds partials, envelope, optional filter). Picking one plays the last chord in it. Remembered with the rest of the page state.
+- Wiring checked by counting oscillators and filters per sound; **nobody has listened to them**. They are rough stand-ins, not real instruments. `shortcut: synthesised voices only; upgrade to small samples if the sounds are not good enough.`
+
+## Word model: more words, better estimates (2026-11-11)
+
+Measured first, then changed three things. Model is now **257,650 words, 1.88 MB gzipped** (was 234,631 / 1.71 MB). 27 tests pass; the rhyme set's miss list is identical to before (no regressions).
+
+- **+23,019 words with real pronunciations**: every CMU word is now in, not only the ones wordfreq or a dictionary lists (`extra` in `build_word_model.py`). That adds lyric forms (`'bout`, `'til`, `'twas`, `'cause`, `'em`) and place/family names. Left out: possessives (`ross's`, `guys'`; wordfreq scores `guys'` as `guys`, so they crowded real rhymes out of the top 50: caught as two rhyme-set regressions) and dropped-g forms like `runnin'` (CMU says it with an N; the engine already rhymes it as `running`, and a test guards that).
+- **British spellings** (`respell()` in `estimate_pronunciations.py`): colour, realise, organisation, analyse, centre, licence now take the American word's CMU entry. Before, about half of them were wrong (`agonised` came out "agon-eezed", `colonisation` was garbage). Apostrophe-less forms (`aint`, `alzheimers`) take the CMU entry with the apostrophe. 1,282 words.
+- **Silent e** (`stems()`): `dined` was built from `din`, `sloped` from `slop`, `gamed` from `gam`. A single consonant (or s/c/g/v/z) before -ed/-ing/-er/-es now tries the e-form first; a doubled consonant (`dinned`) does not. About 2,000 estimated words changed rhyme, nearly all fixes. Self-check 89.9% -> 91.7%; the assert is now >=90%.
+- **Looked at and left alone**: lowering the written-word cutoff below zipf 2.5 (a sample of 2.0-2.5 was mostly foreign words, acronyms and typos, all with guessed sounds: more words, lower accuracy); the compound rule's 68% self-check (the misses are stress placement, which the engine's `lastPart()` already handles); CMU's second pronunciations (`read`, `live`), which need a model format change.
+- Known small misses: `dinging` now reads like `dinge` + ing. The 50,977 g2p_en guesses are unchanged and unmeasured.
+
+## Word model, second pass the same day (2026-11-11)
+
+Asked again for more words and accuracy. Now **262,631 words, 1.91 MB gzipped**; 28 tests pass; the rhyme set gained one pass (`dreamscape>escape`) and lost none.
+
+- **Measured ~110 more affix rules** against CMU's own words (accuracy) and against the g2p-guessed words (coverage). Only those keeping CMU's rhyme for 87%+ were added: `re-`, `ex-`, `em-`, `il-`, `ir-`, `semi-`, `trans-`, `ultra-`, `extra-`, `-dom`, `-some`, `-ette`. Rejected (under 85%): anti-, sub-, super-, micro-, co-, de-, in-, -y, -ist, -ism, -al, -ic, -ity, -ous, -ive (they move the stress). 1,400 words moved from a g2p_en guess to a built pronunciation, and the guesses they replaced were often badly wrong (`rebilled` was "REB-uld", `reshoots` "re-SHUZ").
+- A prefix ending in the sound the base starts with keeps one copy (`il` + `legal`, `un` + `named`).
+- **+4,981 rarer written words** (zipf 1.5-2.5: bassline, firetruck, sandcastle, rantings), admitted only when they can be built from known words or respelled to a CMU entry, never on a guess. Known cost: a few typos that happen to be buildable get in too (`geting`, `powerfull`); they rank last.
+- g2p_en guesses: 50,977 -> 49,577. Still the weakest part and still unmeasured (g2p_en was trained on CMU, so CMU cannot grade it).
+
+## Word model: the guessed words (2026-11-11, third pass)
+
+Asked to improve the 49,577 words g2p_en has to guess. Same word count (262,631, 1.91 MB); 28 tests pass; rhyme-set misses unchanged.
+
+- **Measured g2p_en for the first time.** It was trained on CMU, so CMU cannot grade it, but British spellings can: the old all-g2p file (git HEAD) guessed `agonised`, CMU has `agonized`. On 650 such words g2p_en got the rhyme right **47%** of the time. Long words are where it falls apart (`reproducibility` ended "...L AY T", `xylography` "AA R G AH F IY").
+- **Look-alike endings** (`Analogy` in `estimate_pronunciations.py`): for a guessed word, take the longest ending (3-10 letters, starting with a vowel letter) that 3+ CMU words share and 90%+ of them rhyme the same way; give the word that rhyme, keeping g2p_en's guess for the front of the word. `xylography` now ends like photography, `postatomic` like atomic. Graded by leaving each CMU word out and predicting it from the rest: **92.2%** right where it applies (`check_analogy`, asserts >=89%).
+- It applied to 4,714 guessed words directly; with the words built on top of them (plurals etc.) about 7,200 pronunciations changed rhyme.
+- Two bugs found by reading the changes: an ending starting with a consonant (`-ntured`) carried the vowel before it over from ventured to `jointured` (now endings must start with a vowel letter; accuracy 89.8% -> 92.2%); and the splice dropped a syllable when g2p_en's syllable count was off (now the spelling's vowel groups decide how much of the guess to keep).
+- **Still weak**: ~42,000 guessed words whose ending is rare or disputed keep the raw g2p_en guess. The front of a fixed word can still be garbled (the rhyme is right, the syllable count may not be). `benzoic` loses a syllable (oi read as one vowel).

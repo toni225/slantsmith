@@ -30,34 +30,34 @@
 @media (min-width: 768px) {
   .page {
     max-width: 760px;
-    padding: 0 16px;
+    padding: 0 24px;
   }
 
-  header {
+  .page header {
     padding-left: 0;
     padding-right: 0;
   }
 
-  main {
+  .page main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 20px;
+    column-gap: 24px;
     align-content: start;
   }
 
-  .lamp-card {
+  .page .lamp-card {
     grid-column: 1;
     grid-row: 1;
     margin: 0;
   }
 
-  .rows {
+  .page .rows {
     display: contents;
     padding: 0;
   }
 
-  .rows > li {
-    margin-top: 10px;
+  .page .rows > li {
+    margin-top: 12px;
   }
 
   /* FAQ shares Delivery's row (not EQ's): CSS Grid stretches a shared row to its
@@ -82,21 +82,21 @@
     padding: 0 32px;
   }
 
-  main {
+  .page main {
     column-gap: 40px;
   }
 
-  .eq-list dt, .faq-list dt {
+  .page .eq-list dt, .page .faq-list dt {
     margin-top: 18px;
   }
 
-  .checklist {
+  .page .checklist {
     gap: 6px;
   }
 }
 
 header {
-  padding: 22px 20px 0;
+  padding: 20px 20px 0;
 }
 
 h1 {
@@ -115,7 +115,7 @@ h1 {
 }
 
 .search {
-  margin-top: 14px;
+  margin-top: 16px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -145,7 +145,7 @@ main {
 
 .lamp-card {
   margin: 0 12px;
-  padding: 14px 14px 12px;
+  padding: 16px 16px 14px;
   border-radius: 20px;
   background: radial-gradient(120% 70% at 50% 0%, rgba(213, 191, 134, 0.16), rgba(213, 191, 134, 0) 70%), var(--lamp-lit);
   box-shadow: 0 14px 36px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);

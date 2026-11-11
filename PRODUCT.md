@@ -30,7 +30,7 @@ Used mid-writing, often on a phone beside an instrument, or on a laptop next to 
 
 ## Capabilities and Constraints
 
-- v1.0 scope: 20 Must requirements (Phase 2 baseline); chords, metronome, voice memos and prompts are v1.1.
+- v1.0 scope: 20 Must requirements (Phase 2 baseline); metronome, voice memos and prompts are v1.1. A per-section chord row came forward into v1.0 on 2026-11-11; chords placed over each lyric line stay v1.1.
 - Fully offline after first visit; first load under 3 MB; no accounts, analytics or network calls with user text.
 - US English only in v1.0; Tagalog/Taglish later.
 - Explicit words shown by default, hideable; slurs removed.
