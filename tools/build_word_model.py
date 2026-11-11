@@ -184,7 +184,8 @@ def main():
             "Estimated pronunciations: built from CMU entries, the rest predicted by g2p_en (Apache 2.0)",
         ],
     }
-    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    # newline="\n": on Windows write_text() turns each \n into \r\n, so CI (Linux) saw a byte difference.
+    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     total = sum(len(d) for d in files.values())
     zipped = sum(len(gzip.compress(d, 9, mtime=0)) for d in files.values())
     print(f"{len(words)} words ({sum(w not in cmu for w in words)} estimated), {total:,} bytes raw, {zipped:,} gzipped")
