@@ -1,9 +1,9 @@
 // Rhyme engine (Phase 3 spec, "Rhyme engine"). Pure functions over a loaded Model.
 import type { Model } from './model.ts';
 
-export type RhymeType = 'perfect' | 'assonance' | 'consonance' | 'family' | 'additive' | 'subtractive';
+export type RhymeType = 'perfect' | 'assonance' | 'consonance' | 'family' | 'additive' | 'subtractive' | 'phrase' | 'synonym';
 export interface Rhyme { word: string; type: RhymeType; score: number; why: string }
-export interface RhymeResult { word: string; estimated: boolean; perfect: Rhyme[]; slant: Rhyme[] }
+export interface RhymeResult { word: string; estimated: boolean; perfect: Rhyme[]; slant: Rhyme[]; phrases: Rhyme[] }
 
 interface Split { onset: string; vowel: string; tail: string[]; multi: boolean }
 
@@ -44,9 +44,14 @@ export class RhymeEngine {
   private byTail = new Map<string, number[]>();
   private suffixKeys?: Map<string, Map<string, number>>;
   private m: Model;
+  private phraseList: string[];
+  private phraseWords: number[][] = []; // word ids of each phrase
+  private byPhraseKey = new Map<string, number[]>(); // rhyme key of a phrase's last word -> phrases, most common first
 
-  constructor(m: Model) {
+  // phrases: phrases.txt, most common first (tools/build_word_model.py load_phrases).
+  constructor(m: Model, phrases: string[] = []) {
     this.m = m;
+    this.phraseList = phrases;
     this.splits = m.phones.map((p) => this.split(p));
     this.splits.forEach((s, id) => {
       push(this.byKey, key(s), id);
@@ -54,6 +59,12 @@ export class RhymeEngine {
         push(this.byVowel, s.vowel, id);
         if (s.tail.length) push(this.byTail, s.tail.join(' '), id);
       }
+    });
+    phrases.forEach((p, i) => {
+      const ids = p.split(' ').map((w) => m.ids.get(w));
+      if (ids.some((id) => id === undefined)) return; // built from the same lexicon, so only if files disagree
+      this.phraseWords[i] = ids as number[];
+      push(this.byPhraseKey, key(this.splits[ids[ids.length - 1]!]), i);
     });
   }
 
@@ -83,7 +94,7 @@ export class RhymeEngine {
     let id = this.m.ids.get(word);
     if (id === undefined && /in'?$/.test(word)) id = this.m.ids.get(word.replace(/in'?$/, 'ing'));
     const s = id !== undefined ? this.splits[id] : this.estimate(word);
-    if (!s) return { word, estimated: true, perfect: [], slant: [] };
+    if (!s) return { word, estimated: true, perfect: [], slant: [], phrases: [] };
     const keep = (c: number) => c !== id && !(hideExplicit && this.m.explicit(c)) && this.m.words[c] !== word;
     const part = id !== undefined ? this.lastPart(this.m.phones[id]) : undefined;
     let perfect = this.perfect(s, keep);
@@ -92,12 +103,29 @@ export class RhymeEngine {
       perfect = [...perfect, ...this.perfect(part, keep).filter((r) => !seen.has(r.word))].slice(0, MAX);
     }
     const base = part ?? s;
-    return { word, estimated: id === undefined || this.m.isEstimated(id), perfect, slant: base.multi ? [] : this.slant(base, keep) };
+    const phrases = this.phrases(part ? [s, part] : [s], word, hideExplicit);
+    return { word, estimated: id === undefined || this.m.isEstimated(id), perfect, slant: base.multi ? [] : this.slant(base, keep), phrases };
   }
 
   // Rhymes for each stressed content word of a phrase; the UI combines them.
   phrase(text: string, hideExplicit = false): RhymeResult[] {
     return text.split(/\s+/).filter((w) => w && !SMALL.has(w.toLowerCase())).map((w) => this.rhymes(w, hideExplicit));
+  }
+
+  // Phrases whose last word rhymes perfectly with the word (hold -> heart of gold, catch cold), not ending on the word itself.
+  private phrases(splits: Split[], word: string, hideExplicit: boolean): Rhyme[] {
+    const out: Rhyme[] = [];
+    const seen = new Set<number>();
+    for (const s of splits) {
+      for (const i of this.byPhraseKey.get(key(s)) ?? []) {
+        const ids = this.phraseWords[i];
+        if (seen.has(i) || this.m.words[ids[ids.length - 1]] === word || (hideExplicit && ids.some((id) => this.m.explicit(id)))) continue;
+        seen.add(i);
+        out.push({ word: this.phraseList[i], type: 'phrase', score: 100, why: `Lands on the same ${say(s.vowel)}${s.tail.length ? ' + ' + s.tail.map(say).join('') : ''}` });
+        if (out.length === MAX) return out;
+      }
+    }
+    return out;
   }
 
   private perfect(s: Split, keep: (c: number) => boolean): Rhyme[] {

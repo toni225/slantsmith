@@ -1,4 +1,5 @@
 import { Component, DestroyRef, inject, isDevMode, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TabNavComponent } from '../shell/tab-nav.component';
 import { SettingsService } from '../settings/settings.service';
 import { QuickRhymeBarComponent } from './quick-rhyme-bar.component';
@@ -18,7 +19,8 @@ const PANEL_QUERY = '(min-width: 768px)';
   styleUrl: './rhyme-page.component.css',
 })
 export class RhymePageComponent {
-  readonly word = signal('hold');
+  // ?word= opens a given word (the Dictionary links here); otherwise the artboard's example.
+  readonly word = signal(inject(ActivatedRoute).snapshot.queryParamMap.get('word')?.trim() || 'hold');
   readonly sheetOpen = signal(false);
   readonly showPanel = signal(matchMedia(PANEL_QUERY).matches);
   // shortcut: visible only in dev builds, for Sprint 2 item 3 real-device timing; remove once that's closed.

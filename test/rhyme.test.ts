@@ -9,7 +9,7 @@ const dir = new URL('../src/assets/model/en-us/', import.meta.url);
 const bin = (f: string) => new Uint8Array(readFileSync(new URL(f, dir)));
 const manifest = JSON.parse(readFileSync(new URL('manifest.json', dir), 'utf8'));
 const model = loadModel(readFileSync(new URL('lexicon.txt', dir), 'utf8'), bin('phones.bin'), bin('meta.bin'), bin('commonness.bin'), manifest.sounds);
-const engine = new RhymeEngine(model);
+const engine = new RhymeEngine(model, readFileSync(new URL('phrases.txt', dir), 'utf8').split('\n').filter(Boolean));
 
 const rows = readFileSync(new URL('./slantsmith_rhyme_test_set.csv', import.meta.url), 'utf8')
   .trim().split('\n').slice(1).map((l) => l.trim().split(','))
@@ -88,4 +88,18 @@ test("word model: lyric forms are in, British spellings and silent-e words rhyme
   assert.ok(model.words.includes('firetruck') && model.words.includes('bassline')); // rarer words, buildable
   assert.ok(perfect('xylography').includes('photography')); // guessed word, rhyme taken from look-alike endings
   assert.ok(perfect('postatomic').includes('economic'));
+});
+
+test('hand-added words (tools/data/custom.dict) are in, count as real, and rhyme as written', () => {
+  const id = (w: string) => model.words.indexOf(w);
+  assert.ok(id('rizz') >= 0 && !model.isEstimated(id('rizz')));
+  assert.ok(engine.rhymes('tryna').perfect.some((x) => x.word === 'china')); // was guessed "TREE-na"
+  assert.ok(engine.rhymes('swag').perfect.some((x) => x.word === 'bag'));
+});
+
+test('phrase tab: phrases ending in a rhyme, most common first, never ending on the word itself', () => {
+  const p = engine.rhymes('hold').phrases.map((x) => x.word);
+  assert.ok(p.includes('all told') && p.includes('catch cold'), p.slice(0, 10).join(', '));
+  assert.ok(!p.some((x) => x.endsWith(' hold')));
+  assert.ok(engine.rhymes('heart').phrases.some((x) => x.word.endsWith(' art') || x.word.endsWith(' start')));
 });

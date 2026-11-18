@@ -36,18 +36,64 @@
             <span class="name" [class.auto]="!latest.name">{{ latest.name ?? 'Autosave' }}</span>
             <span class="when">{{ when(latest.createdAt) }}</span>
           </div>
-          <button type="button" class="restore" (click)="restore(latest)">Restore</button>
+          <div class="actions">
+            <button type="button" class="restore" (click)="restore(latest)">Restore</button>
+            <button type="button" class="restore" [attr.aria-expanded]="comparing() === latest.id" (click)="compare(latest)">
+              {{ comparing() === latest.id ? 'Hide changes' : 'Compare with now' }}
+            </button>
+          </div>
+          @if (comparing() === latest.id) {
+            <ng-container *ngTemplateOutlet="changes" />
+          }
         </li>
 
         @for (take of takes().slice(1); track take.id) {
-          <li class="row">
-            <span class="n dim">{{ take.n }}</span>
-            <span class="name" [class.auto]="!take.name">{{ take.name ?? 'Autosave' }}</span>
-            <span class="when">{{ when(take.createdAt) }}</span>
+          <li class="older">
+            <button type="button" class="row" [attr.aria-expanded]="comparing() === take.id" (click)="compare(take)" [attr.aria-label]="'Take ' + take.n + ', ' + (take.name ?? 'Autosave') + ', ' + when(take.createdAt) + '. Compare with now'">
+              <span class="n dim">{{ take.n }}</span>
+              <span class="name" [class.auto]="!take.name">{{ take.name ?? 'Autosave' }}</span>
+              <span class="when">{{ when(take.createdAt) }}</span>
+            </button>
+            @if (comparing() === take.id) {
+              <div class="actions">
+                <button type="button" class="restore" (click)="restore(take)">Restore this take</button>
+              </div>
+              <ng-container *ngTemplateOutlet="changes" />
+            }
           </li>
         }
       }
     </ul>
+    <ng-template #changes>
+      <div class="changes">
+        <p class="legend"><span class="key removed">in the take</span> <span class="key added">in the draft now</span></p>
+        @if (titleChange(); as t) {
+          <p class="sec-name">Title: <del>{{ t.was }}</del> → {{ t.now }}</p>
+        }
+        @for (s of diff(); track $index) {
+          @if (s.status !== 'same') {
+            <section class="sec" [attr.aria-label]="s.name + ', ' + s.status">
+              <p class="sec-name">
+                {{ s.name }}
+                @if (s.was) { <span class="note">(was {{ s.was }})</span> }
+                @if (s.status === 'added') { <span class="note">new since this take</span> }
+                @if (s.status === 'removed') { <span class="note">gone since this take</span> }
+              </p>
+              @for (l of s.lines; track $index) {
+                <p class="line" [class]="'line ' + l.kind">
+                  <span class="mark" aria-hidden="true">{{ l.kind === 'added' ? '+' : l.kind === 'removed' ? '−' : '' }}</span>
+                  <span class="sr-only">{{ l.kind === 'added' ? 'added: ' : l.kind === 'removed' ? 'removed: ' : '' }}</span>{{ l.text || ' ' }}
+                </p>
+              }
+            </section>
+          }
+        }
+        @if (unchanged()) {
+          <p class="sec-name">No changes. This take matches the draft.</p>
+        }
+      </div>
+    </ng-template>
+
     <p class="footer">Autosaves every 10 minutes keep the newest 20. Named takes are never deleted.</p>
   </div>
 

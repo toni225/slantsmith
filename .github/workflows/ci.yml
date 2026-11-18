@@ -18,7 +18,8 @@ jobs:
       - name: Rebuild word model and check it is byte-identical
         run: |
           npm run build:model
-          git diff --exit-code -- src/assets/model
+          # .gz bytes depend on the zlib build; manifest.json still checks the unzipped content.
+          git diff --exit-code -- src/assets/model ':!*.gz'
 
       - uses: actions/setup-node@v4
         with:

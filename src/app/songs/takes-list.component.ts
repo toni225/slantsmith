@@ -1,4 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { compareSections } from './compare';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TabNavComponent } from '../shell/tab-nav.component';
 import { SongStorageService } from './song-storage.service';
@@ -12,11 +14,10 @@ function when(ts: number): string {
   return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
 }
 
-// FR-32: "Save this as a take", restore a prior take. Compare-with-now (also on the
-// approved artboard) isn't built - a real diff view, not something to stub.
+// FR-32: "Save this as a take", restore a prior take, and compare any take with the draft.
 @Component({
   selector: 'app-takes-list',
-  imports: [RouterLink, TabNavComponent],
+  imports: [RouterLink, NgTemplateOutlet, TabNavComponent],
   templateUrl: './takes-list.component.html',
   styleUrl: './takes-list.component.css',
 })
@@ -28,6 +29,22 @@ export class TakesListComponent {
   readonly song = signal<Song | null>(null);
   readonly takes = signal<Take[]>([]);
   protected readonly when = when;
+
+  readonly comparing = signal<string | null>(null); // id of the take shown against the draft
+  private readonly picked = computed(() => this.takes().find((t) => t.id === this.comparing()));
+  readonly diff = computed(() => {
+    const take = this.picked(), song = this.song();
+    return take && song ? compareSections(take.sections, song.sections) : [];
+  });
+  readonly titleChange = computed(() => {
+    const take = this.picked(), song = this.song();
+    return take && song && take.title !== song.title ? { was: take.title, now: song.title } : null;
+  });
+  readonly unchanged = computed(() => !!this.picked() && !this.titleChange() && this.diff().every((s) => s.status === 'same'));
+
+  compare(take: Take) {
+    this.comparing.set(this.comparing() === take.id ? null : take.id);
+  }
 
   constructor() {
     if (!this.songId) { this.router.navigate(['/songs']); return; }

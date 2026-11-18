@@ -430,6 +430,290 @@ main {
 
 /* FR-33: PDF export is the browser's own print dialog ("Save as PDF"), no library.
    Everything but the title and lyrics is chrome that doesn't belong on paper. */
+/* Chords over the words: chips to insert a chord, and the lyrics rendered as a chart below the box. */
+.chord-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+
+.chord-chips .chip,
+.chord-chips .chip-new {
+  height: 36px;
+  min-width: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--copper);
+  border-radius: 18px;
+  background: transparent;
+  color: var(--chiffon);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.chord-chips .chip {
+  cursor: pointer;
+}
+
+.chord-chips .chip-new {
+  width: 96px;
+  border-style: dashed;
+  font-weight: 600;
+}
+
+.chord-chips .chip-new::placeholder {
+  color: var(--fawn);
+}
+
+.chart {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--booth-dark);
+}
+
+.chart-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin: 0 0 6px;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.seg {
+  display: inline-flex;
+  flex-direction: column;
+  white-space: pre;
+}
+
+.seg .ch {
+  min-height: 18px;
+  padding-right: 6px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 800;
+  color: var(--chiffon);
+}
+
+.seg .tx {
+  color: var(--fawn);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chord-chips .chip:hover {
+    background: rgba(241, 240, 204, 0.08);
+  }
+}
+
+/* Meter view: each word with its syllables as dots, big = stressed. On-beat places get an underline;
+   while playing, the syllable sounding is ruby (the record light). */
+.section-actions button[aria-pressed='true'] {
+  background: var(--chiffon);
+  color: var(--mahogany);
+}
+
+.meter {
+  margin: 8px 0 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--booth-dark);
+}
+
+.meter-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meter-play {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ruby);
+  color: #f1f0cc;
+  cursor: pointer;
+}
+
+.meter-tap {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--copper);
+  border-radius: 22px;
+  background: transparent;
+  color: var(--chiffon);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.meter-tap:active {
+  background: rgba(241, 240, 204, 0.12);
+}
+
+.meter-bpm {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--fawn);
+  font-variant-numeric: tabular-nums;
+}
+
+.meter-bpm strong {
+  font-size: 16px;
+  color: var(--chiffon);
+}
+
+.meter-hint {
+  margin: 8px 0 4px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--fawn);
+}
+
+.meter-line {
+  padding: 8px 0;
+  border-top: 1px solid rgba(141, 119, 95, 0.25);
+}
+
+.meter-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.meter-word {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.meter-word .w {
+  font-size: 15px;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 14px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fawn);
+  opacity: 0.6;
+  box-shadow: 0 3px 0 -1px transparent;
+}
+
+.dot.mid {
+  width: 8px;
+  height: 8px;
+  opacity: 0.85;
+}
+
+.dot.strong {
+  width: 11px;
+  height: 11px;
+  background: var(--chiffon);
+  opacity: 1;
+}
+
+.dot.beat {
+  box-shadow: 0 4px 0 -2px var(--copper);
+}
+
+.dot.now {
+  background: var(--ruby);
+  opacity: 1;
+}
+
+.unknown {
+  font-size: 11px;
+  color: var(--fawn);
+}
+
+.meter-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--fawn);
+}
+
+/* Song stats: a quiet disclosure under the sections. */
+.stats {
+  margin-top: 8px;
+  border-top: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+.stats summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 0;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.stats summary::-webkit-details-marker {
+  display: none;
+}
+
+.stats-sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fawn);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.stats-grid dt {
+  font-size: 12px;
+  color: var(--fawn);
+}
+
+.stats-grid dd {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-label {
+  margin: 16px 0 4px;
+  font-size: 12px;
+  color: var(--fawn);
+}
+
+.stats-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.stats-word {
+  padding: 4px 10px;
+  border: 1px solid var(--copper);
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
 @media print {
   :host {
     height: auto;
@@ -444,7 +728,7 @@ main {
     box-shadow: none;
   }
 
-  .back, .takes, .more, .status, .letters, .counts, .section-actions, .add-section, .flags,
+  .back, .takes, .more, .status, .letters, .counts, .section-actions, .add-section, .flags, .meter, .stats, .chord-chips, .lines.has-chart,
   app-tab-nav, app-rhyme-sheet {
     display: none !important;
   }
@@ -472,5 +756,16 @@ main {
     background: transparent;
     color: #000;
     resize: none;
+  }
+
+  /* With chords over the words, the chart is what prints, black on white. */
+  .chart {
+    padding: 0;
+    background: none;
+  }
+
+  .seg .ch,
+  .seg .tx {
+    color: #000;
   }
 }

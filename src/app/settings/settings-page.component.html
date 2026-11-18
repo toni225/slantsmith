@@ -49,6 +49,16 @@
         </button>
       </div>
 
+      <div class="row">
+        <label for="chords-over">
+          <span class="row-title">Chords over the words</span>
+          <span class="row-hint">Off: one chord row per section. On: put chords inside the lyrics, like [Am]hold on, and see them above the words</span>
+        </label>
+        <button id="chords-over" type="button" role="switch" [attr.aria-checked]="settings.chordsOverWords()" class="switch" [class.on]="settings.chordsOverWords()" (click)="toggleChordsOverWords()">
+          <span class="knob" aria-hidden="true"></span>
+        </button>
+      </div>
+
       <h2>Your songs</h2>
       <div class="backup-row">
         <button type="button" class="backup-btn primary" (click)="exportBackup()">Export backup</button>

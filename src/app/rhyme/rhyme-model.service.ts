@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import type { GrammarFlag } from '../../engines/grammar';
-import type { GrammarResponse, RhymeResponse, SchemeLetter, SchemeResponse, SyllablesResponse, UiRhymeResult, WordSyllables } from './rhyme-protocol';
+import type { BrowsePage } from '../../engines/thesaurus';
+import type { GrammarResponse, RhymeResponse, WordEntry, SchemeLetter, SchemeResponse, SyllablesResponse, SynonymsResult, UiRhymeResult, WordSyllables } from './rhyme-protocol';
 
 // Rhyme/grammar engines run off the main thread (ADR-04).
 @Injectable({ providedIn: 'root' })
@@ -47,6 +48,42 @@ export class RhymeModelService {
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve: resolve as (r: never) => void, reject: (e) => { this.error.set(e.message); reject(e); } });
       this.worker.postMessage({ id, kind: 'scheme', words });
+    });
+  }
+
+  /** Thesaurus tab: synonyms grouped by meaning. */
+  synonyms(word: string, hideExplicit = false): Promise<SynonymsResult> {
+    const id = this.nextId++;
+    return new Promise((resolve, reject) => {
+      this.pending.set(id, { resolve: resolve as (r: never) => void, reject: (e) => { this.error.set(e.message); reject(e); } });
+      this.worker.postMessage({ id, kind: 'synonyms', word, hideExplicit });
+    });
+  }
+
+  /** Meaning tab: definitions, null if the word is not in the dictionary. */
+  define(word: string): Promise<WordEntry | null> {
+    const id = this.nextId++;
+    return new Promise((resolve, reject) => {
+      this.pending.set(id, { resolve: resolve as (r: never) => void, reject: (e) => { this.error.set(e.message); reject(e); } });
+      this.worker.postMessage({ id, kind: 'define', word });
+    });
+  }
+
+  /** Dictionary page: a random fairly common word, already looked up. */
+  randomWord(hideExplicit = false): Promise<WordEntry> {
+    const id = this.nextId++;
+    return new Promise((resolve, reject) => {
+      this.pending.set(id, { resolve: resolve as (r: never) => void, reject: (e) => { this.error.set(e.message); reject(e); } });
+      this.worker.postMessage({ id, kind: 'random', hideExplicit });
+    });
+  }
+
+  /** Dictionary page: one A-Z page of words (or the page a given word is on). */
+  browse(letter: string, page: number, word?: string): Promise<BrowsePage> {
+    const id = this.nextId++;
+    return new Promise((resolve, reject) => {
+      this.pending.set(id, { resolve: resolve as (r: never) => void, reject: (e) => { this.error.set(e.message); reject(e); } });
+      this.worker.postMessage({ id, kind: 'browse', letter, page, word });
     });
   }
 

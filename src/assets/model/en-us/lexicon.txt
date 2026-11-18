@@ -82764,6 +82764,7 @@ finmarks
 finmeccanica
 finn
 finn's
+finna
 finnair
 finnan
 finne
@@ -102316,6 +102317,7 @@ heckelphone
 heckendorn
 hecker
 heckert
+heckin
 hecking
 heckle
 heckled
@@ -104629,6 +104631,7 @@ highjacker
 highjacking
 highjacks
 highjump
+highkey
 highland
 highlander
 highlanders
@@ -198945,6 +198948,7 @@ rizer
 rizk
 rizo
 rizor
+rizz
 rizza
 rizzi
 rizzo
@@ -210527,6 +210531,7 @@ shawnut
 shawny
 shaws
 shawshank
+shawty
 shawver
 shay
 shaykh
@@ -214317,6 +214322,7 @@ skreighs
 skrillex
 skroch
 skrocki
+skrrt
 skrzypek
 skua
 skuas

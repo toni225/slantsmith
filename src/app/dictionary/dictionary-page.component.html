@@ -1,0 +1,102 @@
+<div class="page" #scroller>
+  <header>
+    <h1>Dictionary</h1>
+    <div class="search">
+      <label class="field">
+        <span class="field-label">Word</span>
+        <input type="text" enterkeyhint="search" [value]="query()" (change)="look($any($event.target).value)" placeholder="Type a word" autocomplete="off" autocapitalize="off" spellcheck="false" />
+      </label>
+      <button type="button" class="random" (click)="random()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.1" fill="currentColor"/><circle cx="15" cy="15" r="1.1" fill="currentColor"/><circle cx="15" cy="9" r="1.1" fill="currentColor"/><circle cx="9" cy="15" r="1.1" fill="currentColor"/></svg>
+        Random
+      </button>
+    </div>
+  </header>
+
+  <nav class="letters" #strip aria-label="Letters">
+    @for (l of letters; track l) {
+      <button type="button" [attr.data-letter]="l" [class.on]="l === letter()" [attr.aria-current]="l === letter() ? 'true' : null" [attr.aria-label]="'Words starting with ' + l.toUpperCase()" (click)="openPage(l, 1)">{{ l.toUpperCase() }}</button>
+    }
+  </nav>
+
+  <main aria-live="polite" [attr.aria-busy]="loading()">
+    @if (failed()) {
+      <div class="note">
+        <p>The dictionary didn't load. It downloads once (2 MB), then works offline.</p>
+        <button type="button" class="secondary" (click)="retry()">Try again</button>
+      </div>
+    } @else if (view() === 'entry') {
+      @if (entry(); as d) {
+        <section class="lamp-card">
+          <h2>{{ d.base }}</h2>
+          <p class="hint">
+            @if (d.syllables) { {{ d.syllables }} syllable{{ d.syllables === 1 ? '' : 's' }} · }
+            {{ d.meanings.length }} meaning{{ d.meanings.length === 1 ? '' : 's' }}@if (d.base !== query()) { · for “{{ query() }}”}
+          </p>
+          <div class="actions">
+            <a class="secondary" routerLink="/rhymes" [queryParams]="{ word: d.base }">Rhymes for {{ d.base }}</a>
+            @if (d.also) {
+              <button type="button" class="secondary" (click)="look(d.also)">Also see {{ d.also }}</button>
+            }
+          </div>
+        </section>
+        @for (g of groups(); track $index) {
+          <section class="pos">
+            <h3>{{ g.pos }}</h3>
+            <ol>
+              @for (m of g.meanings; track $index) {
+                <li>{{ m.definition }}</li>
+              }
+            </ol>
+          </section>
+        }
+        <nav class="flip" aria-label="Nearby words">
+          <button type="button" class="prev" [disabled]="!d.prev" [attr.aria-label]="'Word before: ' + d.prev" (click)="look(d.prev!)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+            <span>{{ d.prev }}</span>
+          </button>
+          <button type="button" class="mid" (click)="backToPage()">Page</button>
+          <button type="button" class="next" [disabled]="!d.next" [attr.aria-label]="'Word after: ' + d.next" (click)="look(d.next!)">
+            <span>{{ d.next }}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+          </button>
+        </nav>
+      } @else if (!loading()) {
+        <div class="note">
+          <p>No definition for “{{ query() }}”. Check the spelling; slang and names aren't in this dictionary.</p>
+          <a class="secondary" routerLink="/rhymes" [queryParams]="{ word: query() }">Rhymes for {{ query() }}</a>
+        </div>
+      }
+    } @else if (book(); as p) {
+      <section class="lamp-card guide">
+        <h2>{{ p.words[0].word }} <span class="dash">–</span> {{ p.words.at(-1)?.word }}</h2>
+        <p class="hint">{{ p.letter.toUpperCase() }} · page {{ p.page }} of {{ p.pages }}</p>
+      </section>
+      <ul class="words">
+        @for (w of p.words; track w.word) {
+          <li [class.here]="w.word === here()">
+            <button type="button" (click)="look(w.word)">
+              <span class="head"><span class="hw">{{ w.word }}</span> <i class="ps">{{ posShort[w.pos] }}</i></span>
+              <span class="gloss">{{ w.gloss }}</span>
+            </button>
+          </li>
+        }
+      </ul>
+      <nav class="flip" aria-label="Pages">
+        <button type="button" class="prev" [disabled]="p.letter === 'a' && p.page === 1" (click)="turn(-1)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          <span>Previous</span>
+        </button>
+        <span class="count">{{ p.page }} / {{ p.pages }}</span>
+        <button type="button" class="next" [disabled]="p.letter === 'z' && p.page === p.pages" (click)="turn(1)">
+          <span>Next</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </nav>
+    } @else if (loading()) {
+      <p class="note">Opening the dictionary…</p>
+    }
+  </main>
+</div>
+
+<app-tab-nav />

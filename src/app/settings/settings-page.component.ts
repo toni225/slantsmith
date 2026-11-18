@@ -31,6 +31,7 @@ export class SettingsPageComponent {
   pickSize(s: TextSize) { this.settings.textSize.set(s); }
   toggleLyricMode() { this.settings.lyricModeDefault.update((v) => !v); }
   toggleHideExplicit() { this.settings.hideExplicit.update((v) => !v); }
+  toggleChordsOverWords() { this.settings.chordsOverWords.update((v) => !v); }
 
   // FR-33: full backup .json export/import, from the approved Settings.dc.html/ImportError.dc.html artboards.
   async exportBackup() {

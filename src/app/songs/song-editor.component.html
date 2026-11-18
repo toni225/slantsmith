@@ -32,6 +32,9 @@
           <div class="section-head">
             <input class="section-name" [value]="section.name" (change)="renameSection(section, $any($event.target).value)" aria-label="Section name" />
             <div class="section-actions">
+              <button type="button" (click)="toggleMeter(section)" [attr.aria-pressed]="meterFor() === section.id" aria-label="Meter: stresses and tap along">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6l3 18H6z"/><path d="M12 15l4-9"/></svg>
+              </button>
               <button type="button" (click)="moveSection(i, -1)" [disabled]="i === 0" aria-label="Move section up">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
               </button>
@@ -46,7 +49,19 @@
               </button>
             </div>
           </div>
+          @if (chordsOverWords()) {
+            <!-- Chords over the words: tap a chip to put [Am] at the caret, or type a new one. -->
+            <div class="chord-chips" role="group" [attr.aria-label]="'Insert a chord in ' + section.name">
+              @for (c of songChords(); track c) {
+                <button type="button" class="chip" (mousedown)="$event.preventDefault()" (click)="insertChord(lyrics, c)">{{ c }}</button>
+              }
+              <input class="chip-new" placeholder="+ chord" aria-label="New chord, Enter to insert" autocomplete="off" autocapitalize="off" spellcheck="false"
+                     (keydown.enter)="insertChord(lyrics, $any($event.target).value); $any($event.target).value = ''; $event.preventDefault()" />
+            </div>
+          }
+          @if (!chordsOverWords() || section.chords) {
           <input class="chords" [class.beside-letters]="section.text" [value]="section.chords ?? ''" (change)="setChords(section, $any($event.target).value)" [attr.aria-label]="'Chords for ' + section.name" placeholder="Add chords (Am  F  C  G)" autocomplete="off" autocapitalize="off" spellcheck="false" />
+          }
           <div class="lines-wrap">
             @if (section.text) {
               <!-- shortcut: one letter per \n-separated line; a soft-wrapped long line won't line up with its letter. -->
@@ -56,7 +71,7 @@
                 }
               </div>
             }
-            <textarea class="lines" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" (dblclick)="tapWord($event)" placeholder="Write this section… (double-click a word for rhymes)" rows="4"></textarea>
+            <textarea #lyrics class="lines" [class.has-chart]="hasChords(section.text)" [value]="section.text" (input)="setSectionText(section, $any($event.target).value)" (dblclick)="tapWord($event)" placeholder="Write this section… (double-click a word for rhymes)" rows="4"></textarea>
             @if (section.text) {
               <!-- shortcut: one count per \n-separated line; a soft-wrapped long line won't line up with its count. -->
               <div class="counts" aria-hidden="true">
@@ -66,6 +81,58 @@
               </div>
             }
           </div>
+          @if (hasChords(section.text)) {
+            <!-- The lyrics as a chord chart: each [chord] sits above the word it starts on. -->
+            <div class="chart" [attr.aria-label]="section.name + ' with chords'">
+              @for (line of lines(section); track $index) {
+                <p class="chart-line">
+                  @for (s of segments(line); track $index) {
+                    <span class="seg"><span class="ch">{{ s.chord }}</span><span class="tx">{{ s.text || ' ' }}</span></span>
+                  }
+                </p>
+              }
+            </div>
+          }
+          @if (meterFor() === section.id) {
+            <div class="meter">
+              <div class="meter-tools">
+                <button type="button" class="meter-play" (click)="playMeter(section)" [attr.aria-label]="meterPlaying() ? 'Stop' : 'Play the lines on the beat'">
+                  @if (meterPlaying()) {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                  } @else {
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l11-6.5a1 1 0 0 0 0-1.72l-11-6.5A1 1 0 0 0 8 5.5z"/></svg>
+                  }
+                </button>
+                <button type="button" class="meter-tap" (click)="tapTempo()">Tap the beat</button>
+                <span class="meter-bpm" aria-live="polite"><strong>{{ bpm() }}</strong> BPM</span>
+              </div>
+              <p class="meter-hint">Big dots are stressed syllables. Play steps through each line two syllables to a beat. Underlined places land on a click; a big dot there sits right.</p>
+              @for (l of meterLines(section); track $index; let li = $index) {
+                @if (l.words.length) {
+                  <div class="meter-line">
+                    <div class="meter-words">
+                      @for (w of l.words; track $index) {
+                        <span class="meter-word">
+                          <span class="w">{{ w.word }}</span>
+                          <span class="dots" aria-hidden="true">
+                            @for (s of w.stress; track $index; let si = $index) {
+                              @let at = w.start + si;
+                              <span class="dot" [class.strong]="s === 1" [class.mid]="s === 2" [class.beat]="(at + l.beat.offset) % 2 === 0" [class.now]="meterPlaying()?.line === li && meterPlaying()?.syl === at"></span>
+                            } @empty {
+                              <span class="unknown">?</span>
+                            }
+                          </span>
+                        </span>
+                      }
+                    </div>
+                    <p class="meter-note">
+                      {{ l.beat.of ? l.beat.on + ' of ' + l.beat.of + ' stresses on the beat' : 'no stressed syllable' }}@if (l.pattern) { · {{ l.pattern }} }
+                    </p>
+                  </div>
+                }
+              }
+            </div>
+          }
           <!-- FR-09/10/11: grammar flags for this section, listed below (not inline - it's a plain textarea). -->
           @if (grammarFlags(section); as flags) {
             @if (flags.length) {
@@ -97,6 +164,29 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
         Add section
       </button>
+
+      @if (stats(); as st) {
+        <details class="stats">
+          <summary>
+            <span>Song stats</span>
+            <span class="stats-sub">{{ st.words }} words · {{ st.lines }} lines</span>
+          </summary>
+          <dl class="stats-grid">
+            <div><dt>Sections</dt><dd>{{ st.sections }}</dd></div>
+            <div><dt>Lines</dt><dd>{{ st.lines }}</dd></div>
+            <div><dt>Words</dt><dd>{{ st.words }}</dd></div>
+            <div><dt>Different words</dt><dd>{{ st.uniqueWords }}</dd></div>
+            <div><dt>Syllables a line</dt><dd>{{ st.avgSyllables }} <span class="stats-sub">avg, {{ st.maxSyllables }} max</span></dd></div>
+            <div><dt>Rhyming lines</dt><dd>{{ st.perfect }} <span class="stats-sub">perfect,</span> {{ st.slant }} <span class="stats-sub">slant</span></dd></div>
+          </dl>
+          @if (st.topWords.length) {
+            <p class="stats-label">Words you use most</p>
+            <p class="stats-words">
+              @for (w of st.topWords; track w.word) { <span class="stats-word">{{ w.word }} <span class="stats-sub">×{{ w.count }}</span></span> }
+            </p>
+          }
+        </details>
+      }
     </main>
   </div>
 

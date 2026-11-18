@@ -8,9 +8,10 @@ export interface Settings {
   textSize: TextSize;
   lyricModeDefault: boolean;
   hideExplicit: boolean;
+  chordsOverWords: boolean; // false: one chord row per section (default); true: [Am] chords inside the lyrics
 }
 
-const DEFAULTS: Settings = { theme: 'system', textSize: 'medium', lyricModeDefault: true, hideExplicit: false };
+const DEFAULTS: Settings = { theme: 'system', textSize: 'medium', lyricModeDefault: true, hideExplicit: false, chordsOverWords: false };
 const STORAGE_KEY = 'slantsmith:settings';
 const ZOOM: Record<TextSize, string> = { small: '0.9', medium: '1', large: '1.15' };
 
@@ -31,6 +32,7 @@ export class SettingsService {
   readonly textSize = signal(this.stored.textSize);
   readonly lyricModeDefault = signal(this.stored.lyricModeDefault);
   readonly hideExplicit = signal(this.stored.hideExplicit);
+  readonly chordsOverWords = signal(this.stored.chordsOverWords);
 
   constructor() {
     const prefersDark = matchMedia('(prefers-color-scheme: dark)');
@@ -50,6 +52,7 @@ export class SettingsService {
         textSize: this.textSize(),
         lyricModeDefault: this.lyricModeDefault(),
         hideExplicit: this.hideExplicit(),
+        chordsOverWords: this.chordsOverWords(),
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
     });

@@ -18,6 +18,12 @@
     <button type="button" role="tab" [attr.aria-selected]="tab() === 'slant'" class="tab" [class.active]="tab() === 'slant'" (click)="pick('slant')">
       Slant @if (result(); as r) { {{ r.slant.length }} }
     </button>
+    <button type="button" role="tab" [attr.aria-selected]="tab() === 'phrases'" class="tab" [class.active]="tab() === 'phrases'" (click)="pick('phrases')">
+      Phrase @if (result(); as r) { {{ r.phrases.length }} }
+    </button>
+    <button type="button" role="tab" [attr.aria-selected]="tab() === 'synonyms'" class="tab" [class.active]="tab() === 'synonyms'" (click)="pick('synonyms')">
+      Synonyms @if (synonyms(); as s) { {{ s.items.length }} }
+    </button>
   </div>
 
   <div class="filters">
@@ -50,8 +56,12 @@
         </button>
       </li>
     } @empty {
-      @if (result()) {
-        <li class="empty">No {{ tab() }} rhymes match these filters.</li>
+      @if (tab() === 'synonyms') {
+        @if (synonyms(); as s) {
+          <li class="empty">{{ s.items.length ? 'No synonyms match these filters.' : 'No synonyms for this word.' }}</li>
+        }
+      } @else if (result()) {
+        <li class="empty">No {{ tab() === 'phrases' ? 'phrase' : tab() }} rhymes match these filters.</li>
       }
     }
   </ul>

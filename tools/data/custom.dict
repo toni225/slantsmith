@@ -1,0 +1,20 @@
+# Words added by hand. They win over cmudict.dict and estimated.dict.
+# One word per line: the word (lowercase), then its sounds in ARPAbet, as in cmudict.dict.
+# Put a stress number on every vowel: 1 = main stress, 2 = second stress, 0 = none.
+# Easiest way: find a word that rhymes in cmudict.dict and copy its ending.
+# Then run: npm run build:model
+#
+# Slang and lyric words: missing from the model, or guessed wrong.
+bae B EY1
+bruh B R AH1
+cringey K R IH1 N JH IY0
+finna F IH1 N AH0
+fomo F OW1 M OW2
+heckin HH EH1 K IH0 N
+highkey HH AY1 K IY0
+kawaii K AH0 W AY1 IY2
+rizz R IH1 Z
+shawty SH AO1 T IY0
+skrrt S K ER1 T
+swag S W AE1 G
+tryna T R AY1 N AH0

@@ -1,7 +1,7 @@
 {
   "lang": "en-us",
   "format": 1,
-  "words": 262631,
+  "words": 262637,
   "sounds": [
     "AA",
     "AE",
@@ -45,20 +45,32 @@
   ],
   "files": {
     "lexicon.txt": {
-      "bytes": 2495485,
-      "sha256": "0ed34622fef7d3c0c1b8a549fe5c47f036500097008062485fd28e916ec56f67"
+      "bytes": 2495524,
+      "sha256": "2070b0181b089ab18b6bddccfdb9f056858449ed427226969ddfec98febcfac6"
     },
     "phones.bin": {
-      "bytes": 2184576,
-      "sha256": "8295697b5d21fee82c342ca08f21dedc14bece18a14cb464cf68108e4d96a699"
+      "bytes": 2184606,
+      "sha256": "904ef58a7d78e51e53c573b564a9f04b1092a00d34ae891ab339371e9861fc57"
     },
     "meta.bin": {
-      "bytes": 262631,
-      "sha256": "45308d9ad9c11e785d7b11f39855c7738b5074064637aca9451578c6b25c1e87"
+      "bytes": 262637,
+      "sha256": "ee3d81250dd69e9a83e6e49dcec1bb80f239b73657d6cdc086e57e44ec094b03"
     },
     "commonness.bin": {
-      "bytes": 262631,
-      "sha256": "3dc9fed66a1cf0c29d205ba00b39b176f74336766f1b55fb3d4c2bb473ebccc0"
+      "bytes": 262637,
+      "sha256": "731345859386736e65a105680aa15e8b8cdb9a51fbc6fab39a7b87f026114f81"
+    },
+    "phrases.txt": {
+      "bytes": 424409,
+      "sha256": "ede8101bdb333f1f84bac1ce10067174e5adf398928a68a9a001e119b91d8933"
+    },
+    "thesaurus.txt": {
+      "bytes": 1556070,
+      "sha256": "3322cd8e748ae6681cc112739ba1a571a3eadb387ac4db0ab4a622cd74883c3a"
+    },
+    "dictionary.txt.gz": {
+      "bytes": 5526200,
+      "sha256": "87f9d4e1eb7e2408873609313c88921f9bcd4b8ac1b000fbb2f64a331ead1267"
     }
   },
   "credits": [
@@ -67,6 +79,7 @@
     "LDNOOBW English word list (CC BY 4.0)",
     "Open English WordNet (CC BY 4.0) and Princeton WordNet, word types and word list",
     "ENABLE word list (public domain)",
+    "Phrases, thesaurus and definitions: Open English WordNet (CC BY 4.0)",
     "Estimated pronunciations: built from CMU entries, the rest predicted by g2p_en (Apache 2.0)"
   ]
 }

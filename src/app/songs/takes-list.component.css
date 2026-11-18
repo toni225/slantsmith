@@ -223,7 +223,135 @@ h1 {
   color: var(--fawn);
 }
 
+/* Compare with now: the take's lines struck through in fawn, the draft's lines marked + in chiffon. */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 0 60px;
+}
+
+.latest .actions .restore {
+  margin: 0;
+}
+
+.older {
+  border-bottom: 1px solid rgba(141, 119, 95, 0.3);
+}
+
+.older .row {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.older .actions {
+  margin-top: 0;
+}
+
+.older .restore {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid var(--fawn);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.changes {
+  margin: 12px 0;
+  padding: 12px 12px 4px;
+  border-radius: 12px;
+  background: var(--booth-dark);
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--fawn);
+}
+
+.key::before {
+  margin-right: 4px;
+  font-weight: 800;
+}
+
+.key.removed::before {
+  content: '−';
+}
+
+.key.added::before {
+  content: '+';
+  color: var(--chiffon);
+}
+
+.sec {
+  margin: 0 0 12px;
+}
+
+.sec-name {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.note {
+  margin-left: 4px;
+  font-weight: 500;
+  color: var(--fawn);
+}
+
+.line {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  line-height: 24px;
+  white-space: pre-wrap;
+}
+
+.mark {
+  flex: none;
+  width: 12px;
+  font-weight: 800;
+}
+
+.line.same {
+  color: var(--fawn);
+}
+
+.line.removed {
+  color: var(--fawn);
+  text-decoration: line-through;
+  text-decoration-color: rgba(213, 191, 134, 0.6);
+}
+
+.line.added {
+  color: var(--chiffon);
+  font-weight: 600;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 @media (hover: hover) and (pointer: fine) {
+  .older .row:hover { background: rgba(241, 240, 204, 0.04); }
+  .older .restore:hover { background: rgba(241, 240, 204, 0.08); }
   .back:hover { background: rgba(241, 240, 204, 0.08); }
   .save:hover { filter: brightness(0.9); }
   .latest .restore:hover { background: rgba(241, 240, 204, 0.08); }

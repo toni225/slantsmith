@@ -1,4 +1,7 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { onBeat, patternName, tempoFromTaps, type WordStress } from './meter';
+import { songStats } from './stats';
+import { chartLines, hasChords, maskChords, segments, usedChords } from './chordpro';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TabNavComponent } from '../shell/tab-nav.component';
 import { RhymeModelService } from '../rhyme/rhyme-model.service';
@@ -47,8 +50,42 @@ export class SongEditorComponent {
   private readonly ignoredOnce = signal(new Set<string>());
   private readonly dictionary = inject(PersonalDictionaryService);
   // FR-23: tap a word, see rhymes, tap a result to replace it; undo (Ctrl/Cmd+Z) restores it.
-  readonly hideExplicit = inject(SettingsService).hideExplicit;
+  private readonly settings = inject(SettingsService);
+  readonly hideExplicit = this.settings.hideExplicit;
+  readonly chordsOverWords = this.settings.chordsOverWords;
+  protected readonly hasChords = hasChords;
+  protected readonly segments = segments;
+  // Chords over the words: chips of the chords this song already uses, for one-tap insert.
+  // A method, not computed(): typing edits section.text in place, which a computed would not notice.
+  songChords(): string[] {
+    const song = this.song();
+    if (!song) return [];
+    const inline = usedChords(song.sections.map((s) => s.text).join('\n'));
+    const rows = song.sections.flatMap((s) => (s.chords ?? '').split(/\s+/).filter(Boolean));
+    return [...new Set([...inline, ...rows])];
+  }
   readonly tapped = signal<TappedWord | null>(null);
+  // Meter view (one section at a time) and song stats.
+  readonly lineWords = signal<Record<string, WordStress[][]>>({});
+  readonly meterFor = signal<string | null>(null);
+  readonly meterPlaying = signal<{ line: number; syl: number } | null>(null);
+  readonly bpm = signal(90);
+  readonly stats = computed(() => {
+    const song = this.song();
+    if (!song) return null;
+    const counts = Object.values(this.lineCounts()).flat().map((c) => c.syllables).filter((n) => n > 0);
+    const letters = Object.values(this.lineSchemes()).flat();
+    return {
+      ...songStats(song.sections.map((s) => ({ ...s, text: s.text.split('\n').map(maskChords).join('\n') }))),
+      avgSyllables: counts.length ? Math.round((counts.reduce((a, b) => a + b, 0) / counts.length) * 10) / 10 : 0,
+      maxSyllables: counts.length ? Math.max(...counts) : 0,
+      perfect: letters.filter((l) => l.type === 'perfect').length,
+      slant: letters.filter((l) => l.type === 'slant').length,
+    };
+  });
+  private taps: number[] = [];
+  private meterTimer?: ReturnType<typeof setTimeout>;
+  private audio?: AudioContext;
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id');
@@ -65,6 +102,8 @@ export class SongEditorComponent {
     inject(DestroyRef).onDestroy(() => {
       clearTimeout(this.saveTimer);
       clearInterval(this.autoTakeTimer);
+      clearTimeout(this.meterTimer);
+      void this.audio?.close();
     });
   }
 
@@ -103,18 +142,19 @@ export class SongEditorComponent {
   }
 
   private updateLineGrammar(section: Section) {
-    const lines = section.text.split('\n');
+    const lines = section.text.split('\n').map(maskChords); // [Am] chords are not words; same length keeps flag positions
     Promise.all(lines.map((l) => this.models.checkGrammar(l))).then((perLine) => {
       this.lineGrammar.update((m) => ({ ...m, [section.id]: perLine }));
     });
   }
 
   private updateLineCounts(section: Section) {
-    const lines = section.text.split('\n');
+    const lines = section.text.split('\n').map(maskChords);
     const words = lines.map((l) => l.match(WORD_RE) ?? []);
     const flat = words.flat();
     if (!flat.length) {
       this.lineCounts.update((m) => ({ ...m, [section.id]: lines.map(() => ({ syllables: 0, estimated: false })) }));
+      this.lineWords.update((m) => ({ ...m, [section.id]: lines.map(() => []) }));
       return;
     }
     this.models.syllables(flat).then((counts) => {
@@ -125,11 +165,14 @@ export class SongEditorComponent {
         return { syllables: slice.reduce((n: number, c) => n + (c.count ?? 0), 0), estimated: slice.some((c) => c.estimated) };
       });
       this.lineCounts.update((m) => ({ ...m, [section.id]: perLine }));
+      at = 0;
+      const stress = words.map((ws) => ws.map((word) => ({ word, stress: counts[at++].stress })));
+      this.lineWords.update((m) => ({ ...m, [section.id]: stress }));
     });
   }
 
   private updateLineScheme(section: Section) {
-    const endings = section.text.split('\n').map((l) => (l.match(WORD_RE) ?? []).at(-1)?.toLowerCase() ?? '');
+    const endings = section.text.split('\n').map(maskChords).map((l) => (l.match(WORD_RE) ?? []).at(-1)?.toLowerCase() ?? '');
     this.models.scheme(endings).then((result) => {
       this.lineSchemes.update((m) => ({ ...m, [section.id]: result }));
     });
@@ -274,7 +317,7 @@ export class SongEditorComponent {
   exportText() {
     const song = this.song();
     if (!song) return;
-    const text = `${song.title}\n\n${song.sections.map((s) => `${s.name}\n${s.chords ? s.chords + '\n' : ''}${s.text}`).join('\n\n')}\n`;
+    const text = `${song.title}\n\n${song.sections.map((s) => `${s.name}\n${s.chords ? s.chords + '\n' : ''}${s.text.split('\n').flatMap(chartLines).join('\n')}`).join('\n\n')}\n`;
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -289,5 +332,75 @@ export class SongEditorComponent {
   // everything but the title and lyrics for this.
   exportPdf() {
     window.print();
+  }
+
+  // Puts [chord] at the caret. The chip's mousedown is cancelled, so the textarea keeps its caret;
+  // execCommand keeps it on the browser's undo stack, like the rhyme swap.
+  insertChord(textarea: HTMLTextAreaElement, chord: string) {
+    chord = chord.trim().replace(/[[\]]/g, '');
+    if (!chord) return;
+    textarea.focus();
+    document.execCommand('insertText', false, `[${chord}]`);
+  }
+
+  // Meter view: each line's syllables with their stress, and a tap-along player.
+  meterLines(section: Section) {
+    return (this.lineWords()[section.id] ?? []).map((ws) => {
+      let start = 0;
+      const words = ws.map((w) => ({ ...w, start: (start += w.stress.length) - w.stress.length })); // start: first syllable's place in the line
+      const stress = ws.flatMap((w) => w.stress);
+      return { words, stress, pattern: patternName(stress), beat: onBeat(stress) };
+    });
+  }
+
+  toggleMeter(section: Section) {
+    this.stopMeter();
+    this.meterFor.set(this.meterFor() === section.id ? null : section.id);
+  }
+
+  tapTempo() {
+    const now = performance.now();
+    this.taps = [...this.taps.filter((t) => now - t < 8000), now];
+    const bpm = tempoFromTaps(this.taps);
+    if (bpm) this.bpm.set(bpm);
+    this.click(true);
+  }
+
+  // One syllable every half beat, each line starting on a beat, a click on every beat.
+  playMeter(section: Section) {
+    if (this.meterPlaying()) return this.stopMeter();
+    const steps: { line: number; syl: number }[] = [];
+    this.meterLines(section).forEach((l, line) => {
+      if (!l.stress.length) return;
+      if (l.beat.offset) steps.push({ line, syl: -1 }); // a pickup line starts half a beat in
+      l.stress.forEach((_, syl) => steps.push({ line, syl }));
+      if (steps.length % 2) steps.push({ line, syl: -1 }); // pad to a whole beat
+      steps.push({ line, syl: -1 }, { line, syl: -1 }); // one beat of rest between lines
+    });
+    let i = 0;
+    const step = () => {
+      if (i >= steps.length) return this.stopMeter();
+      if (i % 2 === 0) this.click(false);
+      this.meterPlaying.set(steps[i++]);
+      this.meterTimer = setTimeout(step, 30000 / this.bpm());
+    };
+    step();
+  }
+
+  stopMeter() {
+    clearTimeout(this.meterTimer);
+    this.meterPlaying.set(null);
+  }
+
+  private click(accent: boolean) {
+    this.audio ??= new AudioContext();
+    void this.audio.resume();
+    const t = this.audio.currentTime, osc = this.audio.createOscillator(), gain = this.audio.createGain();
+    osc.frequency.value = accent ? 1320 : 880;
+    gain.gain.setValueAtTime(0.2, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    osc.connect(gain).connect(this.audio.destination);
+    osc.start(t);
+    osc.stop(t + 0.06);
   }
 }

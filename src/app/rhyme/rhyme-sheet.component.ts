@@ -1,9 +1,9 @@
 import { Component, ElementRef, HostListener, computed, effect, inject, input, output, signal, viewChild } from '@angular/core';
 import type { WordType } from '../../engines/model';
 import { RhymeModelService } from './rhyme-model.service';
-import type { UiRhyme, UiRhymeResult } from './rhyme-protocol';
+import type { SynonymsResult, UiRhyme, UiRhymeResult } from './rhyme-protocol';
 
-type Tab = 'perfect' | 'slant';
+type Tab = 'perfect' | 'slant' | 'phrases' | 'synonyms';
 type LengthFilter = 'any' | 1 | 2;
 type TypeFilter = 'any' | WordType;
 
@@ -11,6 +11,7 @@ const TYPE_FILTERS: TypeFilter[] = ['any', 'noun', 'verb', 'adjective', 'adverb'
 
 // shortcut: "common only" cuts at a fixed commonness byte (160/255); revisit once we have usage data.
 const COMMON_CUTOFF = 160;
+const shownOf = (shown: number, total: number) => (shown === total ? `${total} found.` : `Showing ${shown} of ${total}.`);
 
 @Component({
   selector: 'app-rhyme-sheet',
@@ -32,11 +33,11 @@ export class RhymeSheetComponent {
   readonly typeFilters = TYPE_FILTERS;
   readonly commonOnly = signal(false);
   readonly result = signal<UiRhymeResult | null>(null);
-
+  readonly synonyms = signal<SynonymsResult | null>(null); // asked for only once the tab is opened
   readonly rows = computed(() => {
     const r = this.result();
     if (!r) return [];
-    let list = this.tab() === 'perfect' ? r.perfect : r.slant;
+    let list = this.list(r);
     const len = this.lengthFilter();
     const type = this.typeFilter();
     const common = this.commonOnly();
@@ -60,10 +61,11 @@ export class RhymeSheetComponent {
 
   readonly footer = computed(() => {
     const r = this.result();
-    if (!r) return 'Loading…';
-    const total = this.tab() === 'perfect' ? r.perfect.length : r.slant.length;
-    const shown = this.rows().length;
-    return shown === total ? `${total} found.` : `Showing ${shown} of ${total}.`;
+    const syn = this.synonyms();
+    if (!r || (this.tab() === 'synonyms' && !syn)) return 'Loading…';
+    const total = this.list(r).length;
+    if (this.tab() === 'synonyms' && syn?.base && syn.base !== r.word) return `Synonyms of ${syn.base}. ${shownOf(this.rows().length, total)}`;
+    return shownOf(this.rows().length, total);
   });
 
   constructor() {
@@ -73,10 +75,21 @@ export class RhymeSheetComponent {
       this.result.set(null);
       this.models.rhyme(word, hideExplicit).then((r) => this.result.set(r));
     });
+    effect(() => {
+      const word = this.word();
+      const hideExplicit = this.hideExplicit();
+      this.synonyms.set(null);
+      if (this.tab() === 'synonyms') this.models.synonyms(word, hideExplicit).then((s) => this.synonyms.set(s));
+    });
     effect(() => { this.word(); this.panel()?.nativeElement.querySelector<HTMLElement>('button')?.focus(); });
   }
 
   pick(tab: Tab) { this.tab.set(tab); }
+
+  private list(r: UiRhymeResult): UiRhyme[] {
+    const tab = this.tab();
+    return tab === 'synonyms' ? this.synonyms()?.items ?? [] : r[tab];
+  }
   pickLength(len: LengthFilter) { this.lengthFilter.set(len); }
   pickType(type: TypeFilter) { this.typeFilter.set(type); }
   toggleCommon() { this.commonOnly.update((v) => !v); }
@@ -84,7 +97,7 @@ export class RhymeSheetComponent {
   use(word: string) { this.used.emit(word); }
 
   chipKind(r: UiRhyme): 'solid' | 'dotted' {
-    return r.type === 'perfect' ? 'solid' : 'dotted';
+    return r.type === 'perfect' || r.type === 'phrase' || r.type === 'synonym' ? 'solid' : 'dotted';
   }
 
   @HostListener('document:keydown.escape')

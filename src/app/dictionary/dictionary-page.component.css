@@ -1,0 +1,366 @@
+/* Mobile-first. A reading page like the lyric editor: one column, widening 480 -> 560 -> 640px. */
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--mahogany);
+  color: var(--chiffon);
+  overflow: hidden;
+}
+
+.page {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  .page { max-width: 560px; padding: 0 4px; }
+}
+
+@media (min-width: 1024px) {
+  .page { max-width: 640px; padding: 0 12px; }
+}
+
+header {
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+}
+
+input {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--copper);
+  background: var(--booth-dark);
+  color: var(--chiffon);
+  font-size: 17px;
+  font-family: inherit;
+}
+
+input::placeholder {
+  color: var(--fawn);
+}
+
+.search {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.search .field {
+  flex: 1;
+  min-width: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.random {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--copper);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* A-Z thumb index, scrolls sideways on a phone. */
+.letters {
+  position: relative; /* offsetParent for centring the current letter */
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 0 20px 16px;
+  scrollbar-width: none;
+}
+
+.letters button {
+  flex: 0 0 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--booth-dark);
+  color: var(--fawn);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* From tablet the whole alphabet fits: two rows of 13, nothing hidden off the edge. */
+@media (min-width: 768px) {
+  .letters {
+    display: grid;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    overflow: visible;
+    padding: 0 20px 16px;
+  }
+}
+
+.letters button.on {
+  background: var(--chiffon);
+  color: var(--mahogany);
+}
+
+main {
+  padding: 0 0 32px;
+}
+
+.guide h2 {
+  font-size: 20px;
+  overflow-wrap: anywhere;
+}
+
+.dash {
+  color: var(--fawn);
+  font-weight: 600;
+}
+
+/* A book page: each word with its first meaning, read down the column like a printed
+   dictionary. One column on a phone (the glosses need the width), two from tablet. */
+.words {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0 20px;
+  display: grid;
+  column-gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .words {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(20, auto); /* 40 a page */
+    grid-auto-flow: column;
+  }
+}
+
+.words li {
+  padding: 0;
+  font-size: inherit;
+  border-bottom: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+.words button {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--chiffon);
+  text-align: left;
+}
+
+.head {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hw {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ps {
+  margin-left: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fawn);
+}
+
+.gloss {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--fawn);
+}
+
+/* The word you came back from: a soft wash, so you see where you were on the page. */
+.words li.here {
+  border-bottom-color: transparent;
+}
+
+.words li.here button {
+  margin: 0 -10px;
+  padding: 10px;
+  width: calc(100% + 20px);
+  border-radius: 12px;
+  background: rgba(213, 191, 134, 0.14);
+}
+
+/* Turn the page / flip to the word before or after. */
+.flip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin: 24px 20px 0;
+}
+
+.flip button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--copper);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.flip button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flip svg {
+  flex-shrink: 0;
+  color: var(--fawn);
+}
+
+.flip .prev { justify-self: start; max-width: 100%; padding-left: 8px; }
+.flip .next { justify-self: end; max-width: 100%; padding-right: 8px; }
+
+.flip button:disabled {
+  visibility: hidden;
+}
+
+.count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+  font-variant-numeric: tabular-nums;
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--copper);
+  background: transparent;
+  color: var(--chiffon);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .words button:hover .hw,
+  .random:hover,
+  .secondary:hover,
+  .flip button:hover { color: var(--fawn); }
+  .letters button:not(.on):hover { color: var(--chiffon); }
+}
+
+.lamp-card {
+  margin: 0 12px;
+  padding: 16px 16px 14px;
+  border-radius: 20px;
+  background: radial-gradient(120% 70% at 50% 0%, rgba(213, 191, 134, 0.16), rgba(213, 191, 134, 0) 70%), var(--lamp-lit);
+  box-shadow: 0 14px 36px rgba(20, 4, 6, 0.6), inset 0 1px 0 rgba(241, 240, 204, 0.08);
+}
+
+.lamp-card h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.hint {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--fawn);
+}
+
+.pos {
+  padding: 0 20px;
+  margin-top: 24px;
+}
+
+h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fawn);
+}
+
+ol {
+  margin: 0;
+  padding: 0 0 0 24px;
+}
+
+.pos li {
+  padding: 10px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  border-bottom: 1px solid rgba(141, 119, 95, 0.35);
+}
+
+.pos li::marker {
+  color: var(--fawn);
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin: 8px 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--fawn);
+}
+
+.note p {
+  margin: 0 0 12px;
+}

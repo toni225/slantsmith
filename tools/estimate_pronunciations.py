@@ -9,7 +9,7 @@ g2p_en (a small letter-to-sound model trained on CMU) predicts whatever is left.
 """
 import re, sys
 from wordfreq import iter_wordlist, zipf_frequency
-from build_word_model import DATA, SOUNDS, WORD_RE, dictionary_words, load_dict, load_word_types, word_list
+from build_word_model import DATA, SOUNDS, WORD_RE, dictionary_words, load_custom, load_dict, load_word_types, word_list
 
 SIBILANT = {"S", "Z", "SH", "ZH", "CH", "JH"}
 VOICELESS = {"P", "T", "K", "F", "TH", "S", "SH", "CH"}
@@ -221,7 +221,7 @@ def check(deriver):
 
 
 def main():
-    cmu = load_dict(DATA / "cmudict.dict")
+    cmu = {**load_dict(DATA / "cmudict.dict"), **load_custom()}  # hand-added words are bases for others too
     dictionary = dictionary_words(load_word_types())
     deriver = Deriver(dict(cmu), dictionary)
     check(deriver)
